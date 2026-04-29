@@ -1,0 +1,22 @@
+<div class="flex w-screen h-screen">
+  <nav class="menu bg-base-200 rounded-box w-56">
+    <li>
+      <h2 class="menu-title">Componentes</h2>
+      <ul>
+        <li>
+          <a class="opacity-60" routerLink="components/button" routerLinkActive="opacity-100">
+            Button
+          </a>
+        </li>
+        <li>
+          <a class="opacity-60" routerLink="components/loading" routerLinkActive="opacity-100">
+            Loading
+          </a>
+        </li>
+      </ul>
+    </li>
+  </nav>
+  <section class="w-full">
+    <router-outlet />
+  </section>
+</div>

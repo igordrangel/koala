@@ -1,0 +1,62 @@
+{
+  "name": "koala",
+  "version": "0.0.0",
+  "scripts": {
+    "build": "bun scripts/build",
+    "start": "bun run build && bun ./bin/run",
+    "ui:start": "cd libs/ui && bun start",
+    "generate:command": "bunx oclif generate command",
+    "prepare:hotfix": "ng version patch --no-git-tag-version",
+    "prepare:feature": "ng version minor --no-git-tag-version",
+    "prepare:release": "ng version major --no-git-tag-version"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true,
+    "overrides": [
+      {
+        "files": "*.html",
+        "options": {
+          "parser": "angular"
+        }
+      },
+      {
+        "files": ".dockerignore",
+        "options": {
+          "parser": "yaml"
+        }
+      }
+    ]
+  },
+  "private": true,
+  "packageManager": "bun@1.3.6",
+  "dependencies": {
+    "@oclif/core": "^4.10.6"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "25.3.0",
+    "@typescript-eslint/eslint-plugin": "8.53.1",
+    "@typescript-eslint/parser": "8.53.1",
+    "@vitest/coverage-v8": "4.0.16",
+    "@vitest/eslint-plugin": "1.6.6",
+    "eslint": "9.39.2",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-plugin-prettier": "5.5.5",
+    "prettier": "3.7.4",
+    "typescript": "5.9.2",
+    "typescript-eslint": "8.53.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "bin": {
+    "kl": "./bin/run.js"
+  },
+  "oclif": {
+    "bin": "kl",
+    "commands": "./dist/cli/commands",
+    "dirname": "kl",
+    "topicSeparator": " "
+  }
+}
