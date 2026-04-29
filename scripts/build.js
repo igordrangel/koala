@@ -3,4 +3,6 @@ import { cpSync, rmSync } from 'node:fs';
 
 rmSync('dist', { recursive: true, force: true });
 spawnSync('tsc', ['-p', 'libs/cli/tsconfig.json'], { stdio: 'inherit' });
-cpSync('libs/ui', 'dist/ui', { recursive: true });
+cpSync('libs/ui/src/app/shared/components', 'dist/ui/components', { recursive: true });
+cpSync('libs/ui/src/app/app.ts', 'dist/ui/app.ts');
+cpSync('libs/ui/src/styles.css', 'dist/ui/styles.css');

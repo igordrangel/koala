@@ -28,10 +28,10 @@ export default class NewUi extends Command {
   private createFolderStructure(name: string, flags: NewUiFlags) {
     rmSync(`${name}/src/app/app.css`);
 
-    const appTs = readFileSync(`dist/ui/src/app/app.ts`, 'utf-8');
+    const appTs = readFileSync(`dist/ui/app.ts`, 'utf-8');
     writeFileSync(`${name}/src/app/app.ts`, appTs.replace('--projectName--', name));
 
-    const styles = readFileSync(`dist/ui/src/styles.css`, 'utf-8');
+    const styles = readFileSync(`dist/ui/styles.css`, 'utf-8');
     writeFileSync(`${name}/src/styles.css`, styles);
 
     const folders: { [key: string]: string[] } = {
@@ -80,5 +80,11 @@ export default class NewUi extends Command {
 
     this.createAngularProject(name);
     this.createFolderStructure(name, flags);
+
+    spawnSync(`cd ${name} && bunx ng generate environments`, { stdio: 'inherit', shell: true });
+    spawnSync(`cd ${name} && bunx ng generate @angular/core:cleanup-unused-imports`, {
+      stdio: 'inherit',
+      shell: true,
+    });
   }
 }

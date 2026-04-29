@@ -4,7 +4,7 @@ export type InstallComponentFlags = 'button' | 'loading';
 
 function copyComponent(projectName: string, component: InstallComponentFlags) {
   cpSync(
-    `./dist/ui/src/app/shared/components/${component}`,
+    `./dist/ui/components/${component}`,
     `${projectName}/src/app/shared/components/${component}`,
     { recursive: true },
   );
@@ -32,11 +32,11 @@ export function installComponent(projectName: string, component: InstallComponen
 
       if (prefix) {
         const buttonTs = readFileSync(
-          `${projectName}/src/app/shared/components/${component}/index.ts`,
+          `${projectName}/src/app/shared/components/${component}/${component}.ts`,
           'utf-8',
         );
         writeFileSync(
-          `${projectName}/src/app/shared/components/${component}/index.ts`,
+          `${projectName}/src/app/shared/components/${component}/${component}.ts`,
           buttonTs.replace(/app/g, prefix),
           'utf-8',
         );
