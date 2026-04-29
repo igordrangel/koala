@@ -28,6 +28,9 @@ export default class NewUi extends Command {
   private createFolderStructure(name: string, flags: NewUiFlags) {
     rmSync(`${name}/src/app/app.css`);
 
+    const indexHtml = readFileSync(`dist/ui/index.html`, 'utf-8');
+    writeFileSync(`${name}/src/index.html`, indexHtml.replace('--projectName--', name));
+
     const appTs = readFileSync(`dist/ui/app.ts`, 'utf-8');
     writeFileSync(`${name}/src/app/app.ts`, appTs.replace('--projectName--', name));
 
