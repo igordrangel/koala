@@ -1,5 +1,12 @@
 @import 'tailwindcss';
 
+/* --start-internal-- */
+@import './theme/icons.css';
+@import 'prism-themes/themes/prism-atom-dark.min.css';
+@import 'prismjs/plugins/line-numbers/prism-line-numbers.min.css';
+@import 'prismjs/plugins/line-highlight/prism-line-highlight.min.css';
+/* --end-internal-- */
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @plugin "daisyui" {

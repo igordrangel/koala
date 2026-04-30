@@ -1,42 +1,61 @@
-<div class="flex w-screen h-screen">
-  <nav class="menu bg-base-200 rounded-box w-56">
-    <li>
-      <h2 class="menu-title">Componentes</h2>
-      <ul>
-        <li>
-          <a>Ações</a>
-          <ul>
-            <li>
-              <a class="opacity-60" routerLink="components/button" routerLinkActive="opacity-100">
-                Button
-              </a>
-            </li>
-            <li>
-              <a class="opacity-60" routerLink="components/dropdown" routerLinkActive="opacity-100">
-                Dropdown
-              </a>
-            </li>
-            <li>
-              <a class="opacity-60" routerLink="components/modal" routerLinkActive="opacity-100">
-                Modal
-              </a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a>Feedback</a>
-          <ul>
-            <li>
-              <a class="opacity-60" routerLink="components/loading" routerLinkActive="opacity-100">
-                Loading
-              </a>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </li>
-  </nav>
-  <section class="w-full">
-    <router-outlet />
-  </section>
+<div class="flex flex-col">
+  <div class="fixed flex items-center justify-between py-4 px-6 w-full bg-base-100 z-10">
+    <span class="flex items-center gap-8">
+      <i class="app-icon kl-logotype size-6! -rotate-45"></i>
+      <span class="font-bold text-base">Docs</span>
+    </span>
+
+    <app-github-stars class="w-auto" />
+  </div>
+
+  <div class="flex w-full">
+    <ul class="fixed menu bg-base-100 w-60 mt-16">
+      <li>
+        <h2 class="menu-title">Components</h2>
+        <ul>
+          <li>
+            <a>Actions</a>
+            <ul>
+              <li>
+                <a class="opacity-60" routerLink="components/button" routerLinkActive="opacity-100">
+                  Button
+                </a>
+              </li>
+              <li>
+                <a
+                  class="opacity-60"
+                  routerLink="components/dropdown"
+                  routerLinkActive="opacity-100"
+                >
+                  Dropdown
+                </a>
+              </li>
+              <li>
+                <a class="opacity-60" routerLink="components/modal" routerLinkActive="opacity-100">
+                  Modal
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a>Feedback</a>
+            <ul>
+              <li>
+                <a
+                  class="opacity-60"
+                  routerLink="components/loading"
+                  routerLinkActive="opacity-100"
+                >
+                  Loading
+                </a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+    <section class="w-full ml-60 mt-16">
+      <router-outlet />
+    </section>
+  </div>
 </div>

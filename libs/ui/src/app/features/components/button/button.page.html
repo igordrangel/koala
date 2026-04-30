@@ -1,77 +1,320 @@
-<div class="p-4">
-  <h1>Button</h1>
-  <small>Button component</small>
+<app-section-container>
+  <ng-container title>Button</ng-container>
+  <ng-container description>A simple button component.</ng-container>
 
-  <div class="mockup-code mt-4">
-    <pre data-prefix="$"><code>kl component -n button</code></pre>
-  </div>
+  <app-section-content>
+    <ng-container title>Installation</ng-container>
+    <ng-container description>Use the Koala CLI to generate a new button component.</ng-container>
 
-  <span class="divider"></span>
+    <app-code-viewer language="bash" name="kl" src="markdown/install/button-install.md" />
+  </app-section-content>
 
-  <h2 class="pb-3">Variants</h2>
-  <div class="flex gap-2 items-center">
-    <button appButton variant="primary">Primary</button>
-    <button appButton variant="secondary">Secondary</button>
-    <button appButton variant="error">Danger</button>
-    <button appButton variant="success">Success</button>
-    <button appButton variant="warning">Warning</button>
-    <button appButton variant="info">Info</button>
-    <button appButton variant="neutral">Neutral</button>
-    <button appButton variant="ghost">Ghost</button>
-  </div>
+  <app-section-content>
+    <ng-container title>Variants</ng-container>
+    <ng-container description>
+      The button component supports several variants to fit different use cases and design
+      requirements.
+    </ng-container>
 
-  <h2 class="pt-5">Sizes</h2>
-  <div class="flex gap-2 items-center">
-    <button appButton size="xs">Extra Small</button>
-    <button appButton size="sm">Small</button>
-    <button appButton size="md">Medium</button>
-    <button appButton size="lg">Large</button>
-    <button appButton size="xl">Extra Large</button>
-  </div>
+    <div appTabGroup align="start" class="flex items-center">
+      <div appTab label="Preview" checked>
+        <div
+          class="flex items-center justify-center gap-2 py-10 border border-t-0 border-base-300 rounded-b-lg"
+        >
+          <button appButton variant="primary">Primary</button>
+          <button appButton variant="secondary">Secondary</button>
+          <button appButton variant="error">Danger</button>
+          <button appButton variant="success">Success</button>
+          <button appButton variant="warning">Warning</button>
+          <button appButton variant="info">Info</button>
+          <button appButton variant="neutral">Neutral</button>
+          <button appButton variant="ghost">Ghost</button>
+        </div>
+      </div>
 
-  <h2 class="py-5">Outline</h2>
-  <div class="flex gap-2 items-center">
-    <button appButton outline variant="primary">Primary</button>
-    <button appButton outline variant="secondary">Secondary</button>
-    <button appButton outline variant="error">Danger</button>
-    <button appButton outline variant="success">Success</button>
-    <button appButton outline variant="warning">Warning</button>
-    <button appButton outline variant="info">Info</button>
-    <button appButton outline variant="neutral">Neutral</button>
-    <button appButton outline variant="ghost">Ghost</button>
-  </div>
+      <div appTab label="HTML">
+        <div class="flex p-2 border border-t-0 border-base-300 rounded-b-lg">
+          <app-code-viewer
+            class="w-full"
+            language="html"
+            name="button-sample.html"
+            src="markdown/usage/button/button-variants.html.md"
+          />
+        </div>
+      </div>
 
-  <h2 class="py-5">Soft</h2>
-  <div class="flex gap-2 items-center">
-    <button appButton soft variant="primary">Primary</button>
-    <button appButton soft variant="secondary">Secondary</button>
-    <button appButton soft variant="error">Danger</button>
-    <button appButton soft variant="success">Success</button>
-    <button appButton soft variant="warning">Warning</button>
-    <button appButton soft variant="info">Info</button>
-    <button appButton soft variant="neutral">Neutral</button>
-    <button appButton soft variant="ghost">Ghost</button>
-  </div>
+      <div appTab label="TS">
+        <div class="flex p-2 border border-t-0 border-base-300 rounded-b-lg">
+          <app-code-viewer
+            class="w-full"
+            language="typescript"
+            name="button-sample.ts"
+            src="markdown/usage/button/button.ts.md"
+          />
+        </div>
+      </div>
+    </div>
+  </app-section-content>
 
-  <h2 class="py-5">Dash</h2>
-  <div class="flex gap-2 items-center">
-    <button appButton dash variant="primary">Primary</button>
-    <button appButton dash variant="secondary">Secondary</button>
-    <button appButton dash variant="error">Danger</button>
-    <button appButton dash variant="success">Success</button>
-    <button appButton dash variant="warning">Warning</button>
-    <button appButton dash variant="info">Info</button>
-    <button appButton dash variant="neutral">Neutral</button>
-    <button appButton dash variant="ghost">Ghost</button>
-  </div>
+  <app-section-content>
+    <ng-container title>Sizes</ng-container>
+    <ng-container description>
+      The button component supports different sizes to accommodate various design needs.
+    </ng-container>
 
-  <h2 class="py-5">Disabled</h2>
-  <div class="flex gap-2 items-center">
-    <button appButton disabled variant="primary">Disabled</button>
-  </div>
+    <div appTabGroup align="start" class="flex items-center">
+      <div appTab label="Preview" checked>
+        <div
+          class="flex items-center justify-center gap-2 py-10 border border-t-0 border-base-300 rounded-b-lg"
+        >
+          <button appButton size="xs">Extra Small</button>
+          <button appButton size="sm">Small</button>
+          <button appButton size="md">Medium</button>
+          <button appButton size="lg">Large</button>
+          <button appButton size="xl">Extra Large</button>
+        </div>
+      </div>
 
-  <h2 class="py-5">Circle</h2>
-  <div class="flex gap-2 items-center">
-    <button appButton circle variant="primary">C</button>
-  </div>
-</div>
+      <div appTab label="HTML">
+        <div class="flex p-2 border border-t-0 border-base-300 rounded-b-lg">
+          <app-code-viewer
+            class="w-full"
+            language="html"
+            name="button-sample.html"
+            src="markdown/usage/button/button-sizes.html.md"
+          />
+        </div>
+      </div>
+
+      <div appTab label="TS">
+        <div class="flex p-2 border border-t-0 border-base-300 rounded-b-lg">
+          <app-code-viewer
+            class="w-full"
+            language="typescript"
+            name="button-sample.ts"
+            src="markdown/usage/button/button.ts.md"
+          />
+        </div>
+      </div>
+    </div>
+  </app-section-content>
+
+  <app-section-content>
+    <ng-container title>Outline</ng-container>
+    <ng-container description>
+      The outline variant provides a button style with a border and transparent background, ideal
+      for secondary actions.
+    </ng-container>
+
+    <div appTabGroup align="start" class="flex items-center">
+      <div appTab label="Preview" checked>
+        <div
+          class="flex items-center justify-center gap-2 py-10 border border-t-0 border-base-300 rounded-b-lg"
+        >
+          <button appButton outline variant="primary">Primary</button>
+          <button appButton outline variant="secondary">Secondary</button>
+          <button appButton outline variant="error">Danger</button>
+          <button appButton outline variant="success">Success</button>
+          <button appButton outline variant="warning">Warning</button>
+          <button appButton outline variant="info">Info</button>
+          <button appButton outline variant="neutral">Neutral</button>
+          <button appButton outline variant="ghost">Ghost</button>
+        </div>
+      </div>
+
+      <div appTab label="HTML">
+        <div class="flex p-2 border border-t-0 border-base-300 rounded-b-lg">
+          <app-code-viewer
+            class="w-full"
+            language="html"
+            name="button-sample.html"
+            src="markdown/usage/button/button-outline.html.md"
+          />
+        </div>
+      </div>
+
+      <div appTab label="TS">
+        <div class="flex p-2 border border-t-0 border-base-300 rounded-b-lg">
+          <app-code-viewer
+            class="w-full"
+            language="typescript"
+            name="button-sample.ts"
+            src="markdown/usage/button/button.ts.md"
+          />
+        </div>
+      </div>
+    </div>
+  </app-section-content>
+
+  <app-section-content>
+    <ng-container title>Soft</ng-container>
+    <ng-container description>
+      The soft variant offers a button style with a softer background color, suitable for less
+      prominent actions.
+    </ng-container>
+
+    <div appTabGroup align="start" class="flex items-center">
+      <div appTab label="Preview" checked>
+        <div
+          class="flex items-center justify-center gap-2 py-10 border border-t-0 border-base-300 rounded-b-lg"
+        >
+          <button appButton soft variant="primary">Primary</button>
+          <button appButton soft variant="secondary">Secondary</button>
+          <button appButton soft variant="error">Danger</button>
+          <button appButton soft variant="success">Success</button>
+          <button appButton soft variant="warning">Warning</button>
+          <button appButton soft variant="info">Info</button>
+          <button appButton soft variant="neutral">Neutral</button>
+          <button appButton soft variant="ghost">Ghost</button>
+        </div>
+      </div>
+
+      <div appTab label="HTML">
+        <div class="flex p-2 border border-t-0 border-base-300 rounded-b-lg">
+          <app-code-viewer
+            class="w-full"
+            language="html"
+            name="button-sample.html"
+            src="markdown/usage/button/button-soft.html.md"
+          />
+        </div>
+      </div>
+
+      <div appTab label="TS">
+        <div class="flex p-2 border border-t-0 border-base-300 rounded-b-lg">
+          <app-code-viewer
+            class="w-full"
+            language="typescript"
+            name="button-sample.ts"
+            src="markdown/usage/button/button.ts.md"
+          />
+        </div>
+      </div>
+    </div>
+  </app-section-content>
+
+  <app-section-content>
+    <ng-container title>Dash</ng-container>
+    <ng-container description>
+      The dash variant provides a button style with a dashed border, suitable for less prominent
+      actions.
+    </ng-container>
+
+    <div appTabGroup align="start" class="flex items-center">
+      <div appTab label="Preview" checked>
+        <div
+          class="flex items-center justify-center gap-2 py-10 border border-t-0 border-base-300 rounded-b-lg"
+        >
+          <button appButton dash variant="primary">Primary</button>
+          <button appButton dash variant="secondary">Secondary</button>
+          <button appButton dash variant="error">Danger</button>
+          <button appButton dash variant="success">Success</button>
+          <button appButton dash variant="warning">Warning</button>
+          <button appButton dash variant="info">Info</button>
+          <button appButton dash variant="neutral">Neutral</button>
+          <button appButton dash variant="ghost">Ghost</button>
+        </div>
+      </div>
+
+      <div appTab label="HTML">
+        <div class="flex p-2 border border-t-0 border-base-300 rounded-b-lg">
+          <app-code-viewer
+            class="w-full"
+            language="html"
+            name="button-sample.html"
+            src="markdown/usage/button/button-dash.html.md"
+          />
+        </div>
+      </div>
+
+      <div appTab label="TS">
+        <div class="flex p-2 border border-t-0 border-base-300 rounded-b-lg">
+          <app-code-viewer
+            class="w-full"
+            language="typescript"
+            name="button-sample.ts"
+            src="markdown/usage/button/button.ts.md"
+          />
+        </div>
+      </div>
+    </div>
+  </app-section-content>
+
+  <app-section-content>
+    <ng-container title>Disabled</ng-container>
+    <ng-container description>
+      The disabled state indicates that the button is not interactive and cannot be clicked.
+    </ng-container>
+
+    <div appTabGroup align="start" class="flex items-center">
+      <div appTab label="Preview" checked>
+        <div
+          class="flex items-center justify-center gap-2 py-10 border border-t-0 border-base-300 rounded-b-lg"
+        >
+          <button appButton disabled variant="primary">Disabled</button>
+        </div>
+      </div>
+
+      <div appTab label="HTML">
+        <div class="flex p-2 border border-t-0 border-base-300 rounded-b-lg">
+          <app-code-viewer
+            class="w-full"
+            language="html"
+            name="button-sample.html"
+            src="markdown/usage/button/button-disabled.html.md"
+          />
+        </div>
+      </div>
+
+      <div appTab label="TS">
+        <div class="flex p-2 border border-t-0 border-base-300 rounded-b-lg">
+          <app-code-viewer
+            class="w-full"
+            language="typescript"
+            name="button-sample.ts"
+            src="markdown/usage/button/button.ts.md"
+          />
+        </div>
+      </div>
+    </div>
+  </app-section-content>
+
+  <app-section-content>
+    <ng-container title>Circle</ng-container>
+    <ng-container description>
+      The circle variant provides a button style with a circular shape, ideal for icon buttons.
+    </ng-container>
+
+    <div appTabGroup align="start" class="flex items-center">
+      <div appTab label="Preview" checked>
+        <div
+          class="flex items-center justify-center gap-2 py-10 border border-t-0 border-base-300 rounded-b-lg"
+        >
+          <button appButton circle variant="primary">C</button>
+        </div>
+      </div>
+
+      <div appTab label="HTML">
+        <div class="flex p-2 border border-t-0 border-base-300 rounded-b-lg">
+          <app-code-viewer
+            class="w-full"
+            language="html"
+            name="button-sample.html"
+            src="markdown/usage/button/button-circle.html.md"
+          />
+        </div>
+      </div>
+
+      <div appTab label="TS">
+        <div class="flex p-2 border border-t-0 border-base-300 rounded-b-lg">
+          <app-code-viewer
+            class="w-full"
+            language="typescript"
+            name="button-sample.ts"
+            src="markdown/usage/button/button.ts.md"
+          />
+        </div>
+      </div>
+    </div>
+  </app-section-content>
+</app-section-container>

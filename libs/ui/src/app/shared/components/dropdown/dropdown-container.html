@@ -1,4 +1,11 @@
-<div #dropdown class="dropdown dropdown-close">
+<div
+  #dropdown
+  class="dropdown dropdown-close"
+  [class.dropdown-top]="direction() === 'top'"
+  [class.dropdown-bottom]="direction() === 'bottom'"
+  [class.dropdown-left]="direction() === 'left'"
+  [class.dropdown-right]="direction() === 'right'"
+>
   <div tabindex="0" role="button">
     <ng-content select="[trigger]" />
   </div>

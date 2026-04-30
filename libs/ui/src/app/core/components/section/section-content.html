@@ -1,0 +1,12 @@
+<article class="py-2">
+  <div class="flex flex-col mb-2">
+    <h2 class="text-3xl font-bold empty:hidden">
+      <ng-content select="[title]" />
+    </h2>
+    <small class="text-base font-light opacity-75 empty:hidden">
+      <ng-content select="[description]" />
+    </small>
+  </div>
+
+  <ng-content />
+</article>

@@ -31,16 +31,28 @@ export default class New extends Command {
         shell: true,
       },
     );
+
+    const angularJson = JSON.parse(readFileSync(`${name}/angular.json`, 'utf-8'));
+    angularJson.projects[name].architect.build.options.styles.push(
+      'src/theme/icons/font-awesome/css/all.min.css',
+    );
+    writeFileSync(`${name}/angular.json`, JSON.stringify(angularJson, null, 2));
+    cpSync('dist/ui/theme/icons', `${name}/src/theme/icons`, { recursive: true });
   }
 
   private createFolderStructure(name: string, flags: NewUiFlags) {
     rmSync(`${name}/src/app/app.css`);
 
     const indexHtml = readFileSync(`dist/ui/index.html`, 'utf-8');
-    writeFileSync(`${name}/src/index.html`, indexHtml.replace('--projectName--', name));
+    writeFileSync(`${name}/src/index.html`, indexHtml.replace('@koalarx/ui', name));
 
     const appTs = readFileSync(`dist/ui/app.ts`, 'utf-8');
-    writeFileSync(`${name}/src/app/app.ts`, appTs.replace('--projectName--', name));
+    writeFileSync(
+      `${name}/src/app/app.ts`,
+      appTs
+        .replace(`import { GithubStars } from './core/components/github-starts/github-stars';`, '')
+        .replace(`, GithubStars`, ''),
+    );
 
     const styles = readFileSync(`dist/ui/styles.css`, 'utf-8');
     writeFileSync(`${name}/src/styles.css`, styles);

@@ -23,6 +23,7 @@ export class DropdownContainer implements OnDestroy {
   };
 
   readonly closeOnClick = input(false, { transform: booleanAttribute });
+  readonly direction = input<'top' | 'bottom' | 'left' | 'right'>('bottom');
 
   ngOnDestroy(): void {
     const dropdown = this.dropdown();
