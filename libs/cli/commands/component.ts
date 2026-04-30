@@ -6,19 +6,25 @@ export default class Component extends Command {
   static override description = 'add a component to the project';
   static override examples = ['<%= config.bin %> <%= command.id %>'];
   static override flags = {
+    project: Flags.string({
+      char: 'p',
+      description: 'name of the project',
+      required: false,
+    }),
     // flag with a value (-n, --name=VALUE)
     name: Flags.string({
       char: 'n',
       description: 'name of the component',
       required: true,
-      options: ['button'],
+      options: ['button', 'loading', 'dropdown', 'modal'],
     }),
   };
 
   public async run(): Promise<void> {
     const { flags } = await this.parse(Component);
+    const projectName = flags.project || (process.cwd().split('/').pop() as string);
 
-    installComponent('example', flags.name as any);
+    installComponent(projectName, flags.name as any);
 
     this.log(green('INSTALLED'), flags.name);
   }

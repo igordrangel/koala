@@ -3,11 +3,11 @@ import { installResource } from '@/cli/utils/install-resource';
 import { Command, Flags, Interfaces } from '@oclif/core';
 import { green } from 'ansis';
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 
-type NewUiFlags = Interfaces.InferredFlags<typeof NewUi.flags>;
+type NewUiFlags = Interfaces.InferredFlags<typeof New.flags>;
 
-export default class NewUi extends Command {
+export default class New extends Command {
   static override description = 'create a new UI project';
   static override examples = ['<%= config.bin %> <%= command.id %>'];
   static override flags = {
@@ -23,6 +23,14 @@ export default class NewUi extends Command {
     const flags = ['--defaults', '--style=tailwind'];
 
     spawnSync('bunx', ['ng', 'n', name, ...flags], { stdio: 'inherit', shell: true });
+    spawnSync(`cd ${name} && bun i @koalarx/utils`, { stdio: 'inherit', shell: true });
+    spawnSync(
+      `cd ${name} && bun i -D angular-eslint @vitest/eslint-plugin eslint-plugin-prettier typescript-eslint`,
+      {
+        stdio: 'inherit',
+        shell: true,
+      },
+    );
   }
 
   private createFolderStructure(name: string, flags: NewUiFlags) {
@@ -36,6 +44,8 @@ export default class NewUi extends Command {
 
     const styles = readFileSync(`dist/ui/styles.css`, 'utf-8');
     writeFileSync(`${name}/src/styles.css`, styles);
+
+    cpSync('dist/ui/eslint.config.mts', `${name}/eslint.config.mts`);
 
     const folders: { [key: string]: string[] } = {
       core: flags.core?.split(',').map((res) => res.trim()) ?? [],
@@ -73,7 +83,7 @@ export default class NewUi extends Command {
   }
 
   public async run(): Promise<void> {
-    const { flags } = await this.parse(NewUi);
+    const { flags } = await this.parse(New);
 
     const name = flags.name;
 

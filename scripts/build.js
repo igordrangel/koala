@@ -7,3 +7,4 @@ cpSync('libs/ui/src/app/shared/components', 'dist/ui/components', { recursive: t
 cpSync('libs/ui/src/app/app.ts', 'dist/ui/app.ts');
 cpSync('libs/ui/src/index.html', 'dist/ui/index.html');
 cpSync('libs/ui/src/styles.css', 'dist/ui/styles.css');
+cpSync('libs/ui/eslint.config.mts', 'dist/ui/eslint.config.mts');

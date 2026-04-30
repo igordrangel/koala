@@ -1,0 +1,36 @@
+<div class="p-4">
+  <h1>Modal</h1>
+  <small>Modal component</small>
+  <span class="divider"></span>
+
+  <h2 class="pb-3">Dialog modal</h2>
+  <div class="flex gap-2 items-center">
+    <button appButton (click)="openModal({ pressEscape: true, clickOutside: false })">
+      open modal
+    </button>
+  </div>
+
+  <h2 class="py-3">Dialog modal, closes when clicked outside</h2>
+  <div class="flex gap-2 items-center">
+    <button appButton (click)="openModal({ pressEscape: true, clickOutside: true })">
+      open modal
+    </button>
+  </div>
+
+  <h2 class="py-3">Dialog modal with a close button at corner</h2>
+  <div class="flex gap-2 items-center">
+    <button appButton (click)="openModal({ pressEscape: true, clickOutside: false }, true)">
+      open modal
+    </button>
+  </div>
+
+  <h2 class="py-3">Dialog modal with custom width</h2>
+  <div class="flex gap-2 items-center">
+    <button
+      appButton
+      (click)="openModal({ pressEscape: true, clickOutside: false }, false, 'w-200')"
+    >
+      open modal
+    </button>
+  </div>
+</div>

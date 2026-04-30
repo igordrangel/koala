@@ -6,4 +6,12 @@ export const ROUTES: Routes = [
     path: 'loading',
     loadComponent: () => import('./loading/loading.page').then((m) => m.LoadingPage),
   },
+  {
+    path: 'dropdown',
+    loadComponent: () => import('./dropdown/dropdown.page').then((m) => m.DropdownPage),
+  },
+  {
+    path: 'modal',
+    loadComponent: () => import('./modal/modal.page').then((m) => m.ModalPage),
+  },
 ];
