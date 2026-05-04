@@ -37,6 +37,7 @@
     "@oclif/core": "^4.10.6"
   },
   "devDependencies": {
+    "@angular/cli": "^21.2.9",
     "@types/bun": "latest",
     "@types/node": "25.3.0",
     "@typescript-eslint/eslint-plugin": "8.53.1",
