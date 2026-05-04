@@ -1,7 +1,7 @@
+import { Button } from '@/shared/components/button/button';
+import { Tabs } from '@/shared/components/tabs';
 import { Component } from '@angular/core';
-import { Button } from '../../../shared/components/button/button';
 import { Section } from '../../../core/components/section';
-import { Tabs } from '../../../shared/components/tabs';
 
 @Component({
   selector: 'app-button-page',

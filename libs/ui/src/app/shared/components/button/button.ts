@@ -20,16 +20,16 @@ export class Button {
   );
   private readonly initialClasses = this.elementRef.nativeElement.className;
 
-  readonly variant = input<ButtonVariant>('neutral');
-  readonly size = input<ButtonSize>('md');
-  readonly circle = input(false, { transform: booleanAttribute });
-  readonly outline = input(false, { transform: booleanAttribute });
-  readonly soft = input(false, { transform: booleanAttribute });
-  readonly dash = input(false, { transform: booleanAttribute });
+  readonly btnVariant = input<ButtonVariant>('neutral');
+  readonly btnSize = input<ButtonSize>('md');
+  readonly btnCircle = input(false, { transform: booleanAttribute });
+  readonly btnOutline = input(false, { transform: booleanAttribute });
+  readonly btnSoft = input(false, { transform: booleanAttribute });
+  readonly btnDash = input(false, { transform: booleanAttribute });
   readonly disabled = input(false, { transform: booleanAttribute });
 
   private get variantClass() {
-    switch (this.variant()) {
+    switch (this.btnVariant()) {
       case 'neutral':
         return 'btn-neutral';
       case 'primary':
@@ -52,7 +52,7 @@ export class Button {
   }
 
   private get sizeClass() {
-    switch (this.size()) {
+    switch (this.btnSize()) {
       case 'xs':
         return 'btn-xs';
       case 'sm':
@@ -71,23 +71,23 @@ export class Button {
       const button = this.elementRef.nativeElement;
 
       for (const key of button.classList) {
-        if (!this.initialClasses.split(' ').includes(key)) {
+        if (key.startsWith('btn')) {
           button.classList.remove(key);
         }
       }
 
       button.classList.add('btn', this.variantClass, this.sizeClass);
 
-      if (this.circle()) {
+      if (this.btnCircle()) {
         button.classList.add('btn-circle');
       }
-      if (this.outline()) {
+      if (this.btnOutline()) {
         button.classList.add('btn-outline');
       }
-      if (this.soft()) {
+      if (this.btnSoft()) {
         button.classList.add('btn-soft');
       }
-      if (this.dash()) {
+      if (this.btnDash()) {
         button.classList.add('btn-dash');
       }
     });

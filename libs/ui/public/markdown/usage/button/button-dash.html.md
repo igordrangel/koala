@@ -1,7 +1,7 @@
 ```html
 <button appButton dash variant="primary">Primary</button>
 <button appButton dash variant="secondary">Secondary</button>
-<button appButton dash variant="error">Danger</button>
+<button appButton dash variant="error">Error</button>
 <button appButton dash variant="success">Success</button>
 <button appButton dash variant="warning">Warning</button>
 <button appButton dash variant="info">Info</button>

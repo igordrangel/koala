@@ -1,5 +1,5 @@
 import { Command, Flags } from '@oclif/core';
-import { installResource } from '../utils/install-resource';
+import { installResource, InstallResourceFlags } from '../utils/install-resource';
 import { green } from 'ansis';
 
 export default class Resource extends Command {
@@ -14,9 +14,9 @@ export default class Resource extends Command {
     // flag with a value (-n, --name=VALUE)
     name: Flags.string({
       char: 'n',
-      description: 'name of the resource',
+      description:
+        'name of the resource. Separate multiple resources with a comma (e.g., "base,auth,error-handler")',
       required: true,
-      options: ['base', 'auth', 'error-handler'],
     }),
   };
 
@@ -24,8 +24,16 @@ export default class Resource extends Command {
     const { flags } = await this.parse(Resource);
     const projectName = flags.project || (process.cwd().split('/').pop() as string);
 
-    installResource(projectName, flags.name as any);
+    const flagOptions = flags.name.split(',').map((name) => name.trim()) as InstallResourceFlags[];
+    const validFlagOptions: InstallResourceFlags[] = ['base', 'auth', 'error-handler'];
 
-    this.log(green('INSTALLED'), flags.name);
+    if (flagOptions.some((option) => !validFlagOptions.includes(option))) {
+      this.error(`Invalid resource name(s). Valid options are: ${validFlagOptions.join(', ')}`);
+    }
+
+    for (const resourceName of flagOptions) {
+      installResource(projectName, resourceName);
+      this.log(green('INSTALLED'), resourceName);
+    }
   }
 }

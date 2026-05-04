@@ -21,6 +21,7 @@ export class TabGroup {
 
     effect(() => {
       const element = this.elementRef.nativeElement;
+
       element.classList.remove('justify-start', 'justify-center', 'justify-end');
       element.classList.add(this.alignClass());
     });

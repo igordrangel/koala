@@ -1,0 +1,65 @@
+<ul class="menu bg-base-100 w-60 mt-16 overflow-y-auto no-scrollbar h-[calc(100vh-4rem)] pb-15">
+  <li>
+    <h2 class="menu-title">Get Started</h2>
+    <ul>
+      @for (item of getStarted; track $index) {
+        <li>
+          <a class="opacity-60" [routerLink]="item.routerLink" routerLinkActive="opacity-100">
+            <span class="flex items-center gap-2">
+              {{ item.name }}
+
+              @if (item.commingSoon) {
+                <span class="badge badge-xs badge-soft bg-neutral-700 text-white"> soon </span>
+              }
+            </span>
+          </a>
+        </li>
+      }
+    </ul>
+    <h2 class="menu-title">Components</h2>
+    @for (item of components; track $index) {
+      <ul>
+        <li>
+          <a>{{ item.name }}</a>
+          <ul>
+            @for (subItem of item.items; track $index) {
+              <li>
+                <a
+                  class="opacity-60"
+                  [routerLink]="subItem.routerLink"
+                  routerLinkActive="opacity-100"
+                >
+                  <span class="flex items-center gap-2">
+                    {{ subItem.name }}
+
+                    @if (subItem.commingSoon) {
+                      <span class="badge badge-xs badge-soft bg-neutral-700 text-white">
+                        soon
+                      </span>
+                    }
+                  </span>
+                </a>
+              </li>
+            }
+          </ul>
+        </li>
+      </ul>
+    }
+    <h2 class="menu-title">Resources</h2>
+    <ul>
+      @for (item of resources; track $index) {
+        <li>
+          <a class="opacity-60" [routerLink]="item.routerLink" routerLinkActive="opacity-100">
+            <span class="flex items-center gap-2">
+              {{ item.name }}
+
+              @if (item.commingSoon) {
+                <span class="badge badge-xs badge-soft bg-neutral-700 text-white"> soon </span>
+              }
+            </span>
+          </a>
+        </li>
+      }
+    </ul>
+  </li>
+</ul>

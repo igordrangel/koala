@@ -5,6 +5,16 @@
 @import 'prism-themes/themes/prism-atom-dark.min.css';
 @import 'prismjs/plugins/line-numbers/prism-line-numbers.min.css';
 @import 'prismjs/plugins/line-highlight/prism-line-highlight.min.css';
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
 /* --end-internal-- */
 
 @custom-variant dark (&:where(.dark, .dark *));

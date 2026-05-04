@@ -1,0 +1,89 @@
+import { Component } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { KlArray } from '@koalarx/utils';
+
+interface MenuOption {
+  name: string;
+  routerLink: string;
+  commingSoon?: boolean;
+}
+
+interface MenuOptions {
+  name: string;
+  items: MenuOption[];
+}
+
+@Component({
+  selector: 'app-nav-menu',
+  templateUrl: './nav-menu.html',
+  imports: [RouterLink, RouterLinkActive],
+})
+export class NavMenu {
+  readonly getStarted: MenuOption[] = [
+    { name: 'Introduction', routerLink: 'introduction' },
+    { name: 'Installation', routerLink: 'installation' },
+  ];
+  readonly components: MenuOptions[] = [
+    {
+      name: 'Actions',
+      items: [
+        { name: 'Button', routerLink: 'components/button' },
+        { name: 'Confirm', routerLink: 'components/confirm', commingSoon: true },
+        { name: 'Dropdown', routerLink: 'components/dropdown' },
+        { name: 'Modal', routerLink: 'components/modal' },
+        { name: 'Side Window', routerLink: 'components/side-window', commingSoon: true },
+      ],
+    },
+    {
+      name: 'Data Display',
+      items: [
+        { name: 'Accordion', routerLink: 'components/accordion', commingSoon: true },
+        { name: 'Collapse', routerLink: 'components/collapse', commingSoon: true },
+        { name: 'Datatable', routerLink: 'components/datatable', commingSoon: true },
+      ],
+    },
+    {
+      name: 'Navigation',
+      items: [
+        { name: 'Stepper', routerLink: 'components/stepper', commingSoon: true },
+        { name: 'Tab', routerLink: 'components/tabs' },
+      ],
+    },
+    {
+      name: 'Feedback',
+      items: [
+        { name: 'Alert', routerLink: 'components/alert', commingSoon: true },
+        { name: 'Loading', routerLink: 'components/loading' },
+        { name: 'Toast', routerLink: 'components/toast', commingSoon: true },
+        { name: 'Tooltip', routerLink: 'components/tooltip' },
+      ],
+    },
+    {
+      name: 'Data Input',
+      items: new KlArray([
+        { name: 'CNPJ', routerLink: 'components/input-cnpj', commingSoon: true },
+        { name: 'CPF', routerLink: 'components/input-cpf', commingSoon: true },
+        { name: 'Checkbox', routerLink: 'components/input-checkbox', commingSoon: true },
+        { name: 'Currency', routerLink: 'components/input-currency', commingSoon: true },
+        { name: 'Date', routerLink: 'components/input-date', commingSoon: true },
+        { name: 'Datetime', routerLink: 'components/input-datetime', commingSoon: true },
+        { name: 'Email', routerLink: 'components/input-email', commingSoon: true },
+        { name: 'Month', routerLink: 'components/input-month', commingSoon: true },
+        { name: 'Number', routerLink: 'components/input-number', commingSoon: true },
+        { name: 'Password', routerLink: 'components/input-password', commingSoon: true },
+        { name: 'Radio', routerLink: 'components/input-radio', commingSoon: true },
+        { name: 'Range', routerLink: 'components/input-range', commingSoon: true },
+        { name: 'Text', routerLink: 'components/input-text', commingSoon: true },
+        { name: 'Time', routerLink: 'components/input-time', commingSoon: true },
+        { name: 'URL', routerLink: 'components/input-url', commingSoon: true },
+        { name: 'Select', routerLink: 'components/select', commingSoon: true },
+        { name: 'Switcher', routerLink: 'components/switcher', commingSoon: true },
+        { name: 'Textarea', routerLink: 'components/textarea', commingSoon: true },
+      ]).orderBy('name'),
+    },
+  ];
+  readonly resources: MenuOption[] = [
+    { name: 'Auth', routerLink: 'resources/auth', commingSoon: true },
+    { name: 'Global Errors', routerLink: 'resources/global-errors', commingSoon: true },
+  ];
+}

@@ -1,6 +1,6 @@
 ```typescript
 import { Component } from '@angular/core';
-import { Button } from '../../../shared/components/button/button';
+import { Button } from '@/shared/components/button/button';
 
 @Component({
   selector: 'app-button-sample',

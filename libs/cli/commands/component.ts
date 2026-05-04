@@ -1,5 +1,5 @@
 import { Command, Flags } from '@oclif/core';
-import { installComponent } from '../utils/install-component';
+import { installComponent, InstallComponentFlags } from '../utils/install-component';
 import { green } from 'ansis';
 
 export default class Component extends Command {
@@ -14,9 +14,9 @@ export default class Component extends Command {
     // flag with a value (-n, --name=VALUE)
     name: Flags.string({
       char: 'n',
-      description: 'name of the component',
+      description:
+        'name of the component. Separate multiple components with a comma (e.g., "button,loading,dropdown")',
       required: true,
-      options: ['button', 'loading', 'dropdown', 'modal'],
     }),
   };
 
@@ -24,8 +24,23 @@ export default class Component extends Command {
     const { flags } = await this.parse(Component);
     const projectName = flags.project || (process.cwd().split('/').pop() as string);
 
-    installComponent(projectName, flags.name as any);
+    const flagOptions = flags.name.split(',').map((name) => name.trim()) as InstallComponentFlags[];
+    const validFlagOptions: InstallComponentFlags[] = [
+      'button',
+      'loading',
+      'dropdown',
+      'modal',
+      'tabs',
+      'tooltip',
+    ];
 
-    this.log(green('INSTALLED'), flags.name);
+    if (flagOptions.some((option) => !validFlagOptions.includes(option))) {
+      this.error(`Invalid component name(s). Valid options are: ${validFlagOptions.join(', ')}`);
+    }
+
+    for (const componentName of flagOptions) {
+      installComponent(projectName, componentName);
+      this.log(green('INSTALLED'), componentName);
+    }
   }
 }

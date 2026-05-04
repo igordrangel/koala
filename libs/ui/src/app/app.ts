@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { GithubStars } from './core/components/github-starts/github-stars';
+import { RouterOutlet } from '@angular/router';
+import { Header } from './core/components/header/header';
+import { NavMenu } from './core/components/nav-menu/nav-menu';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.html',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, GithubStars],
+  imports: [RouterOutlet, Header, NavMenu],
 })
 export class App {}

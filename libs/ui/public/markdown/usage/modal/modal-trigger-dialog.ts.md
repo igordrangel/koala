@@ -1,7 +1,7 @@
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '../../../shared/components/button/button';
-import { Modal, ModalConfig } from '../../../shared/components/modal/modal';
+import { Button } from '@/shared/components/button/button';
+import { Modal, ModalConfig } from '@/shared/components/modal/modal';
 import { ModalDialogSample } from './modal-dialog-sample';
 
 @Component({

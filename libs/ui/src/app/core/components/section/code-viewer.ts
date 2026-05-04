@@ -10,6 +10,7 @@ import 'prismjs/plugins/line-numbers/prism-line-numbers';
 
 import { booleanAttribute, Component, input, linkedSignal, signal } from '@angular/core';
 import { MarkdownModule } from 'ngx-markdown';
+import { Tooltip } from '../../../shared/components/tooltip/tooltip';
 
 export type CodeViewerLanguage = 'bash' | 'typescript' | 'html' | 'css' | 'json' | 'other';
 
@@ -25,7 +26,7 @@ export interface CodeViewerConfig {
 @Component({
   selector: 'app-code-viewer',
   templateUrl: './code-viewer.html',
-  imports: [MarkdownModule],
+  imports: [MarkdownModule, Tooltip],
 })
 export class CodeViewer {
   readonly copied = signal(false);

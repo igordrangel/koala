@@ -1,11 +1,7 @@
-import { installComponent } from '@/cli/utils/install-component';
-import { installResource } from '@/cli/utils/install-resource';
-import { Command, Flags, Interfaces } from '@oclif/core';
+import { Command, Flags } from '@oclif/core';
 import { green } from 'ansis';
 import { spawnSync } from 'node:child_process';
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
-
-type NewUiFlags = Interfaces.InferredFlags<typeof New.flags>;
 
 export default class New extends Command {
   static override description = 'create a new UI project';
@@ -15,8 +11,6 @@ export default class New extends Command {
     force: Flags.boolean({ char: 'f' }),
     // flag with a value (-n, --name=VALUE)
     name: Flags.string({ char: 'n', description: 'name to print' }),
-    core: Flags.string({ description: 'core resources' }),
-    components: Flags.string({ description: 'components to install' }),
   };
 
   private createAngularProject(name: string) {
@@ -40,51 +34,39 @@ export default class New extends Command {
     cpSync('dist/ui/theme/icons', `${name}/src/theme/icons`, { recursive: true });
   }
 
-  private createFolderStructure(name: string, flags: NewUiFlags) {
+  private createFolderStructure(name: string) {
     rmSync(`${name}/src/app/app.css`);
 
     const indexHtml = readFileSync(`dist/ui/index.html`, 'utf-8');
     writeFileSync(`${name}/src/index.html`, indexHtml.replace('@koalarx/ui', name));
 
-    const appTs = readFileSync(`dist/ui/app.ts`, 'utf-8');
-    writeFileSync(
-      `${name}/src/app/app.ts`,
-      appTs
-        .replace(`import { GithubStars } from './core/components/github-starts/github-stars';`, '')
-        .replace(`, GithubStars`, ''),
-    );
+    const appTs = readFileSync(`${name}/src/app/app.ts`, 'utf-8');
+    writeFileSync(`${name}/src/app/app.ts`, appTs.replace("styleUrl: './app.css',", ''));
 
     const styles = readFileSync(`dist/ui/styles.css`, 'utf-8');
     writeFileSync(`${name}/src/styles.css`, styles);
 
+    const tsConfig = JSON.parse(
+      readFileSync(`${name}/tsconfig.json`, 'utf-8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, ''),
+    );
+    tsConfig.compilerOptions.paths = { '@/*': ['./src/app/*'] };
+    writeFileSync(`${name}/tsconfig.json`, JSON.stringify(tsConfig, null, 2));
+
+    const tsConfigApp = JSON.parse(
+      readFileSync(`${name}/tsconfig.app.json`, 'utf-8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, ''),
+    );
+    tsConfigApp.compilerOptions.rootDir = './src';
+    writeFileSync(`${name}/tsconfig.app.json`, JSON.stringify(tsConfigApp, null, 2));
+
     cpSync('dist/ui/eslint.config.mts', `${name}/eslint.config.mts`);
 
     const folders: { [key: string]: string[] } = {
-      core: flags.core?.split(',').map((res) => res.trim()) ?? [],
       features: [],
       shared: ['components', 'models', 'pipes', 'services', 'utils'],
-      components: flags.components?.split(',').map((comp) => comp.trim()) ?? [],
     };
 
     for (const [folder, subfolders] of Object.entries(folders)) {
-      if (folder !== 'components') {
-        mkdirSync(`${name}/src/app/${folder}`, { recursive: true });
-        this.log(green('CREATED'), `${name}/src/app/${folder}`);
-      }
-
       switch (folder) {
-        case 'core':
-          for (const resource of subfolders) {
-            installResource(name, resource as any);
-            this.log(green('INSTALLED'), `${resource} in ${name}/src/app/${folder}`);
-          }
-          break;
-        case 'components':
-          for (const component of subfolders) {
-            installComponent(name, component as any);
-            this.log(green('INSTALLED'), `${component} in ${name}/src/app/${folder}`);
-          }
-          break;
         default:
           for (const subfolder of subfolders) {
             mkdirSync(`${name}/src/app/${folder}/${subfolder}`, { recursive: true });
@@ -104,12 +86,9 @@ export default class New extends Command {
     }
 
     this.createAngularProject(name);
-    this.createFolderStructure(name, flags);
+    this.createFolderStructure(name);
 
     spawnSync(`cd ${name} && bunx ng generate environments`, { stdio: 'inherit', shell: true });
-    spawnSync(`cd ${name} && bunx ng generate @angular/core:cleanup-unused-imports`, {
-      stdio: 'inherit',
-      shell: true,
-    });
+    spawnSync(`cd ${name} && eslint . --fix`, { stdio: 'inherit', shell: true });
   }
 }

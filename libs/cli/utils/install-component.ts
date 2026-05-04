@@ -1,6 +1,12 @@
 import { cpSync, readFileSync, writeFileSync } from 'node:fs';
 
-export type InstallComponentFlags = 'button' | 'loading' | 'dropdown' | 'modal';
+export type InstallComponentFlags =
+  | 'button'
+  | 'loading'
+  | 'dropdown'
+  | 'modal'
+  | 'tabs'
+  | 'tooltip';
 
 function copyComponent(projectName: string, component: InstallComponentFlags) {
   cpSync(
@@ -24,10 +30,7 @@ function getPrefix(projectName: string) {
 
 export function installComponent(projectName: string, component: InstallComponentFlags) {
   switch (component) {
-    case 'button':
-    case 'loading':
-    case 'dropdown':
-    case 'modal':
+    default:
       copyComponent(projectName, component);
 
       const prefix = getPrefix(projectName);

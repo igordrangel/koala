@@ -14,4 +14,12 @@ export const ROUTES: Routes = [
     path: 'modal',
     loadComponent: () => import('./modal/modal.page').then((m) => m.ModalPage),
   },
+  {
+    path: 'tabs',
+    loadComponent: () => import('./tabs/tabs.page').then((m) => m.TabsPage),
+  },
+  {
+    path: 'tooltip',
+    loadComponent: () => import('./tooltip/tooltip.page').then((m) => m.TooltipPage),
+  },
 ];

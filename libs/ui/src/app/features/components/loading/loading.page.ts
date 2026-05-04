@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { Loading } from '../../../shared/components/loading/loading';
-import { Tabs } from '../../../shared/components/tabs';
-import { Section } from '../../../core/components/section';
+import { Loading } from '@/shared/components/loading/loading';
+import { Tabs } from '@/shared/components/tabs';
+import { Section } from '@/core/components/section';
 
 @Component({
   selector: 'app-loading-page',

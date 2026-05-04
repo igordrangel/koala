@@ -1,7 +1,7 @@
 ```typescript
 import { Component } from '@angular/core';
-import { Button } from '../../../shared/components/button/button';
-import { Dropdown } from '../../../shared/components/dropdown';
+import { Button } from '@/shared/components/button/button';
+import { Dropdown } from '@/shared/components/dropdown';
 
 @Component({
   selector: 'app-dropdown-sample',

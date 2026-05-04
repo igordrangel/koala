@@ -8,6 +8,8 @@
     <button
       class="hover:cursor-pointer px-2 text-md text-neutral-500 hover:text-neutral-300 hover:bg-neutral-800 rounded-sm"
       type="button"
+      [appTooltip]="copied() ? 'Copied' : 'Copy'"
+      tooltipPosition="left"
       (click)="copyCode()"
     >
       @if (copied()) {
