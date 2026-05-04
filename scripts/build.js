@@ -17,3 +17,11 @@ writeFileSync(
 );
 
 cpSync('libs/ui/eslint.config.mts', 'dist/ui/eslint.config.mts');
+cpSync('README.md', 'dist/README.md');
+cpSync('package.json', 'dist/package.json');
+
+const packageJson = JSON.parse(readFileSync('dist/package.json', 'utf-8'));
+delete packageJson.devDependencies;
+delete packageJson.scripts;
+delete packageJson.prettier;
+writeFileSync('dist/package.json', JSON.stringify(packageJson, null, 2));

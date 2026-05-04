@@ -1,14 +1,16 @@
 {
-  "name": "koala",
+  "name": "@koalarx/ui-cli",
   "version": "0.0.0",
   "scripts": {
     "build": "bun scripts/build",
     "start": "bun run build && bun ./bin/run",
     "ui:start": "cd libs/ui && bun start",
     "generate:command": "bunx oclif generate command",
-    "prepare:hotfix": "ng version patch --no-git-tag-version",
-    "prepare:feature": "ng version minor --no-git-tag-version",
-    "prepare:release": "ng version major --no-git-tag-version"
+    "version": "git add -A projects",
+    "postversion": "git push && git push --tags",
+    "prepare:hotfix": "npm version patch",
+    "prepare:feature": "npm version minor",
+    "prepare:release": "npm version major"
   },
   "prettier": {
     "printWidth": 100,
