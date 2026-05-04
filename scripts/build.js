@@ -20,6 +20,8 @@ cpSync('libs/ui/eslint.config.mts', 'dist/ui/eslint.config.mts');
 cpSync('README.md', 'dist/README.md');
 cpSync('package.json', 'dist/package.json');
 
+cpSync('bin', 'dist/bin', { recursive: true });
+
 const packageJson = JSON.parse(readFileSync('dist/package.json', 'utf-8'));
 delete packageJson.devDependencies;
 delete packageJson.scripts;
