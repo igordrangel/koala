@@ -44,7 +44,7 @@ export default class New extends Command {
     writeFileSync(`${name}/src/index.html`, indexHtml.replace('@koalarx/ui', name));
 
     const appTs = readFileSync(`${name}/src/app/app.ts`, 'utf-8');
-    writeFileSync(`${name}/src/app/app.ts`, appTs.replace("styleUrl: './app.css',", ''));
+    writeFileSync(`${name}/src/app/app.ts`, appTs.replace("styleUrl: './app.css'", ''));
 
     const styles = readFileSync(`${originPath}/ui/styles.css`, 'utf-8');
     writeFileSync(`${name}/src/styles.css`, styles);
@@ -60,6 +60,12 @@ export default class New extends Command {
     );
     tsConfigApp.compilerOptions.rootDir = './src';
     writeFileSync(`${name}/tsconfig.app.json`, JSON.stringify(tsConfigApp, null, 2));
+
+    const tsConfigSpec = JSON.parse(
+      readFileSync(`${name}/tsconfig.spec.json`, 'utf-8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, ''),
+    );
+    tsConfigSpec.compilerOptions.rootDir = './src';
+    writeFileSync(`${name}/tsconfig.spec.json`, JSON.stringify(tsConfigSpec, null, 2));
 
     cpSync(`${originPath}/ui/eslint.config.mts`, `${name}/eslint.config.mts`);
 
@@ -92,6 +98,6 @@ export default class New extends Command {
     this.createFolderStructure(name);
 
     spawnSync(`cd ${name} && bunx ng generate environments`, { stdio: 'inherit', shell: true });
-    spawnSync(`cd ${name} && eslint . --fix`, { stdio: 'inherit', shell: true });
+    spawnSync(`cd ${name} && bunx eslint . --fix`, { stdio: 'inherit', shell: true });
   }
 }
