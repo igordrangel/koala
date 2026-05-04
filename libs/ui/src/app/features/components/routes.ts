@@ -26,4 +26,8 @@ export const ROUTES: Routes = [
     path: 'stepper',
     loadComponent: () => import('./stepper/stepper.page').then((m) => m.StepperPage),
   },
+  {
+    path: 'collapse',
+    loadComponent: () => import('./collapse/collapse.page').then((m) => m.CollapsePage),
+  },
 ];

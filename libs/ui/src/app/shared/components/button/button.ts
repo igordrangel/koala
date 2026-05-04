@@ -18,7 +18,6 @@ export class Button {
   private readonly elementRef = inject<ElementRef<HTMLButtonElement>>(
     ElementRef<HTMLButtonElement>,
   );
-  private readonly initialClasses = this.elementRef.nativeElement.className;
 
   readonly btnVariant = input<ButtonVariant>('neutral');
   readonly btnSize = input<ButtonSize>('md');

@@ -19,48 +19,49 @@ interface MenuOptions {
   imports: [RouterLink, RouterLinkActive],
 })
 export class NavMenu {
-  readonly getStarted: MenuOption[] = [
+  readonly getStarted = new KlArray<MenuOption>([
     { name: 'Introduction', routerLink: 'introduction' },
     { name: 'Installation', routerLink: 'installation' },
-  ];
-  readonly components: MenuOptions[] = [
+  ]).orderBy('name');
+
+  readonly components = new KlArray<MenuOptions>([
     {
       name: 'Actions',
-      items: [
+      items: new KlArray<MenuOption>([
         { name: 'Button', routerLink: 'components/button' },
         { name: 'Confirm', routerLink: 'components/confirm', commingSoon: true },
         { name: 'Dropdown', routerLink: 'components/dropdown' },
         { name: 'Modal', routerLink: 'components/modal' },
         { name: 'Side Window', routerLink: 'components/side-window', commingSoon: true },
-      ],
+      ]).orderBy('name'),
     },
     {
       name: 'Data Display',
-      items: [
-        { name: 'Accordion', routerLink: 'components/accordion', commingSoon: true },
-        { name: 'Collapse', routerLink: 'components/collapse', commingSoon: true },
+      items: new KlArray<MenuOption>([
+        { name: 'Collapse', routerLink: 'components/collapse' },
         { name: 'Datatable', routerLink: 'components/datatable', commingSoon: true },
-      ],
+        { name: 'Table', routerLink: 'components/table', commingSoon: true },
+      ]).orderBy('name'),
     },
     {
       name: 'Navigation',
-      items: [
+      items: new KlArray<MenuOption>([
         { name: 'Stepper', routerLink: 'components/stepper' },
         { name: 'Tab', routerLink: 'components/tabs' },
-      ],
+      ]).orderBy('name'),
     },
     {
       name: 'Feedback',
-      items: [
+      items: new KlArray<MenuOption>([
         { name: 'Alert', routerLink: 'components/alert', commingSoon: true },
         { name: 'Loading', routerLink: 'components/loading' },
         { name: 'Toast', routerLink: 'components/toast', commingSoon: true },
         { name: 'Tooltip', routerLink: 'components/tooltip' },
-      ],
+      ]).orderBy('name'),
     },
     {
       name: 'Data Input',
-      items: new KlArray([
+      items: new KlArray<MenuOption>([
         { name: 'CNPJ', routerLink: 'components/input-cnpj', commingSoon: true },
         { name: 'CPF', routerLink: 'components/input-cpf', commingSoon: true },
         { name: 'Checkbox', routerLink: 'components/input-checkbox', commingSoon: true },
@@ -81,9 +82,31 @@ export class NavMenu {
         { name: 'Textarea', routerLink: 'components/textarea', commingSoon: true },
       ]).orderBy('name'),
     },
-  ];
-  readonly resources: MenuOption[] = [
-    { name: 'Auth', routerLink: 'resources/auth', commingSoon: true },
-    { name: 'Global Errors', routerLink: 'resources/global-errors', commingSoon: true },
-  ];
+  ]).orderBy('name');
+
+  readonly resources = new KlArray<MenuOptions>([
+    {
+      name: 'Abstractions',
+      items: new KlArray<MenuOption>([
+        { name: 'HttpBase', routerLink: 'resources/http-base', commingSoon: true },
+        { name: 'ListBase', routerLink: 'resources/list-base', commingSoon: true },
+        { name: 'FormBase', routerLink: 'resources/form-base', commingSoon: true },
+        { name: 'PageBase', routerLink: 'resources/page-base', commingSoon: true },
+      ]).orderBy('name'),
+    },
+    {
+      name: 'Others',
+      items: new KlArray<MenuOption>([
+        { name: 'Global Errors', routerLink: 'resources/global-errors', commingSoon: true },
+      ]).orderBy('name'),
+    },
+    {
+      name: 'Security & Policies',
+      items: new KlArray<MenuOption>([
+        { name: 'Auth', routerLink: 'resources/auth', commingSoon: true },
+        { name: 'Rules', routerLink: 'resources/rules', commingSoon: true },
+        { name: 'Global Errors', routerLink: 'resources/global-errors', commingSoon: true },
+      ]).orderBy('name'),
+    },
+  ]).orderBy('name');
 }

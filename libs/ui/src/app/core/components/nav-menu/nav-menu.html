@@ -46,20 +46,33 @@
       </ul>
     }
     <h2 class="menu-title">Resources</h2>
-    <ul>
-      @for (item of resources; track $index) {
+    @for (item of resources; track $index) {
+      <ul>
         <li>
-          <a class="opacity-60" [routerLink]="item.routerLink" routerLinkActive="opacity-100">
-            <span class="flex items-center gap-2">
-              {{ item.name }}
+          <a>{{ item.name }}</a>
+          <ul>
+            @for (subItem of item.items; track $index) {
+              <li>
+                <a
+                  class="opacity-60"
+                  [routerLink]="subItem.routerLink"
+                  routerLinkActive="opacity-100"
+                >
+                  <span class="flex items-center gap-2">
+                    {{ subItem.name }}
 
-              @if (item.commingSoon) {
-                <span class="badge badge-xs badge-soft bg-neutral-700 text-white"> soon </span>
-              }
-            </span>
-          </a>
+                    @if (subItem.commingSoon) {
+                      <span class="badge badge-xs badge-soft bg-neutral-700 text-white">
+                        soon
+                      </span>
+                    }
+                  </span>
+                </a>
+              </li>
+            }
+          </ul>
         </li>
-      }
-    </ul>
+      </ul>
+    }
   </li>
 </ul>

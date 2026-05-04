@@ -6,10 +6,7 @@ export type LoadingSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 @Directive({ selector: '[appLoading]' })
 export class Loading {
-  private readonly elementRef = inject<ElementRef<HTMLButtonElement>>(
-    ElementRef<HTMLButtonElement>,
-  );
-  private readonly initialClasses = this.elementRef.nativeElement.className;
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef<HTMLElement>);
 
   readonly variant = input<LoadingVariant>('spinner');
   readonly size = input<LoadingSize>('md');
@@ -51,7 +48,7 @@ export class Loading {
       const button = this.elementRef.nativeElement;
 
       for (const key of button.classList) {
-        if (!this.initialClasses.split(' ').includes(key)) {
+        if (key.startsWith('loading')) {
           button.classList.remove(key);
         }
       }
