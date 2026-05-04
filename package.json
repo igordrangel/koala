@@ -1,12 +1,12 @@
 {
   "name": "@koalarx/ui-cli",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "scripts": {
     "build": "bun scripts/build",
     "start": "bun run build && bun ./bin/run",
     "ui:start": "cd libs/ui && bun start",
     "generate:command": "bunx oclif generate command",
-    "version": "git add -A projects",
+    "version": "git add -A libs",
     "postversion": "git push && git push --tags",
     "prepare:hotfix": "npm version patch",
     "prepare:feature": "npm version minor",
