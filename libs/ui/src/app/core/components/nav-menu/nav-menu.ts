@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { KlArray } from '@koalarx/utils';
+import { KlArray } from '@koalarx/utils/KlArray';
 
 interface MenuOption {
   name: string;
@@ -29,7 +29,7 @@ export class NavMenu {
       name: 'Actions',
       items: new KlArray<MenuOption>([
         { name: 'Button', routerLink: 'components/button' },
-        { name: 'Confirm', routerLink: 'components/confirm', commingSoon: true },
+        { name: 'Confirm', routerLink: 'components/confirm' },
         { name: 'Dropdown', routerLink: 'components/dropdown' },
         { name: 'Modal', routerLink: 'components/modal' },
         { name: 'Side Window', routerLink: 'components/side-window', commingSoon: true },
@@ -53,7 +53,7 @@ export class NavMenu {
     {
       name: 'Feedback',
       items: new KlArray<MenuOption>([
-        { name: 'Alert', routerLink: 'components/alert', commingSoon: true },
+        { name: 'Alert', routerLink: 'components/alert' },
         { name: 'Loading', routerLink: 'components/loading' },
         { name: 'Toast', routerLink: 'components/toast', commingSoon: true },
         { name: 'Tooltip', routerLink: 'components/tooltip' },

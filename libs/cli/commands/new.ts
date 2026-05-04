@@ -49,7 +49,10 @@ export default class New extends Command {
     writeFileSync(`${name}/src/index.html`, indexHtml.replace('@koalarx/ui', name));
 
     const appTs = readFileSync(`${name}/src/app/app.ts`, 'utf-8');
-    writeFileSync(`${name}/src/app/app.ts`, appTs.replace("styleUrl: './app.css'", ''));
+    writeFileSync(
+      `${name}/src/app/app.ts`,
+      appTs.replace("styleUrl: './app.css',", '').replace("styleUrl: './app.css'", ''),
+    );
 
     const styles = readFileSync(`${originPath}/ui/styles.css`, 'utf-8');
     writeFileSync(`${name}/src/styles.css`, styles);

@@ -34,6 +34,8 @@ export default class Component extends Command {
       'tooltip',
       'stepper',
       'collapse',
+      'confirm',
+      'alert',
     ];
 
     if (flagOptions.some((option) => !validFlagOptions.includes(option))) {
@@ -41,7 +43,15 @@ export default class Component extends Command {
     }
 
     for (const componentName of flagOptions) {
-      installComponent(projectName, componentName);
+      const deps = installComponent(projectName, componentName);
+      if (deps.length > 0) {
+        this.log('Dependencies installed:');
+        for (const dep of deps) {
+          this.log('- ', green(dep));
+        }
+        this.log('');
+      }
+
       this.log(green('INSTALLED'), componentName);
     }
   }

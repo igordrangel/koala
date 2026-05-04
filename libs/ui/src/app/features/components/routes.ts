@@ -30,4 +30,12 @@ export const ROUTES: Routes = [
     path: 'collapse',
     loadComponent: () => import('./collapse/collapse.page').then((m) => m.CollapsePage),
   },
+  {
+    path: 'confirm',
+    loadComponent: () => import('./confirm/confirm.page').then((m) => m.ConfirmPage),
+  },
+  {
+    path: 'alert',
+    loadComponent: () => import('./alert/alert.page').then((m) => m.AlertPage),
+  },
 ];
