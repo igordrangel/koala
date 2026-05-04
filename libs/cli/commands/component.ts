@@ -32,6 +32,7 @@ export default class Component extends Command {
       'modal',
       'tabs',
       'tooltip',
+      'stepper',
     ];
 
     if (flagOptions.some((option) => !validFlagOptions.includes(option))) {

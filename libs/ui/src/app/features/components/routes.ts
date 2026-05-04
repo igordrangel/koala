@@ -22,4 +22,8 @@ export const ROUTES: Routes = [
     path: 'tooltip',
     loadComponent: () => import('./tooltip/tooltip.page').then((m) => m.TooltipPage),
   },
+  {
+    path: 'stepper',
+    loadComponent: () => import('./stepper/stepper.page').then((m) => m.StepperPage),
+  },
 ];

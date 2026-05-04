@@ -45,7 +45,7 @@ export class NavMenu {
     {
       name: 'Navigation',
       items: [
-        { name: 'Stepper', routerLink: 'components/stepper', commingSoon: true },
+        { name: 'Stepper', routerLink: 'components/stepper' },
         { name: 'Tab', routerLink: 'components/tabs' },
       ],
     },

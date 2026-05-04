@@ -6,7 +6,8 @@ export type InstallComponentFlags =
   | 'dropdown'
   | 'modal'
   | 'tabs'
-  | 'tooltip';
+  | 'tooltip'
+  | 'stepper';
 
 function copyComponent(projectName: string, component: InstallComponentFlags) {
   cpSync(
