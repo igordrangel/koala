@@ -18,6 +18,6 @@ export function installResource(projectName: string, resource: InstallResourceFl
   }
 
   for (const folder of folders) {
-    mkdirSync(`${projectName}/src/app/core/${folder}`, { recursive: true });
+    mkdirSync(`src/app/core/${folder}`, { recursive: true });
   }
 }
