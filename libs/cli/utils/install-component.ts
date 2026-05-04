@@ -1,4 +1,7 @@
 import { cpSync, readFileSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
+
+const originPath = path.join(__dirname, '../../');
 
 export type InstallComponentFlags =
   | 'button'
@@ -12,7 +15,7 @@ export type InstallComponentFlags =
 
 function copyComponent(projectName: string, component: InstallComponentFlags) {
   cpSync(
-    `./dist/ui/components/${component}`,
+    `${originPath}/ui/components/${component}`,
     `${projectName}/src/app/shared/components/${component}`,
     { recursive: true },
   );
