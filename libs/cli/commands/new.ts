@@ -1,7 +1,7 @@
 import { Command, Flags } from '@oclif/core';
 import { green } from 'ansis';
 import { spawnSync } from 'node:child_process';
-import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 
 const originPath = path.join(__dirname, '../../');
@@ -35,6 +35,11 @@ export default class New extends Command {
     );
     writeFileSync(`${name}/angular.json`, JSON.stringify(angularJson, null, 2));
     cpSync(`${originPath}/ui/theme/icons`, `${name}/src/theme/icons`, { recursive: true });
+
+    const vscodeSettingsPath = `${originPath}/ui/.vscode/settings.json`;
+    if (existsSync(vscodeSettingsPath)) {
+      cpSync(vscodeSettingsPath, `${name}/.vscode/settings.json`);
+    }
   }
 
   private createFolderStructure(name: string) {
