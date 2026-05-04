@@ -64,12 +64,15 @@ export default class New extends Command {
       readFileSync(`${name}/tsconfig.app.json`, 'utf-8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, ''),
     );
     tsConfigApp.compilerOptions.rootDir = './src';
+    tsConfigApp.includes = ['src/**/*.ts'];
+    tsConfigApp.exclude = ['src/**/*.spec.ts'];
     writeFileSync(`${name}/tsconfig.app.json`, JSON.stringify(tsConfigApp, null, 2));
 
     const tsConfigSpec = JSON.parse(
       readFileSync(`${name}/tsconfig.spec.json`, 'utf-8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, ''),
     );
     tsConfigSpec.compilerOptions.rootDir = './src';
+    tsConfigSpec.includes = ['src/**/*.d.ts', 'src/**/*.spec.ts'];
     writeFileSync(`${name}/tsconfig.spec.json`, JSON.stringify(tsConfigSpec, null, 2));
 
     cpSync(`${originPath}/ui/eslint.config.mts`, `${name}/eslint.config.mts`);
