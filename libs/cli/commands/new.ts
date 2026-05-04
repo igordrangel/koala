@@ -34,7 +34,7 @@ export default class New extends Command {
       'src/theme/icons/font-awesome/css/all.min.css',
     );
     writeFileSync(`${name}/angular.json`, JSON.stringify(angularJson, null, 2));
-    cpSync('dist/ui/theme/icons', `${name}/src/theme/icons`, { recursive: true });
+    cpSync(`${originPath}/ui/theme/icons`, `${name}/src/theme/icons`, { recursive: true });
   }
 
   private createFolderStructure(name: string) {
