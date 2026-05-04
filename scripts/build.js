@@ -23,7 +23,10 @@ cpSync('package.json', 'dist/package.json');
 cpSync('bin', 'dist/bin', { recursive: true });
 
 const packageJson = JSON.parse(readFileSync('dist/package.json', 'utf-8'));
+packageJson.oclif.commands = './cli/commands';
+
 delete packageJson.devDependencies;
 delete packageJson.scripts;
 delete packageJson.prettier;
+
 writeFileSync('dist/package.json', JSON.stringify(packageJson, null, 2));
