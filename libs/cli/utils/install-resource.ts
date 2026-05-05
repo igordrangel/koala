@@ -1,8 +1,10 @@
 import { mkdirSync } from 'node:fs';
+import { getProjectPath } from './project-path';
 
 export type InstallResourceFlags = 'base' | 'auth' | 'error-handler';
 
 export function installResource(projectName: string, resource: InstallResourceFlags) {
+  const projectFolder = getProjectPath(projectName);
   const folders: string[] = [];
 
   switch (resource) {
@@ -18,6 +20,6 @@ export function installResource(projectName: string, resource: InstallResourceFl
   }
 
   for (const folder of folders) {
-    mkdirSync(`src/app/core/${folder}`, { recursive: true });
+    mkdirSync(`${projectFolder}/src/app/core/${folder}`, { recursive: true });
   }
 }

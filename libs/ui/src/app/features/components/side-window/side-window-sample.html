@@ -2,16 +2,16 @@
   @let pressEscape = sideWindowOptions.closeOptions?.pressEscape ?? false;
   @let clickOutside = sideWindowOptions.closeOptions?.clickOutside ?? false;
 
-  <div class="flex justify-between items-center" title>
+  <div class="flex w-full justify-between items-center" title>
     <span>Hello!</span>
 
     @if (closeButtonCorner) {
-      <button appButton circle variant="ghost" size="sm" (click)="sideWindowRef.dismiss()">
+      <button appButton btnCircle btnVariant="ghost" btnSize="sm" (click)="sideWindowRef.dismiss()">
         X
       </button>
     }
   </div>
-  <div class="w-200" content>
+  <div class="w-100 p-4" content>
     @if (pressEscape && !clickOutside) {
       Press ESC key or click the button below to close
     } @else if (pressEscape && clickOutside) {
@@ -20,7 +20,7 @@
   </div>
   <ng-container actions>
     @if (pressEscape && !clickOutside && !closeButtonCorner) {
-      <button appButton (click)="sideWindowRef.dismiss()">Close</button>
+      <button appButton btnVariant="primary" (click)="sideWindowRef.dismiss()">Close</button>
     }
   </ng-container>
 </app-side-window>

@@ -1,0 +1,46 @@
+@theme {
+  --animate-slide-in-left: slide-in-left 0.1s ease-in-out;
+  --animate-slide-out-right: slide-out-right 0.1s ease-in-out;
+  --animate-zoom-out: animate-zoom-out 0.1s ease-in-out;
+
+  @keyframes slide-in-left {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slide-out-right {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes bounce {
+    0% {
+      top: 10px;
+    }
+    60% {
+      top: -5px;
+    }
+    100% {
+      top: 0;
+    }
+  }
+
+  @keyframes animate-zoom-out {
+    from {
+      transform: scale(1);
+      opacity: 1;
+    }
+    to {
+      transform: scale(0);
+      opacity: 0;
+    }
+  }
+}

@@ -24,11 +24,15 @@ export class SideWindowRef {
   );
 
   dismiss(afterCloseTrigger?: SideWindowAfterCloseTrigger) {
-    this.componentRef().destroy();
-    this.appRef.detachView(this.componentRef().hostView);
+    this.componentRef().location.nativeElement.classList.add('animate-slide-out-right');
 
-    if (afterCloseTrigger) {
-      this.afterCloseTrigger(afterCloseTrigger);
-    }
+    setTimeout(() => {
+      this.componentRef().destroy();
+      this.appRef.detachView(this.componentRef().hostView);
+
+      if (afterCloseTrigger) {
+        this.afterCloseTrigger(afterCloseTrigger);
+      }
+    }, 100);
   }
 }

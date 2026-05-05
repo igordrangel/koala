@@ -2,7 +2,7 @@ import { Button } from '@/shared/components/button/button';
 import { Tabs } from '@/shared/components/tabs';
 import { Component } from '@angular/core';
 import { Section } from '../../../core/components/section';
-import { Stepper } from '../../../shared/components/steps';
+import { Stepper } from '../../../shared/components/stepper';
 
 @Component({
   selector: 'app-stepper-page',

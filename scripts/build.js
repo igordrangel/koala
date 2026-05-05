@@ -4,9 +4,9 @@ import { cpSync, rmSync, readFileSync, writeFileSync } from 'node:fs';
 rmSync('dist', { recursive: true, force: true });
 spawnSync('tsc', ['-p', 'libs/cli/tsconfig.json'], { stdio: 'inherit' });
 cpSync('libs/ui/.vscode/settings.json', 'dist/ui/.vscode/settings.json');
-cpSync('libs/ui/public/assets/icons', 'dist/ui/assets/icons', { recursive: true });
 cpSync('libs/ui/src/app/shared/components', 'dist/ui/components', { recursive: true });
 cpSync('libs/ui/src/theme', 'dist/ui/theme', { recursive: true });
+cpSync('libs/ui/src/theme/animations.css', 'dist/ui/theme/animations.css');
 cpSync('libs/ui/src/app/app.ts', 'dist/ui/app.ts');
 cpSync('libs/ui/src/index.html', 'dist/ui/index.html');
 

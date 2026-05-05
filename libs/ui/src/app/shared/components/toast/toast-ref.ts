@@ -16,7 +16,11 @@ export class ToastRef {
   private readonly componentRef = inject<() => ComponentRef<Type<any>>>(TOAST_REF_TOKEN);
 
   dismiss() {
-    this.componentRef().destroy();
-    this.appRef.detachView(this.componentRef().hostView);
+    this.componentRef().location.nativeElement.classList.add('animate-zoom-out');
+
+    setTimeout(() => {
+      this.componentRef().destroy();
+      this.appRef.detachView(this.componentRef().hostView);
+    }, 100);
   }
 }

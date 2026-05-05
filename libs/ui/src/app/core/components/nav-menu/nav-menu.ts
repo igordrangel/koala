@@ -32,7 +32,7 @@ export class NavMenu {
         { name: 'Confirm', routerLink: 'components/confirm' },
         { name: 'Dropdown', routerLink: 'components/dropdown' },
         { name: 'Modal', routerLink: 'components/modal' },
-        { name: 'Side Window', routerLink: 'components/side-window', commingSoon: true },
+        { name: 'Side Window', routerLink: 'components/side-window' },
       ]).orderBy('name'),
     },
     {

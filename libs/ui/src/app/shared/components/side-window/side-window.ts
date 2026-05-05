@@ -57,6 +57,8 @@ export class SideWindow {
       const elementId = this.generateElementId();
       const container = body.appendChild(document.createElement('div'));
 
+      body.classList.add('flex', 'overflow-x-hidden');
+
       container.id = elementId;
 
       const componentRef = createComponent(component, {

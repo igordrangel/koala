@@ -1,5 +1,6 @@
 import { cpSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { getProjectPath } from './project-path';
 
 const originPath = path.join(__dirname, '../../');
 
@@ -14,10 +15,11 @@ export type InstallComponentFlags =
   | 'collapse'
   | 'confirm'
   | 'alert'
-  | 'toast';
+  | 'toast'
+  | 'side-window';
 
 function copyComponent(projectName: string, component: InstallComponentFlags) {
-  const projectFolder = path.join(process.cwd(), projectName);
+  const projectFolder = getProjectPath(projectName);
   cpSync(
     `${originPath}/ui/components/${component}`,
     `${projectFolder}/src/app/shared/components/${component}`,
@@ -28,7 +30,7 @@ function copyComponent(projectName: string, component: InstallComponentFlags) {
 }
 
 function getPrefix(projectName: string) {
-  const projectFolder = path.join(process.cwd(), projectName);
+  const projectFolder = getProjectPath(projectName);
   const angularJsonPath = path.join(projectFolder, 'angular.json');
   const prefix = JSON.parse(readFileSync(angularJsonPath, 'utf-8')).projects[projectName].prefix;
 
@@ -43,7 +45,7 @@ function getNotInstalledDeps(
   projectName: string,
   deps: InstallComponentFlags[],
 ): InstallComponentFlags[] {
-  const projectFolder = path.join(process.cwd(), projectName);
+  const projectFolder = getProjectPath(projectName);
   const notInstalledDeps: InstallComponentFlags[] = [];
 
   for (const dep of deps) {
@@ -60,7 +62,7 @@ export function installComponent(
   component: InstallComponentFlags,
 ): InstallComponentFlags[] {
   const prefix = getPrefix(projectName);
-  const projectFolder = path.join(process.cwd(), projectName);
+  const projectFolder = getProjectPath(projectName);
   const deps: InstallComponentFlags[] = [];
   const installedDeps: InstallComponentFlags[] = [];
 
