@@ -22,7 +22,7 @@ export default class New extends Command {
     spawnSync('bunx', ['ng', 'n', name, ...flags], { stdio: 'inherit', shell: true });
     spawnSync(`cd ${name} && bun i @koalarx/utils clsx`, { stdio: 'inherit', shell: true });
     spawnSync(
-      `cd ${name} && bun i -D angular-eslint @vitest/eslint-plugin eslint-plugin-prettier typescript-eslint`,
+      `cd ${name} && bun i -D angular-eslint @vitest/eslint-plugin eslint-plugin-prettier typescript-eslint daisyui`,
       {
         stdio: 'inherit',
         shell: true,
