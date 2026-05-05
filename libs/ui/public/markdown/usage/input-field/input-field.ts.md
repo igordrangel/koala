@@ -1,11 +1,11 @@
 ```typescript
 import { Component } from '@angular/core';
-import { InputField } from '@/shared/components/input-field';
+import { Input } from '@/shared/components/input-field/input';
 
 @Component({
   selector: 'app-input-field-sample',
   templateUrl: './input-field.sample.html',
-  imports: [InputField],
+  imports: [Input],
 })
 export class InputFieldSample {}
 ```

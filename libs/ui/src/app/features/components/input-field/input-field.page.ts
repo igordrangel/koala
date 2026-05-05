@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { Section } from '../../../core/components/section';
-import { InputField } from '../../../shared/components/input-field';
+import { Input } from '../../../shared/components/input-field/input';
 import { Tabs } from '../../../shared/components/tabs';
 
 @Component({
   selector: 'app-input-field-page',
   templateUrl: './input-field.page.html',
-  imports: [Section, Tabs, InputField],
+  imports: [Section, Tabs, Input],
 })
 export class InputFieldPage {}

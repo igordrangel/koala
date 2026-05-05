@@ -21,8 +21,10 @@ export const InstallComponentFlagsList = [
   'skeleton',
   'pagination',
   'breadcrumb',
-  'input-field',
+  'fieldset',
   'validator',
+  'input-field',
+  'textarea',
 ] as const;
 export type InstallComponentFlags = (typeof InstallComponentFlagsList)[number];
 

@@ -1,23 +1,21 @@
 <app-section-container>
-  <ng-container title>Validator</ng-container>
+  <ng-container title>Fieldset</ng-container>
   <ng-container description>
-    Validators can be used to ensure that user input meets specific criteria.
+    Fieldsets can be used to group related input fields in a form.
   </ng-container>
 
   <app-section-content>
     <ng-container title>Installation</ng-container>
-    <ng-container description
-      >Use the Koala CLI to generate a new validator component.</ng-container
-    >
+    <ng-container description>Use the Koala CLI to generate a new fieldset component.</ng-container>
 
-    <app-code-viewer language="bash" name="kl" src="markdown/install/validator-install.md" />
+    <app-code-viewer language="bash" name="kl" src="markdown/install/fieldset-install.md" />
   </app-section-content>
 
   <app-section-content>
     <ng-container title>Usage</ng-container>
     <ng-container description>
-      Validators are used to ensure that user input meets specific criteria. They can be applied to
-      input fields to provide real-time feedback and enforce rules.
+      Fieldsets is a container for fields like input, select, textarea, etc. It also has a label,
+      error and a hint to provide more information about the field.
     </ng-container>
 
     <div appTabGroup align="start" class="flex items-center">
@@ -25,7 +23,8 @@
         <div
           class="flex flex-col items-center justify-center gap-2 p-10 border border-t-0 border-base-300 rounded-b-lg"
         >
-          <div class="flex flex-col">
+          <app-fieldset>
+            <ng-container label>What is your email?</ng-container>
             <input
               field
               appInput
@@ -33,13 +32,14 @@
               placeholder="Type here"
               [formControl]="emailControl"
             />
+            <ng-container hint>Inform a valid email address</ng-container>
 
             @if (emailControl.hasError('required')) {
               <span appValidatorHint>Email is required</span>
             } @else if (emailControl.hasError('email')) {
               <span appValidatorHint>Invalid email</span>
             }
-          </div>
+          </app-fieldset>
         </div>
       </div>
 
@@ -48,8 +48,8 @@
           <app-code-viewer
             class="w-full"
             language="html"
-            name="validator-sample.html"
-            src="markdown/usage/validator/validator.html.md"
+            name="fieldset-sample.html"
+            src="markdown/usage/fieldset/fieldset.html.md"
           />
         </div>
       </div>
@@ -59,8 +59,8 @@
           <app-code-viewer
             class="w-full"
             language="typescript"
-            name="validator-sample.ts"
-            src="markdown/usage/validator/validator.ts.md"
+            name="fieldset-sample.ts"
+            src="markdown/usage/fieldset/fieldset.ts.md"
           />
         </div>
       </div>

@@ -83,7 +83,7 @@ export default class New extends Command {
 
     const folders: { [key: string]: string[] } = {
       features: [],
-      shared: ['components', 'models', 'pipes', 'services', 'utils'],
+      shared: ['components', 'models', 'pipes', 'services', 'utils', 'validators'],
     };
 
     for (const [folder, subfolders] of Object.entries(folders)) {

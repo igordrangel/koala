@@ -75,10 +75,11 @@ export class NavMenu {
         { name: 'Select', routerLink: 'components/select', commingSoon: true },
         { name: 'Combobox', routerLink: 'components/combobox', commingSoon: true },
         { name: 'Toggle', routerLink: 'components/toggle', commingSoon: true },
-        { name: 'Textarea', routerLink: 'components/textarea', commingSoon: true },
+        { name: 'Textarea', routerLink: 'components/textarea' },
         { name: 'Filter', routerLink: 'components/filter', commingSoon: true },
         { name: 'Input Field', routerLink: 'components/input-field' },
         { name: 'Validator', routerLink: 'components/validator' },
+        { name: 'Fieldset', routerLink: 'components/fieldset' },
       ]).orderBy('name'),
     },
   ]).orderBy('name');
