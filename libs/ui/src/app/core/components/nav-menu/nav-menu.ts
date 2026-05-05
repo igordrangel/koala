@@ -46,7 +46,7 @@ export class NavMenu {
     {
       name: 'Navigation',
       items: new KlArray<MenuOption>([
-        { name: 'Breadcrumb', routerLink: 'components/breadcrumb', commingSoon: true },
+        { name: 'Breadcrumb', routerLink: 'components/breadcrumb' },
         { name: 'Stepper', routerLink: 'components/stepper' },
         { name: 'Tab', routerLink: 'components/tabs' },
         { name: 'Pagination', routerLink: 'components/pagination' },

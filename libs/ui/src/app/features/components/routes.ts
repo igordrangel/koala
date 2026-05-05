@@ -58,4 +58,8 @@ export const ROUTES: Routes = [
     path: 'pagination',
     loadComponent: () => import('./pagination/pagination.page').then((m) => m.PaginationPage),
   },
+  {
+    path: 'breadcrumb',
+    loadComponent: () => import('./breadcrumb/breadcrumb.page').then((m) => m.BreadcrumbPage),
+  },
 ];
