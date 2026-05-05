@@ -1,6 +1,10 @@
 import { Command, Flags } from '@oclif/core';
-import { installComponent, InstallComponentFlags } from '../utils/install-component';
 import { green } from 'ansis';
+import {
+  installComponent,
+  InstallComponentFlags,
+  InstallComponentFlagsList,
+} from '../utils/install-component';
 
 export default class Component extends Command {
   static override description = 'add a component to the project';
@@ -25,20 +29,7 @@ export default class Component extends Command {
     const projectName = flags.project || (process.cwd().split('/').pop() as string);
 
     const flagOptions = flags.name.split(',').map((name) => name.trim()) as InstallComponentFlags[];
-    const validFlagOptions: InstallComponentFlags[] = [
-      'button',
-      'loading',
-      'dropdown',
-      'modal',
-      'tabs',
-      'tooltip',
-      'stepper',
-      'collapse',
-      'confirm',
-      'alert',
-      'toast',
-      'side-window',
-    ];
+    const validFlagOptions = InstallComponentFlagsList;
 
     if (flagOptions.some((option) => !validFlagOptions.includes(option))) {
       this.error(`Invalid component name(s). Valid options are: ${validFlagOptions.join(', ')}`);

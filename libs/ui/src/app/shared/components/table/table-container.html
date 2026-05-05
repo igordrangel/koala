@@ -1,0 +1,18 @@
+<div class="overflow-x-auto" [class]="class()">
+  <table
+    class="table"
+    [class]="tableSizeClass()"
+    [class.table-zebra]="zebra()"
+    [class.table-pin-rows]="pinnedHeader()"
+  >
+    <thead class="empty:hidden">
+      <ng-content select="[header]"></ng-content>
+    </thead>
+    <tbody class="empty:hidden">
+      <ng-content select="[body]"></ng-content>
+    </tbody>
+    <tfoot class="empty:hidden">
+      <ng-content select="[footer]"></ng-content>
+    </tfoot>
+  </table>
+</div>

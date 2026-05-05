@@ -4,19 +4,22 @@ import { getProjectPath } from './project-path';
 
 const originPath = path.join(__dirname, '../../');
 
-export type InstallComponentFlags =
-  | 'button'
-  | 'loading'
-  | 'dropdown'
-  | 'modal'
-  | 'tabs'
-  | 'tooltip'
-  | 'stepper'
-  | 'collapse'
-  | 'confirm'
-  | 'alert'
-  | 'toast'
-  | 'side-window';
+export const InstallComponentFlagsList = [
+  'button',
+  'loading',
+  'dropdown',
+  'modal',
+  'tabs',
+  'tooltip',
+  'stepper',
+  'collapse',
+  'confirm',
+  'alert',
+  'toast',
+  'side-window',
+  'table',
+] as const;
+export type InstallComponentFlags = (typeof InstallComponentFlagsList)[number];
 
 function copyComponent(projectName: string, component: InstallComponentFlags) {
   const projectFolder = getProjectPath(projectName);

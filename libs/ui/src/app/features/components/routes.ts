@@ -46,4 +46,8 @@ export const ROUTES: Routes = [
     path: 'toast',
     loadComponent: () => import('./toast/toast.page').then((m) => m.ToastPage),
   },
+  {
+    path: 'table',
+    loadComponent: () => import('./table/table.page').then((m) => m.TablePage),
+  },
 ];

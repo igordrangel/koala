@@ -40,7 +40,7 @@ export class NavMenu {
       items: new KlArray<MenuOption>([
         { name: 'Collapse', routerLink: 'components/collapse' },
         { name: 'Datatable', routerLink: 'components/datatable', commingSoon: true },
-        { name: 'Table', routerLink: 'components/table', commingSoon: true },
+        { name: 'Table', routerLink: 'components/table' },
       ]).orderBy('name'),
     },
     {
@@ -48,6 +48,7 @@ export class NavMenu {
       items: new KlArray<MenuOption>([
         { name: 'Stepper', routerLink: 'components/stepper' },
         { name: 'Tab', routerLink: 'components/tabs' },
+        { name: 'Pagination', routerLink: 'components/pagination', commingSoon: true },
       ]).orderBy('name'),
     },
     {
@@ -57,6 +58,7 @@ export class NavMenu {
         { name: 'Loading', routerLink: 'components/loading' },
         { name: 'Toast', routerLink: 'components/toast' },
         { name: 'Tooltip', routerLink: 'components/tooltip' },
+        { name: 'Skeleton', routerLink: 'components/skeleton', commingSoon: true },
       ]).orderBy('name'),
     },
     {
@@ -81,6 +83,7 @@ export class NavMenu {
         { name: 'Combobox', routerLink: 'components/combobox', commingSoon: true },
         { name: 'Toggle', routerLink: 'components/toggle', commingSoon: true },
         { name: 'Textarea', routerLink: 'components/textarea', commingSoon: true },
+        { name: 'Filter', routerLink: 'components/filter', commingSoon: true },
       ]).orderBy('name'),
     },
   ]).orderBy('name');
