@@ -20,7 +20,7 @@ export default class New extends Command {
     const flags = ['--defaults', '--style=tailwind'];
 
     spawnSync('bunx', ['ng', 'n', name, ...flags], { stdio: 'inherit', shell: true });
-    spawnSync(`cd ${name} && bun i @koalarx/utils`, { stdio: 'inherit', shell: true });
+    spawnSync(`cd ${name} && bun i @koalarx/utils clsx`, { stdio: 'inherit', shell: true });
     spawnSync(
       `cd ${name} && bun i -D angular-eslint @vitest/eslint-plugin eslint-plugin-prettier typescript-eslint`,
       {
@@ -35,6 +35,7 @@ export default class New extends Command {
     );
     writeFileSync(`${name}/angular.json`, JSON.stringify(angularJson, null, 2));
     cpSync(`${originPath}/ui/theme/icons`, `${name}/src/theme/icons`, { recursive: true });
+    cpSync(`${originPath}/ui/theme/animations.css`, `${name}/src/theme/animations.css`);
 
     const vscodeSettingsPath = `${originPath}/ui/.vscode/settings.json`;
     if (existsSync(vscodeSettingsPath)) {
