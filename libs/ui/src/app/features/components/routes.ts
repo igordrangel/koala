@@ -54,4 +54,8 @@ export const ROUTES: Routes = [
     path: 'skeleton',
     loadComponent: () => import('./skeleton/skeleton.page').then((m) => m.SkeletonPage),
   },
+  {
+    path: 'pagination',
+    loadComponent: () => import('./pagination/pagination.page').then((m) => m.PaginationPage),
+  },
 ];

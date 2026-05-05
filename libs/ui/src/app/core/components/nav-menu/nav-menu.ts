@@ -49,7 +49,7 @@ export class NavMenu {
         { name: 'Breadcrumb', routerLink: 'components/breadcrumb', commingSoon: true },
         { name: 'Stepper', routerLink: 'components/stepper' },
         { name: 'Tab', routerLink: 'components/tabs' },
-        { name: 'Pagination', routerLink: 'components/pagination', commingSoon: true },
+        { name: 'Pagination', routerLink: 'components/pagination' },
       ]).orderBy('name'),
     },
     {

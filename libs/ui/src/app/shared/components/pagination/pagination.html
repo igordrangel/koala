@@ -1,0 +1,62 @@
+<div class="flex justify-between items-center gap-10">
+  <div class="flex items-center gap-4 dark:text-neutral-500">
+    <span class="whitespace-nowrap" [class]="textSizeClass()">Items per page limit</span>
+    <select class="select" [class]="selectSizeClass()" [(ngModel)]="currentPageSize">
+      @for (item of pageSizeOptions; track $index) {
+        <option [value]="item">{{ item }}</option>
+      }
+    </select>
+    <span [class]="textSizeClass()">|</span>
+    <span class="whitespace-nowrap" [class]="textSizeClass()">
+      {{ totalItemsOnCurrentPage() }} of {{ total() }}
+    </span>
+  </div>
+
+  <div class="join">
+    <button
+      class="join-item btn"
+      [class]="sizeClass()"
+      [disabled]="currentPage() <= 1"
+      (click)="setPage(1)"
+    >
+      <i class="fa-solid fa-angles-left"></i>
+    </button>
+    <button
+      class="join-item btn"
+      [class]="sizeClass()"
+      [disabled]="currentPage() <= 1"
+      (click)="setPage(currentPage() - 1)"
+    >
+      <i class="fa-solid fa-angle-left"></i>
+    </button>
+
+    @for (page of pages(); track $index) {
+      <button
+        class="join-item btn"
+        [class]="sizeClass()"
+        [class.btn-active]="page === currentPage()"
+        [disabled]="page < 0"
+        (click)="setPage(page)"
+      >
+        {{ page === -1 ? '...' : page }}
+      </button>
+    }
+
+    <button
+      class="join-item btn"
+      [class]="sizeClass()"
+      [disabled]="currentPage() >= totalPages()"
+      (click)="setPage(currentPage() + 1)"
+    >
+      <i class="fa-solid fa-angle-right"></i>
+    </button>
+    <button
+      class="join-item btn"
+      [class]="sizeClass()"
+      [disabled]="currentPage() >= totalPages()"
+      (click)="setPage(totalPages())"
+    >
+      <i class="fa-solid fa-angles-right"></i>
+    </button>
+  </div>
+</div>

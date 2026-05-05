@@ -19,6 +19,7 @@ export const InstallComponentFlagsList = [
   'side-window',
   'table',
   'skeleton',
+  'pagination',
 ] as const;
 export type InstallComponentFlags = (typeof InstallComponentFlagsList)[number];
 

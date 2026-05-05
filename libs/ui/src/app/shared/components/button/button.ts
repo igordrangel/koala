@@ -1,4 +1,5 @@
 import { booleanAttribute, Directive, effect, ElementRef, inject, input } from '@angular/core';
+import type { ClassValue } from 'clsx';
 
 export type ButtonVariant =
   | 'neutral'
@@ -19,6 +20,7 @@ export class Button {
     ElementRef<HTMLButtonElement>,
   );
 
+  readonly class = input<ClassValue>('');
   readonly btnVariant = input<ButtonVariant>('neutral');
   readonly btnSize = input<ButtonSize>('md');
   readonly btnCircle = input(false, { transform: booleanAttribute });
@@ -89,6 +91,8 @@ export class Button {
       if (this.btnDash()) {
         button.classList.add('btn-dash');
       }
+
+      button.classList.add(...this.class()!.toString().split(' ').filter(Boolean));
     });
 
     effect(() => {
