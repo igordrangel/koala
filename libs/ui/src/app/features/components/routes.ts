@@ -50,4 +50,8 @@ export const ROUTES: Routes = [
     path: 'table',
     loadComponent: () => import('./table/table.page').then((m) => m.TablePage),
   },
+  {
+    path: 'skeleton',
+    loadComponent: () => import('./skeleton/skeleton.page').then((m) => m.SkeletonPage),
+  },
 ];

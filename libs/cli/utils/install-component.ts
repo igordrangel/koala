@@ -18,6 +18,7 @@ export const InstallComponentFlagsList = [
   'toast',
   'side-window',
   'table',
+  'skeleton',
 ] as const;
 export type InstallComponentFlags = (typeof InstallComponentFlagsList)[number];
 

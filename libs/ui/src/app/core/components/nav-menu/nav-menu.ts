@@ -46,6 +46,7 @@ export class NavMenu {
     {
       name: 'Navigation',
       items: new KlArray<MenuOption>([
+        { name: 'Breadcrumb', routerLink: 'components/breadcrumb', commingSoon: true },
         { name: 'Stepper', routerLink: 'components/stepper' },
         { name: 'Tab', routerLink: 'components/tabs' },
         { name: 'Pagination', routerLink: 'components/pagination', commingSoon: true },
@@ -58,7 +59,7 @@ export class NavMenu {
         { name: 'Loading', routerLink: 'components/loading' },
         { name: 'Toast', routerLink: 'components/toast' },
         { name: 'Tooltip', routerLink: 'components/tooltip' },
-        { name: 'Skeleton', routerLink: 'components/skeleton', commingSoon: true },
+        { name: 'Skeleton', routerLink: 'components/skeleton' },
       ]).orderBy('name'),
     },
     {
