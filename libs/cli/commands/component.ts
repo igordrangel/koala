@@ -36,6 +36,7 @@ export default class Component extends Command {
       'collapse',
       'confirm',
       'alert',
+      'toast',
     ];
 
     if (flagOptions.some((option) => !validFlagOptions.includes(option))) {

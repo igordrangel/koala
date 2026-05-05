@@ -55,7 +55,7 @@ export class NavMenu {
       items: new KlArray<MenuOption>([
         { name: 'Alert', routerLink: 'components/alert' },
         { name: 'Loading', routerLink: 'components/loading' },
-        { name: 'Toast', routerLink: 'components/toast', commingSoon: true },
+        { name: 'Toast', routerLink: 'components/toast' },
         { name: 'Tooltip', routerLink: 'components/tooltip' },
       ]).orderBy('name'),
     },
@@ -78,7 +78,8 @@ export class NavMenu {
         { name: 'Time', routerLink: 'components/input-time', commingSoon: true },
         { name: 'URL', routerLink: 'components/input-url', commingSoon: true },
         { name: 'Select', routerLink: 'components/select', commingSoon: true },
-        { name: 'Switcher', routerLink: 'components/switcher', commingSoon: true },
+        { name: 'Combobox', routerLink: 'components/combobox', commingSoon: true },
+        { name: 'Toggle', routerLink: 'components/toggle', commingSoon: true },
         { name: 'Textarea', routerLink: 'components/textarea', commingSoon: true },
       ]).orderBy('name'),
     },

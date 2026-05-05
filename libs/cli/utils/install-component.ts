@@ -13,7 +13,8 @@ export type InstallComponentFlags =
   | 'stepper'
   | 'collapse'
   | 'confirm'
-  | 'alert';
+  | 'alert'
+  | 'toast';
 
 function copyComponent(projectName: string, component: InstallComponentFlags) {
   const projectFolder = path.join(process.cwd(), projectName);
@@ -67,6 +68,9 @@ export function installComponent(
     case 'confirm':
     case 'alert':
       deps.push('modal', 'button');
+      break;
+    case 'toast':
+      deps.push('button');
       break;
   }
 
