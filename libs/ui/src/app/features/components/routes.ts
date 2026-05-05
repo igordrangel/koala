@@ -15,6 +15,10 @@ export const ROUTES: Routes = [
     loadComponent: () => import('./modal/modal.page').then((m) => m.ModalPage),
   },
   {
+    path: 'side-window',
+    loadComponent: () => import('./side-window/side-window.page').then((m) => m.SideWindowPage),
+  },
+  {
     path: 'tabs',
     loadComponent: () => import('./tabs/tabs.page').then((m) => m.TabsPage),
   },
