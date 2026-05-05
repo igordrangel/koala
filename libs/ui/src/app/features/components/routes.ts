@@ -62,4 +62,12 @@ export const ROUTES: Routes = [
     path: 'breadcrumb',
     loadComponent: () => import('./breadcrumb/breadcrumb.page').then((m) => m.BreadcrumbPage),
   },
+  {
+    path: 'input-field',
+    loadComponent: () => import('./input-field/input-field.page').then((m) => m.InputFieldPage),
+  },
+  {
+    path: 'validator',
+    loadComponent: () => import('./validator/validator.page').then((m) => m.ValidatorPage),
+  },
 ];

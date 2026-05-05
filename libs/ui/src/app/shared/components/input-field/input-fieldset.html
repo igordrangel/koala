@@ -1,0 +1,12 @@
+<fieldset class="fieldset">
+  <legend class="fieldset-legend">
+    <ng-content select="[label]" />
+  </legend>
+
+  <ng-content select="[appInput]" />
+  <ng-content select="[appValidatorHint]" />
+
+  <p class="label empty:hidden">
+    <ng-content select="[hint]" />
+  </p>
+</fieldset>
