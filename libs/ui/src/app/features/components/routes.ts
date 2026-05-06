@@ -78,4 +78,8 @@ export const ROUTES: Routes = [
     path: 'textarea',
     loadComponent: () => import('./textarea/textarea.page').then((m) => m.TextareaPage),
   },
+  {
+    path: 'calendar',
+    loadComponent: () => import('./calendar/calendar.page').then((m) => m.CalendarPage),
+  },
 ];

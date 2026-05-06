@@ -1,6 +1,7 @@
 import { cpSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { getProjectPath } from './project-path';
+import { spawnSync } from 'node:child_process';
 
 const originPath = path.join(__dirname, '../../');
 
@@ -25,6 +26,7 @@ export const InstallComponentFlagsList = [
   'validator',
   'input-field',
   'textarea',
+  'calendar',
 ] as const;
 export type InstallComponentFlags = (typeof InstallComponentFlagsList)[number];
 
@@ -83,6 +85,9 @@ export function installComponent(
       break;
     case 'toast':
       deps.push('button');
+      break;
+    case 'calendar':
+      spawnSync('bun', ['add', 'cally']);
       break;
   }
 

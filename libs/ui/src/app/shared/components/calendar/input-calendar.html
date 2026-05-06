@@ -1,0 +1,23 @@
+<button
+  #datePickerInput
+  class="input input-border w-full cursor-pointer flex items-center justify-between"
+  [id]="id"
+  [style.anchor-name]="`--${id}`"
+  [attr.popovertarget]="popoverId"
+>
+  <span>Pick a date</span>
+
+  @if (value()) {
+    <button class="cursor-pointer" (click)="clear($event)">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  }
+</button>
+<div
+  popover
+  class="dropdown bg-base-100 rounded-box shadow-lg"
+  [id]="popoverId"
+  [style.position-anchor]="`--${id}`"
+>
+  <app-calendar [value]="value()" (selectedDate)="setValue($event)" />
+</div>

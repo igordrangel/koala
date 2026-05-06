@@ -69,7 +69,7 @@ export class NavMenu {
         { name: 'CPF', routerLink: 'components/input-cpf', commingSoon: true },
         { name: 'Checkbox', routerLink: 'components/input-checkbox', commingSoon: true },
         { name: 'Currency', routerLink: 'components/input-currency', commingSoon: true },
-        { name: 'Calendar', routerLink: 'components/input-date', commingSoon: true },
+        { name: 'Calendar', routerLink: 'components/calendar' },
         { name: 'Radio', routerLink: 'components/input-radio', commingSoon: true },
         { name: 'Range', routerLink: 'components/input-range', commingSoon: true },
         { name: 'Select', routerLink: 'components/select', commingSoon: true },
