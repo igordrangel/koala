@@ -84,6 +84,18 @@ export const ROUTES: Routes = [
       import('./input-currency/input-currency.page').then((m) => m.InputCurrencyPage),
   },
   {
+    path: 'checkbox',
+    loadComponent: () => import('./checkbox/checkbox.page').then((m) => m.CheckboxPage),
+  },
+  {
+    path: 'radio',
+    loadComponent: () => import('./radio/radio.page').then((m) => m.RadioPage),
+  },
+  {
+    path: 'toggle',
+    loadComponent: () => import('./toggle/toggle.page').then((m) => m.TogglePage),
+  },
+  {
     path: 'validator',
     loadComponent: () => import('./validator/validator.page').then((m) => m.ValidatorPage),
   },

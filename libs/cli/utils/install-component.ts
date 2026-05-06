@@ -37,6 +37,9 @@ export const InstallComponentFlagsList = [
   'input-cpf',
   'input-cnpj',
   'input-currency',
+  'checkbox',
+  'radio',
+  'toggle',
 ] as const;
 export type InstallComponentFlags = (typeof InstallComponentFlagsList)[number];
 

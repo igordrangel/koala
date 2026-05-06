@@ -51,11 +51,14 @@ export class Tab {
       return this.fallbackName;
     }
 
-    const existingInput = Array.from(parent.getElementsByTagName('input')).find(
-      (element) => element !== this.radioInput,
+    const existingInput = Array.from(parent.children).find(
+      (element): element is HTMLInputElement =>
+        element instanceof HTMLInputElement &&
+        element.classList.contains('tab') &&
+        element !== this.radioInput,
     );
 
-    return (existingInput?.getAttribute('name') ?? this.radioInput?.name) || this.fallbackName;
+    return existingInput?.name || this.radioInput?.name || this.fallbackName;
   }
 
   constructor() {
