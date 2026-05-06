@@ -1,0 +1,121 @@
+<app-section-container>
+  <ng-container title>Select</ng-container>
+  <ng-container description>A simple select component.</ng-container>
+
+  <app-section-content>
+    <ng-container title>Installation</ng-container>
+    <ng-container description>Use the Koala CLI to generate a new select component.</ng-container>
+
+    <app-code-viewer language="bash" name="kl" src="markdown/install/select-install.md" />
+  </app-section-content>
+
+  <app-section-content>
+    <ng-container title>Sizes</ng-container>
+    <ng-container description>
+      The select component supports different sizes to accommodate various design needs.
+    </ng-container>
+
+    <div appTabGroup align="start" class="flex items-center">
+      <div appTab label="Preview" checked>
+        <div
+          class="flex flex-col items-center justify-center gap-2 py-10 border border-t-0 border-base-300 rounded-b-lg"
+        >
+          <select appSelect size="xs" [formControl]="selectControl">
+            <option value="" disabled>Select an option</option>
+            @for (option of options; track $index) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+          <select appSelect size="sm" [formControl]="selectControl">
+            <option value="" disabled>Select an option</option>
+            @for (option of options; track $index) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+          <select appSelect size="md" [formControl]="selectControl">
+            <option value="" disabled>Select an option</option>
+            @for (option of options; track $index) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+          <select appSelect size="lg" [formControl]="selectControl">
+            <option value="" disabled>Select an option</option>
+            @for (option of options; track $index) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+          <select appSelect size="xl" [formControl]="selectControl">
+            <option value="" disabled>Select an option</option>
+            @for (option of options; track $index) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div appTab label="HTML">
+        <div class="flex p-2 border border-t-0 border-base-300 rounded-b-lg">
+          <app-code-viewer
+            class="w-full"
+            language="html"
+            name="select-sample.html"
+            src="markdown/usage/select/select-sizes.html.md"
+          />
+        </div>
+      </div>
+
+      <div appTab label="TS">
+        <div class="flex p-2 border border-t-0 border-base-300 rounded-b-lg">
+          <app-code-viewer
+            class="w-full"
+            language="typescript"
+            name="select-sample.ts"
+            src="markdown/usage/select/select.ts.md"
+          />
+        </div>
+      </div>
+    </div>
+  </app-section-content>
+
+  <app-section-content>
+    <ng-container title>Disabled</ng-container>
+    <ng-container description>
+      The disabled state indicates that the select component is not interactive and cannot be
+      changed.
+    </ng-container>
+
+    <div appTabGroup align="start" class="flex items-center">
+      <div appTab label="Preview" checked>
+        <div
+          class="flex items-center justify-center gap-2 py-10 border border-t-0 border-base-300 rounded-b-lg"
+        >
+          <select appSelect disabled>
+            <option disabled selected>Select an option</option>
+          </select>
+        </div>
+      </div>
+
+      <div appTab label="HTML">
+        <div class="flex p-2 border border-t-0 border-base-300 rounded-b-lg">
+          <app-code-viewer
+            class="w-full"
+            language="html"
+            name="select-sample.html"
+            src="markdown/usage/select/select-disabled.html.md"
+          />
+        </div>
+      </div>
+
+      <div appTab label="TS">
+        <div class="flex p-2 border border-t-0 border-base-300 rounded-b-lg">
+          <app-code-viewer
+            class="w-full"
+            language="typescript"
+            name="select-sample.ts"
+            src="markdown/usage/select/select.ts.md"
+          />
+        </div>
+      </div>
+    </div>
+  </app-section-content>
+</app-section-container>

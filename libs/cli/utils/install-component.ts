@@ -40,6 +40,8 @@ export const InstallComponentFlagsList = [
   'checkbox',
   'radio',
   'toggle',
+  'range',
+  'select',
 ] as const;
 export type InstallComponentFlags = (typeof InstallComponentFlagsList)[number];
 

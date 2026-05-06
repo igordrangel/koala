@@ -96,6 +96,14 @@ export const ROUTES: Routes = [
     loadComponent: () => import('./toggle/toggle.page').then((m) => m.TogglePage),
   },
   {
+    path: 'range',
+    loadComponent: () => import('./range/range.page').then((m) => m.RangePage),
+  },
+  {
+    path: 'select',
+    loadComponent: () => import('./select/select.page').then((m) => m.SelectPage),
+  },
+  {
     path: 'validator',
     loadComponent: () => import('./validator/validator.page').then((m) => m.ValidatorPage),
   },
