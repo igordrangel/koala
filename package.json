@@ -63,5 +63,14 @@
     "commands": "./dist/cli/commands",
     "dirname": "kl",
     "topicSeparator": " "
-  }
+  },
+  "keywords": [
+    "koalarx",
+    "ui",
+    "angular",
+    "components",
+    "library",
+    "tailwindcss",
+    "daisyui"
+  ]
 }

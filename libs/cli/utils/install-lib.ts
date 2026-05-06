@@ -1,6 +1,7 @@
-import { spawnSync } from 'node:child_process';
-import { getProjectPath } from './project-path';
 import readline from 'readline-sync';
+import { detectPackageManager, getPmCommands } from './package-manager';
+import { getProjectPath } from './project-path';
+import { runCommand } from './run-command';
 
 export function installLib(projectName: string, lib: string) {
   const answer = readline.question(
@@ -14,9 +15,11 @@ export function installLib(projectName: string, lib: string) {
     return false;
   }
 
-  spawnSync('bun', ['add', lib], {
+  const pm = detectPackageManager(projectName);
+  const pmCmd = getPmCommands(pm);
+
+  runCommand(`${pmCmd.add} ${lib}`, {
     cwd: getProjectPath(projectName),
-    stdio: 'inherit',
   });
 
   return true;

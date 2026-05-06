@@ -1,8 +1,16 @@
 import { Command, Flags } from '@oclif/core';
 import { green } from 'ansis';
-import { spawnSync } from 'node:child_process';
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import {
+  askPackageManager,
+  getAngularCreateCommand,
+  getPmCommands,
+  getProjectExecCommand,
+  PackageManager,
+  PmCommands,
+} from '../utils/package-manager';
+import { runCommand } from '../utils/run-command';
 
 const originPath = path.join(__dirname, '../../');
 
@@ -14,19 +22,19 @@ export default class New extends Command {
     force: Flags.boolean({ char: 'f' }),
     // flag with a value (-n, --name=VALUE)
     name: Flags.string({ char: 'n', description: 'name to print' }),
+    // flag to pre-select package manager (skips interactive prompt)
+    pm: Flags.string({
+      char: 'm',
+      description: 'package manager to use (bun, npm, yarn, pnpm)',
+      options: ['bun', 'npm', 'yarn', 'pnpm'],
+    }),
   };
 
-  private createAngularProject(name: string) {
-    const flags = ['--defaults', '--style=tailwind'];
-
-    spawnSync('bunx', ['ng', 'n', name, ...flags], { stdio: 'inherit', shell: true });
-    spawnSync(`cd ${name} && bun i @koalarx/utils clsx`, { stdio: 'inherit', shell: true });
-    spawnSync(
-      `cd ${name} && bun i -D angular-eslint @vitest/eslint-plugin eslint-plugin-prettier typescript-eslint daisyui`,
-      {
-        stdio: 'inherit',
-        shell: true,
-      },
+  private createAngularProject(name: string, pmName: PackageManager, pm: PmCommands) {
+    runCommand(getAngularCreateCommand(name, pmName));
+    runCommand(`cd ${name} && ${pm.install} @koalarx/utils clsx`);
+    runCommand(
+      `cd ${name} && ${pm.installDev} angular-eslint @vitest/eslint-plugin eslint-plugin-prettier typescript-eslint daisyui`,
     );
 
     const angularJson = JSON.parse(readFileSync(`${name}/angular.json`, 'utf-8'));
@@ -106,10 +114,13 @@ export default class New extends Command {
       this.error('Please provide a name using the --name or -n flag');
     }
 
-    this.createAngularProject(name);
+    const pmName = (flags.pm as PackageManager | undefined) ?? askPackageManager();
+    const pm = getPmCommands(pmName);
+
+    this.createAngularProject(name, pmName, pm);
     this.createFolderStructure(name);
 
-    spawnSync(`cd ${name} && bunx ng generate environments`, { stdio: 'inherit', shell: true });
-    spawnSync(`cd ${name} && bunx eslint . --fix`, { stdio: 'inherit', shell: true });
+    runCommand(`cd ${name} && ${getProjectExecCommand(pmName, 'ng generate environments')}`);
+    runCommand(`cd ${name} && ${getProjectExecCommand(pmName, 'eslint . --fix')}`);
   }
 }

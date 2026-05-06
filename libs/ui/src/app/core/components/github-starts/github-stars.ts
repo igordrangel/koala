@@ -10,7 +10,7 @@ export class GithubStars {
   qtyStars = resource({
     defaultValue: 0,
     loader: () =>
-      fetch('https://api.github.com/repos/igordrangel/koala-ui')
+      fetch('https://api.github.com/repos/igordrangel/koala')
         .then((response) => response.json())
         .then((data) => data.stargazers_count ?? 0)
         .catch(() => 0),
