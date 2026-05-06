@@ -7,7 +7,7 @@ import { ValidatorHint } from '@/shared/components/validator/validator-hint';
 
 @Component({
   selector: 'app-fieldset-sample',
-  templateUrl: './fieldset.sample.html',
+  templateUrl: './fieldset-sample.html',
   imports: [ReactiveFormsModule, Fieldset, Input, ValidatorHint],
 })
 export class FieldsetSample {

@@ -3,7 +3,12 @@
     <ng-content select="[label]" />
   </legend>
 
-  <ng-content select="[field]" />
+  <div class="relative">
+    <ng-content select="[field]" />
+    <div class="absolute right-1 top-1/2 -translate-y-1/2">
+      <ng-content select="[action]" />
+    </div>
+  </div>
   <ng-content select="[appValidatorHint]" />
 
   <p class="label empty:hidden">

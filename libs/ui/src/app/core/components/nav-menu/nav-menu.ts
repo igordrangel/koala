@@ -65,10 +65,10 @@ export class NavMenu {
     {
       name: 'Data Input',
       items: new KlArray<MenuOption>([
-        { name: 'CNPJ', routerLink: 'components/input-cnpj', commingSoon: true },
-        { name: 'CPF', routerLink: 'components/input-cpf', commingSoon: true },
+        { name: 'CNPJ', routerLink: 'components/input-cnpj' },
+        { name: 'CPF', routerLink: 'components/input-cpf' },
         { name: 'Checkbox', routerLink: 'components/input-checkbox', commingSoon: true },
-        { name: 'Currency', routerLink: 'components/input-currency', commingSoon: true },
+        { name: 'Currency', routerLink: 'components/input-currency' },
         { name: 'Calendar', routerLink: 'components/calendar' },
         { name: 'Radio', routerLink: 'components/input-radio', commingSoon: true },
         { name: 'Range', routerLink: 'components/input-range', commingSoon: true },

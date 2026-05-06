@@ -1,0 +1,101 @@
+import { existsSync, readFileSync } from 'node:fs';
+import { InstallComponentFlags } from './install-component';
+import { InstallPipeFlags } from './install-pipe';
+import { InstallValidatorFlags } from './install-validator';
+import { getProjectPath } from './project-path';
+import { InstallDirectiveFlags } from './install-directive';
+import { InstallUtilFlags } from './install-util';
+
+export type PackageType = 'component' | 'pipe' | 'validator' | 'directives' | 'utils' | 'lib';
+
+export function getNotInstalled(
+  projectName: string,
+  type: 'component',
+  deps: InstallComponentFlags[],
+): InstallComponentFlags[];
+
+export function getNotInstalled(
+  projectName: string,
+  type: 'pipe',
+  deps: InstallPipeFlags[],
+): InstallPipeFlags[];
+
+export function getNotInstalled(
+  projectName: string,
+  type: 'validator',
+  deps: InstallValidatorFlags[],
+): InstallValidatorFlags[];
+
+export function getNotInstalled(
+  projectName: string,
+  type: 'directives',
+  deps: InstallDirectiveFlags[],
+): InstallDirectiveFlags[];
+
+export function getNotInstalled(
+  projectName: string,
+  type: 'utils',
+  deps: InstallUtilFlags[],
+): InstallUtilFlags[];
+
+export function getNotInstalled(projectName: string, type: 'lib', deps: string[]): string[];
+
+export function getNotInstalled(projectName: string, type: PackageType, deps: string[]): string[] {
+  const notInstalled: string[] = [];
+
+  switch (type) {
+    case 'component': {
+      const projectFolder = getProjectPath(projectName);
+
+      for (const dep of deps) {
+        if (!existsSync(`${projectFolder}/src/app/shared/components/${dep}`)) {
+          notInstalled.push(dep);
+        }
+      }
+      break;
+    }
+    case 'directives': {
+      const projectFolder = getProjectPath(projectName);
+
+      for (const dep of deps) {
+        if (!existsSync(`${projectFolder}/src/app/shared/directives/${dep}.directive.ts`)) {
+          notInstalled.push(dep);
+        }
+      }
+      break;
+    }
+    case 'validator': {
+      const projectFolder = getProjectPath(projectName);
+
+      for (const dep of deps) {
+        if (!existsSync(`${projectFolder}/src/app/shared/validators/${dep}.validator.ts`)) {
+          notInstalled.push(dep);
+        }
+      }
+      break;
+    }
+    case 'utils': {
+      const projectFolder = getProjectPath(projectName);
+
+      for (const dep of deps) {
+        if (!existsSync(`${projectFolder}/src/app/shared/utils/${dep}.ts`)) {
+          notInstalled.push(dep);
+        }
+      }
+      break;
+    }
+    case 'lib': {
+      const packageJsonPath = `${getProjectPath(projectName)}/package.json`;
+      const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
+
+      for (const item of deps) {
+        if (!packageJson.dependencies?.[item] && !packageJson.devDependencies?.[item]) {
+          notInstalled.push(item);
+        }
+      }
+      break;
+    }
+  }
+
+  return notInstalled;
+}

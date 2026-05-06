@@ -1,7 +1,14 @@
-import { cpSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { InstallResult } from '../models/install-result';
+import { getNotInstalled } from './get-not-installed';
+import { getPrefix } from './get-prefix';
+import { installDirective, InstallDirectiveFlags } from './install-directive';
+import { installLib } from './install-lib';
+import { installPipe, InstallPipeFlags } from './install-pipe';
+import { installValidator, InstallValidatorFlags } from './install-validator';
 import { getProjectPath } from './project-path';
-import { spawnSync } from 'node:child_process';
+import { installUtil, InstallUtilFlags } from './install-util';
 
 const originPath = path.join(__dirname, '../../');
 
@@ -27,88 +34,146 @@ export const InstallComponentFlagsList = [
   'input-field',
   'textarea',
   'calendar',
+  'input-cpf',
+  'input-cnpj',
+  'input-currency',
 ] as const;
 export type InstallComponentFlags = (typeof InstallComponentFlagsList)[number];
 
 function copyComponent(projectName: string, component: InstallComponentFlags) {
+  const prefix = getPrefix(projectName);
   const projectFolder = getProjectPath(projectName);
-  cpSync(
-    `${originPath}/ui/components/${component}`,
-    `${projectFolder}/src/app/shared/components/${component}`,
-    {
+  const componentFolderPath = `${projectFolder}/src/app/shared/components/${component}`;
+  const componentOriginPath = `${originPath}/ui/components/${component}`;
+
+  if (existsSync(componentOriginPath)) {
+    cpSync(componentOriginPath, componentFolderPath, {
       recursive: true,
-    },
-  );
-}
+    });
 
-function getPrefix(projectName: string) {
-  const projectFolder = getProjectPath(projectName);
-  const angularJsonPath = path.join(projectFolder, 'angular.json');
-  const prefix = JSON.parse(readFileSync(angularJsonPath, 'utf-8')).projects[projectName].prefix;
-
-  if (prefix !== 'app') {
-    return prefix;
-  }
-
-  return null;
-}
-
-function getNotInstalledDeps(
-  projectName: string,
-  deps: InstallComponentFlags[],
-): InstallComponentFlags[] {
-  const projectFolder = getProjectPath(projectName);
-  const notInstalledDeps: InstallComponentFlags[] = [];
-
-  for (const dep of deps) {
-    if (!existsSync(`${projectFolder}/src/app/shared/components/${dep}`)) {
-      notInstalledDeps.push(dep);
+    if (prefix) {
+      configPrefix(componentFolderPath, prefix);
     }
   }
+}
 
-  return notInstalledDeps;
+function configPrefix(componentFolderPath: string, prefix: string) {
+  const files = readdirSync(componentFolderPath);
+
+  for (const file of files) {
+    const filePath = `${componentFolderPath}/${file}`;
+    const stat = readdirSync(filePath, { withFileTypes: true });
+
+    if (stat.some((s) => s.isDirectory())) {
+      const subFiles = readdirSync(filePath);
+
+      for (const subFile of subFiles) {
+        const subFilePath = `${filePath}/${subFile}`;
+        const subStat = readdirSync(subFilePath, { withFileTypes: true });
+
+        if (subStat.some((s) => s.isDirectory())) {
+          configPrefix(subFilePath, prefix);
+        } else {
+          const subFileTs = readFileSync(subFilePath, 'utf-8');
+          writeFileSync(subFilePath, subFileTs.replace(/app/g, prefix), 'utf-8');
+        }
+      }
+    } else {
+      const fileTs = readFileSync(filePath, 'utf-8');
+      writeFileSync(filePath, fileTs.replace(/app/g, prefix), 'utf-8');
+    }
+  }
 }
 
 export function installComponent(
   projectName: string,
   component: InstallComponentFlags,
-): InstallComponentFlags[] {
-  const prefix = getPrefix(projectName);
-  const projectFolder = getProjectPath(projectName);
-  const deps: InstallComponentFlags[] = [];
-  const installedDeps: InstallComponentFlags[] = [];
+): InstallResult {
+  const componentDeps: InstallComponentFlags[] = [];
+  const libDeps: string[] = [];
+  const pipeDeps: InstallPipeFlags[] = [];
+  const validatorDeps: InstallValidatorFlags[] = [];
+  const directiveDeps: InstallDirectiveFlags[] = [];
+  const utilDeps: InstallUtilFlags[] = [];
+
+  const installedComponentDeps: InstallComponentFlags[] = [];
+  const installedLibDeps: string[] = [];
+  const installedPipeDeps: InstallPipeFlags[] = [];
+  const installedValidatorDeps: InstallValidatorFlags[] = [];
+  const installedDirectiveDeps: InstallDirectiveFlags[] = [];
+  const installedUtilDeps: InstallUtilFlags[] = [];
 
   switch (component) {
     case 'confirm':
     case 'alert':
-      deps.push('modal', 'button');
+      componentDeps.push('modal', 'button');
       break;
     case 'toast':
-      deps.push('button');
+      componentDeps.push('button');
       break;
     case 'calendar':
-      spawnSync('bun', ['add', 'cally']);
+      libDeps.push('cally');
+      break;
+    case 'input-cpf':
+    case 'input-cnpj':
+      if (component === 'input-cpf') {
+        validatorDeps.push('cpf');
+      } else {
+        validatorDeps.push('cnpj');
+      }
+
+      directiveDeps.push('mask');
+      utilDeps.push('string-mask');
+
+      componentDeps.push('input-field');
       break;
   }
 
-  for (const dep of getNotInstalledDeps(projectName, deps)) {
+  for (const dep of getNotInstalled(projectName, 'lib', libDeps)) {
+    const installed = installLib(projectName, dep);
+
+    if (installed) {
+      installedLibDeps.push(dep);
+    } else {
+      console.warn(
+        `The library "${dep}" is required for the "${component}" component to work properly. Please install it as soon as possible.`,
+      );
+    }
+  }
+
+  for (const dep of getNotInstalled(projectName, 'utils', utilDeps)) {
+    installUtil(projectName, dep);
+    installedUtilDeps.push(dep);
+  }
+
+  for (const dep of getNotInstalled(projectName, 'pipe', pipeDeps)) {
+    installPipe(projectName, dep);
+    installedPipeDeps.push(dep);
+  }
+
+  for (const dep of getNotInstalled(projectName, 'validator', validatorDeps)) {
+    installValidator(projectName, dep);
+    installedValidatorDeps.push(dep);
+  }
+
+  for (const dep of getNotInstalled(projectName, 'directives', directiveDeps)) {
+    installDirective(projectName, dep);
+    installedDirectiveDeps.push(dep);
+  }
+
+  for (const dep of getNotInstalled(projectName, 'component', componentDeps)) {
     installComponent(projectName, dep);
-    installedDeps.push(dep);
+    installedComponentDeps.push(dep);
   }
 
   copyComponent(projectName, component);
 
-  if (prefix) {
-    const componentTs = readFileSync(
-      `${projectFolder}/src/app/shared/components/${component}/${component}.ts`,
-      'utf-8',
-    );
-    writeFileSync(
-      `${projectFolder}/src/app/shared/components/${component}/${component}.ts`,
-      componentTs.replace(/app/g, prefix),
-      'utf-8',
-    );
-  }
-
-  return installedDeps;
+  return {
+    components: installedComponentDeps,
+    libs: installedLibDeps,
+    pipes: installedPipeDeps,
+    validators: installedValidatorDeps,
+    directives: installedDirectiveDeps,
+    utils: installedUtilDeps,
+  };
 }

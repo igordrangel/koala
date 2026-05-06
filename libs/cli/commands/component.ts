@@ -36,10 +36,57 @@ export default class Component extends Command {
     }
 
     for (const componentName of flagOptions) {
-      const deps = installComponent(projectName, componentName);
-      if (deps.length > 0) {
-        this.log('Dependencies installed:');
-        for (const dep of deps) {
+      this.log('');
+      this.log('----------------------------------');
+      this.log('Installing component:', green(componentName));
+      this.log('----------------------------------');
+      this.log('');
+
+      const result = installComponent(projectName, componentName);
+
+      if (result.libs.length > 0) {
+        this.log('External libraries installed:');
+        for (const dep of result.libs) {
+          this.log('- ', green(dep));
+        }
+        this.log('');
+      }
+
+      if (result.pipes.length > 0) {
+        this.log('Pipes installed:');
+        for (const dep of result.pipes) {
+          this.log('- ', green(dep));
+        }
+        this.log('');
+      }
+
+      if (result.directives.length > 0) {
+        this.log('Directives installed:');
+        for (const dep of result.directives) {
+          this.log('- ', green(dep));
+        }
+        this.log('');
+      }
+
+      if (result.validators.length > 0) {
+        this.log('Validators installed:');
+        for (const dep of result.validators) {
+          this.log('- ', green(dep));
+        }
+        this.log('');
+      }
+
+      if (result.utils.length > 0) {
+        this.log('Utils installed:');
+        for (const dep of result.utils) {
+          this.log('- ', green(dep));
+        }
+        this.log('');
+      }
+
+      if (result.components.length > 0) {
+        this.log('Components installed:');
+        for (const dep of result.components) {
           this.log('- ', green(dep));
         }
         this.log('');

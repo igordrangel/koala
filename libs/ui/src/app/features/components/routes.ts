@@ -71,6 +71,19 @@ export const ROUTES: Routes = [
     loadComponent: () => import('./input-field/input-field.page').then((m) => m.InputFieldPage),
   },
   {
+    path: 'input-cpf',
+    loadComponent: () => import('./input-cpf/input-cpf.page').then((m) => m.InputCpfPage),
+  },
+  {
+    path: 'input-cnpj',
+    loadComponent: () => import('./input-cnpj/input-cnpj.page').then((m) => m.InputCnpjPage),
+  },
+  {
+    path: 'input-currency',
+    loadComponent: () =>
+      import('./input-currency/input-currency.page').then((m) => m.InputCurrencyPage),
+  },
+  {
     path: 'validator',
     loadComponent: () => import('./validator/validator.page').then((m) => m.ValidatorPage),
   },
