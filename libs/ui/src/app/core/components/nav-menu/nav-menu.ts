@@ -73,7 +73,7 @@ export class NavMenu {
         { name: 'Radio', routerLink: 'components/radio' },
         { name: 'Range', routerLink: 'components/range' },
         { name: 'Select', routerLink: 'components/select' },
-        { name: 'Combobox', routerLink: 'components/combobox', commingSoon: true },
+        { name: 'Combobox', routerLink: 'components/combobox' },
         { name: 'Toggle', routerLink: 'components/toggle' },
         { name: 'Textarea', routerLink: 'components/textarea' },
         { name: 'Filter', routerLink: 'components/filter', commingSoon: true },

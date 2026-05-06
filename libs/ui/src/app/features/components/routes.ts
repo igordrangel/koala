@@ -104,6 +104,10 @@ export const ROUTES: Routes = [
     loadComponent: () => import('./select/select.page').then((m) => m.SelectPage),
   },
   {
+    path: 'combobox',
+    loadComponent: () => import('./combobox/combobox.page').then((m) => m.ComboboxPage),
+  },
+  {
     path: 'validator',
     loadComponent: () => import('./validator/validator.page').then((m) => m.ValidatorPage),
   },

@@ -42,6 +42,7 @@ export const InstallComponentFlagsList = [
   'toggle',
   'range',
   'select',
+  'combobox',
 ] as const;
 export type InstallComponentFlags = (typeof InstallComponentFlagsList)[number];
 
@@ -131,6 +132,10 @@ export function installComponent(
       utilDeps.push('string-mask');
 
       componentDeps.push('input-field');
+      break;
+    case 'combobox':
+      libDeps.push('@angular/aria');
+      componentDeps.push('loading');
       break;
   }
 
