@@ -81,8 +81,8 @@
           [inputMask]="inputMask()"
           [placeholder]="resolvedPlaceholder()"
           [value]="entryTextValue()"
-          (textInput)="textInput.emit($event)"
-            [validationControl]="validationControl()"
+          [validationControl]="validationControl()"
+          (valueInput)="textValueInput.emit($event)"
         />
       }
     }

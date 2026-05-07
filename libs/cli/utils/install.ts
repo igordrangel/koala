@@ -4,6 +4,7 @@ import { installBase, InstallBaseFlags } from './install-base';
 import { installComponent, InstallComponentFlags } from './install-component';
 import { installDirective, InstallDirectiveFlags } from './install-directive';
 import { installLib } from './install-lib';
+import { setupComponentTests } from './setup-component-tests';
 import { installUtil, InstallUtilFlags } from './install-util';
 import { installValidator, InstallValidatorFlags } from './install-validator';
 
@@ -58,6 +59,8 @@ export function install(projectName: string, component: InstallComponentFlags): 
     installedBaseDeps.push(...result.base);
     missingLibDeps.push(...result.missingLibs);
   }
+
+  setupComponentTests(projectName);
 
   return {
     components: [...new Set(installedComponentDeps)],

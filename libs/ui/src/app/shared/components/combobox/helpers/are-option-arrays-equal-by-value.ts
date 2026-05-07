@@ -1,12 +1,6 @@
+import { areItemsEqualByValue } from '../../../utils/are-items-equal-by-value';
 import { ComboboxOption } from '../combobox';
 
-export function areOptionArraysEqualByValue(
-  a: ComboboxOption[],
-  b: ComboboxOption[],
-): boolean {
-  if (a.length !== b.length) {
-    return false;
-  }
-
-  return a.every((option, index) => Object.is(option.value, b[index]?.value));
+export function areOptionArraysEqualByValue(a: ComboboxOption[], b: ComboboxOption[]): boolean {
+  return areItemsEqualByValue(a, b);
 }

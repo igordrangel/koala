@@ -18,5 +18,5 @@ export class FilterEntryTextFieldComponent {
   readonly value = input.required<string>();
   readonly validationControl = input.required<FormControl<unknown>>();
 
-  readonly textInput = output<string>();
+  readonly valueInput = output<string>();
 }

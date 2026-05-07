@@ -53,6 +53,7 @@ export function setupComboboxKeyboardHandling(config: {
           return;
         }
         event.preventDefault();
+        event.stopPropagation();
         config.close();
         break;
     }

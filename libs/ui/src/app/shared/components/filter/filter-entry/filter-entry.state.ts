@@ -194,6 +194,14 @@ export class FilterEntryState {
 
   onComboboxOptionSelected(option: ComboboxOption) {
     this.resources.onComboboxOptionSelected(option);
+
+    if (
+      this.isEditing() &&
+      this.definition().type === 'combobox' &&
+      this.closeEdit()
+    ) {
+      this.config.emitTab();
+    }
   }
 
   removeCurrent() {
@@ -241,7 +249,6 @@ export class FilterEntryState {
       definition: () => this.definition(),
       entryValue: () => this.entryValue(),
       entryId: () => this.entry().id,
-        validateCandidate: (value) => this.validateCandidate(value),
       updateInvalidState: () => this.updateInvalidState(),
     });
 

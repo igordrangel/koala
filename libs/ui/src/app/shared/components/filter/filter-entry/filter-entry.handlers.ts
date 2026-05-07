@@ -80,7 +80,7 @@ export function getFieldKeyAction(
     return hasCommittedFilterValue(currentValue) ? 'cancel' : 'remove';
   }
 
-  if (event.key === 'Tab') {
+  if (event.key === 'Tab' && !event.shiftKey) {
     event.preventDefault();
     return 'tab';
   }

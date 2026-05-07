@@ -119,7 +119,18 @@ export function installComponent(projectName: string, component: InstallComponen
       break;
     case 'combobox':
       libDeps.push('@angular/aria');
+      utilDeps.push(
+        'find-item-by-value',
+        'has-item-with-value',
+        'remove-item-by-value',
+        'toggle-item-by-value',
+        'map-items-by-values',
+        'are-items-equal-by-value',
+      );
       componentDeps.push('loading');
+      break;
+    case 'select':
+      utilDeps.push('find-item-by-value', 'toggle-primitive-value');
       break;
     case 'filter':
       componentDeps.push(

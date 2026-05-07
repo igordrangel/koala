@@ -1,4 +1,6 @@
 import type { SelectBadgeVariant, SelectOption, SelectSize } from './select';
+import { findItemByValue } from '../../utils/find-item-by-value';
+import { togglePrimitiveValue } from '../../utils/toggle-primitive-value';
 
 const CHECK_ICON_CLASS_BY_VARIANT: Record<SelectBadgeVariant, string> = {
   neutral: 'text-neutral',
@@ -28,7 +30,7 @@ export function getSelectSizeClass(size: SelectSize): string {
 }
 
 export function getOptionLabel(options: SelectOption[], value: unknown, fallback: string): string {
-  return options.find((option) => Object.is(option.value, value))?.label ?? fallback;
+  return findItemByValue(options, value)?.label ?? fallback;
 }
 
 export function getTriggerLabel(
@@ -48,6 +50,5 @@ export function getTriggerLabel(
 }
 
 export function toggleSelectValue(current: unknown[], value: unknown): unknown[] {
-  const hasValue = current.some((item) => Object.is(item, value));
-  return hasValue ? current.filter((item) => !Object.is(item, value)) : [...current, value];
+  return togglePrimitiveValue(current, value);
 }

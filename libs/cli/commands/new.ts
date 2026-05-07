@@ -10,7 +10,9 @@ import {
   PackageManager,
   PmCommands,
 } from '../utils/package-manager';
+import { logHeader, logStep, logSuccess } from '../utils/cli-ui';
 import { runCommand } from '../utils/run-command';
+import { setupGlobalTests } from '../utils/setup-global-tests';
 
 const originPath = path.join(__dirname, '../../');
 
@@ -105,10 +107,22 @@ export default class New extends Command {
     const pmName = (flags.pm as PackageManager | undefined) ?? askPackageManager();
     const pm = getPmCommands(pmName);
 
+    logHeader(this.log.bind(this), 'KOALA UI PROJECT SETUP', `Project: ${name}`);
+    logStep(this.log.bind(this), 'Creating Angular project structure');
     this.createAngularProject(name, pmName, pm);
-    this.createFolderStructure(name);
+    logSuccess(this.log.bind(this), 'Angular project created');
 
+    logStep(this.log.bind(this), 'Applying Koala folder structure and styles');
+    this.createFolderStructure(name);
+    logSuccess(this.log.bind(this), 'Koala structure ready');
+
+    logStep(this.log.bind(this), 'Configuring test stack (unit + e2e + CI workflow)');
+    setupGlobalTests(name);
+    logSuccess(this.log.bind(this), 'Test stack configured');
+
+    logStep(this.log.bind(this), 'Generating environments and lint baseline');
     runCommand(`cd ${name} && ${getProjectExecCommand(pmName, 'ng generate environments')}`);
     runCommand(`cd ${name} && ${getProjectExecCommand(pmName, 'eslint . --fix')}`);
+    logSuccess(this.log.bind(this), 'Project ready');
   }
 }

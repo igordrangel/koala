@@ -1,5 +1,5 @@
 import { Command, Flags } from '@oclif/core';
-import { green } from 'ansis';
+import { logHeader, logList, logStep, logSuccess, logWarning } from '../utils/cli-ui';
 import { install } from '../utils/install';
 import { InstallComponentFlags, InstallComponentFlagsList } from '../utils/install-component';
 
@@ -31,72 +31,32 @@ export default class Install extends Command {
       this.error(`Invalid component name(s). Valid options are: ${validFlagOptions.join(', ')}`);
     }
 
+    logHeader(
+      this.log.bind(this),
+      'KOALA COMPONENT INSTALLER',
+      `Project: ${projectName} | Components: ${flagOptions.join(', ')}`,
+    );
+
     for (const componentName of flagOptions) {
-      this.log('');
-      this.log('----------------------------------');
-      this.log('Installing component:', green(componentName));
-      this.log('----------------------------------');
-      this.log('');
+      logStep(this.log.bind(this), `Installing ${componentName}`);
 
       const result = install(projectName, componentName);
 
-      if (result.libs.length > 0) {
-        this.log('External libraries installed:');
-        for (const dep of result.libs) {
-          this.log('- ', green(dep));
-        }
-        this.log('');
-      }
-
       if (result.missingLibs.length > 0) {
-        this.warn('External libraries not installed automatically:');
-        for (const dep of result.missingLibs) {
-          this.log('- ', dep);
-        }
-        this.log('');
+        logWarning(
+          this.log.bind(this),
+          `Missing external libs (${componentName}): ${result.missingLibs.join(', ')}`,
+        );
       }
 
-      if (result.directives.length > 0) {
-        this.log('Directives installed:');
-        for (const dep of result.directives) {
-          this.log('- ', green(dep));
-        }
-        this.log('');
-      }
+      logList(this.log.bind(this), 'libs', result.libs);
+      logList(this.log.bind(this), 'directives', result.directives);
+      logList(this.log.bind(this), 'validators', result.validators);
+      logList(this.log.bind(this), 'utils', result.utils);
+      logList(this.log.bind(this), 'base', result.base);
+      logList(this.log.bind(this), 'dependent components', result.components);
 
-      if (result.validators.length > 0) {
-        this.log('Validators installed:');
-        for (const dep of result.validators) {
-          this.log('- ', green(dep));
-        }
-        this.log('');
-      }
-
-      if (result.utils.length > 0) {
-        this.log('Utils installed:');
-        for (const dep of result.utils) {
-          this.log('- ', green(dep));
-        }
-        this.log('');
-      }
-
-      if (result.components.length > 0) {
-        this.log('Components installed:');
-        for (const dep of result.components) {
-          this.log('- ', green(dep));
-        }
-        this.log('');
-      }
-
-      if (result.base.length > 0) {
-        this.log('Base installed:');
-        for (const dep of result.base) {
-          this.log('- ', green(dep));
-        }
-        this.log('');
-      }
-
-      this.log(green('INSTALLED'), componentName);
+      logSuccess(this.log.bind(this), `${componentName} installed`);
     }
   }
 }

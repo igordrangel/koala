@@ -2,9 +2,30 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
+    path: 'e2e/select',
+    loadComponent: () =>
+      import('./shared/components/select/testing/select-e2e-host').then(
+        (m) => m.SelectE2EHostComponent,
+      ),
+  },
+  {
+    path: 'e2e/combobox',
+    loadComponent: () =>
+      import('./shared/components/combobox/testing/combobox-e2e-host').then(
+        (m) => m.ComboboxE2EHostComponent,
+      ),
+  },
+  {
     path: '',
     redirectTo: 'get-started/introduction',
     pathMatch: 'full',
+  },
+  {
+    path: 'e2e/filter',
+    loadComponent: () =>
+      import('./shared/components/filter/testing/filter-e2e-host').then(
+        (m) => m.FilterE2EHostComponent,
+      ),
   },
   {
     path: 'get-started',

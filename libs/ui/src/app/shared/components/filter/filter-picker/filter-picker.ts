@@ -88,6 +88,10 @@ export class FilterPicker {
 
       case 'Enter':
       case 'Tab': {
+        if (event.key === 'Tab' && event.shiftKey) {
+          break;
+        }
+
         const idx = this.activeIndex();
         const item = idx >= 0 ? items[idx] : items[0];
         if (item) {
@@ -111,10 +115,10 @@ export class FilterPicker {
 
   select(option: ComboboxOption) {
     this.pick.emit(option.value as string);
+    this.inputRef()?.nativeElement.blur();
     this.inputValue.set('');
     this.isOpen.set(false);
     this.activeIndex.set(-1);
-    queueMicrotask(() => this.inputRef()?.nativeElement.focus());
   }
 
   close() {

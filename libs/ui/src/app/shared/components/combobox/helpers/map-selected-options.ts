@@ -1,3 +1,4 @@
+import { mapItemsByValues } from '../../../utils/map-items-by-values';
 import { ComboboxOption } from '../combobox';
 
 export function mapSelectedOptions(
@@ -5,11 +6,5 @@ export function mapSelectedOptions(
   options: ComboboxOption[],
   previous: ComboboxOption[],
 ): ComboboxOption[] {
-  return values
-    .map(
-      (value) =>
-        options.find((option) => Object.is(option.value, value)) ??
-        previous.find((option) => Object.is(option.value, value)),
-    )
-    .filter((option): option is ComboboxOption => !!option);
+  return mapItemsByValues(values, options, previous);
 }

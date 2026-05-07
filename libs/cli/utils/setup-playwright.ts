@@ -1,0 +1,84 @@
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { detectPackageManager, getPmCommands } from './package-manager';
+import { getProjectPath } from './project-path';
+import { runCommand } from './run-command';
+
+const PLAYWRIGHT_CONFIG = `import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './src/app/shared/components',
+  testMatch: '**/*.e2e.spec.ts',
+  fullyParallel: true,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 1 : undefined,
+  reporter: 'list',
+  use: {
+    baseURL: 'http://127.0.0.1:4300',
+    trace: 'on-first-retry',
+  },
+  webServer: {
+    command: 'npx ng serve --host 127.0.0.1 --port 4300',
+    url: 'http://127.0.0.1:4300',
+    reuseExistingServer: true,
+    timeout: 120000,
+  },
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
+  ],
+});
+`;
+
+function ensurePlaywrightDependency(projectName: string) {
+  const projectPath = getProjectPath(projectName);
+  const packageJsonPath = `${projectPath}/package.json`;
+  const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8')) as {
+    dependencies?: Record<string, string>;
+    devDependencies?: Record<string, string>;
+  };
+
+  if (
+    packageJson.dependencies?.['@playwright/test'] ||
+    packageJson.devDependencies?.['@playwright/test']
+  ) {
+    return;
+  }
+
+  const pm = getPmCommands(detectPackageManager(projectName));
+  runCommand(`cd ${projectPath} && ${pm.installDev} @playwright/test`);
+}
+
+function ensurePlaywrightScripts(projectName: string) {
+  const projectPath = getProjectPath(projectName);
+  const packageJsonPath = `${projectPath}/package.json`;
+  const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8')) as {
+    scripts?: Record<string, string>;
+  };
+
+  packageJson.scripts ??= {};
+  packageJson.scripts.e2e ??= 'playwright test';
+  packageJson.scripts['e2e:headed'] ??= 'playwright test --headed';
+  packageJson.scripts['e2e:ui'] ??= 'playwright test --ui';
+
+  writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+}
+
+function ensurePlaywrightConfig(projectName: string) {
+  const projectPath = getProjectPath(projectName);
+  const configPath = `${projectPath}/playwright.config.ts`;
+
+  if (existsSync(configPath)) {
+    return;
+  }
+
+  writeFileSync(configPath, PLAYWRIGHT_CONFIG);
+}
+
+export function setupPlaywright(projectName: string) {
+  ensurePlaywrightDependency(projectName);
+  ensurePlaywrightScripts(projectName);
+  ensurePlaywrightConfig(projectName);
+}

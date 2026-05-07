@@ -47,7 +47,7 @@ export class FilterEntryEditComponent implements AfterViewInit {
 
   readonly optionSelected = output<ComboboxOption>();
   readonly dateChange = output<string | undefined>();
-  readonly textInput = output<string>();
+  readonly textValueInput = output<string>();
   readonly currencyInput = output<string>();
   readonly remove = output<void>();
   readonly fieldKeydown = output<KeyboardEvent>();

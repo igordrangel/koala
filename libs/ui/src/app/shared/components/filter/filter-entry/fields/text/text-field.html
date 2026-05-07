@@ -11,6 +11,7 @@
       [inputMode]="inputMode()"
       [placeholder]="placeholder()"
       [formControl]="validationControl()"
+      (input)="valueInput.emit($any($event.target).value)"
     />
   } @else {
     <input
@@ -23,6 +24,7 @@
       [inputMode]="inputMode()"
       [placeholder]="placeholder()"
       [formControl]="validationControl()"
+      (input)="valueInput.emit($any($event.target).value)"
     />
   }
 </span>

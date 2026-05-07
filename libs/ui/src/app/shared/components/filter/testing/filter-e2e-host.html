@@ -1,0 +1,14 @@
+<div class="mx-auto flex max-w-5xl flex-col gap-6 p-6">
+  <app-filter [definitions]="filterDefinitions" (filtersChange)="handleFiltersChange($event)" />
+
+  <section
+    aria-label="Applied filters payload"
+    class="rounded-lg border border-base-300 bg-base-100 p-4 text-sm"
+  >
+    @if (appliedFilters().length === 0) {
+      <p class="text-base-content/60">No filters selected.</p>
+    } @else {
+      <pre class="overflow-x-auto text-xs leading-6">{{ appliedFilters() | json }}</pre>
+    }
+  </section>
+</div>

@@ -13,7 +13,6 @@ export function setupTextFieldEffects(config: {
   entryValue: Getter<unknown>;
   entryId: Getter<string>;
   updateInvalidState: () => void;
-  validateCandidate?: (value: unknown) => void;
 }) {
   // Sync validation control with definition when field type or validators change
   effect(() => {
@@ -26,7 +25,6 @@ export function setupTextFieldEffects(config: {
   config.validationControl.valueChanges
     .pipe(takeUntilDestroyed(config.destroyRef))
     .subscribe((value) => {
-      config.validateCandidate?.(value);
       config.updateInvalidState();
     });
 
