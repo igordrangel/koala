@@ -1,3 +1,3 @@
 ```bash
-kl component -n modal
+kl install -n modal
 ```

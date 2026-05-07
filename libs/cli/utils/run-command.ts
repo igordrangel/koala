@@ -1,11 +1,17 @@
 import { SpawnSyncOptions, spawnSync } from 'node:child_process';
 
-export function runCommand(command: string, options: SpawnSyncOptions = {}) {
+export interface RunCommandOptions extends SpawnSyncOptions {
+  verbose?: boolean;
+}
+
+export function runCommand(command: string, options: RunCommandOptions = {}) {
+  const { verbose = true, ...spawnOptions } = options;
+
   const result = spawnSync(command, {
-    ...options,
+    ...spawnOptions,
     encoding: 'utf-8',
     shell: true,
-    stdio: 'inherit',
+    stdio: verbose ? 'inherit' : 'pipe',
   });
 
   if (result.error) {
@@ -13,6 +19,15 @@ export function runCommand(command: string, options: SpawnSyncOptions = {}) {
   }
 
   if (result.status !== 0) {
+    if (!verbose) {
+      const output = [result.stdout, result.stderr].filter(Boolean).join('\n').trim();
+      if (output) {
+        throw new Error(
+          `Command failed with exit code ${result.status}: ${command}\n${output}`,
+        );
+      }
+    }
+
     throw new Error(`Command failed with exit code ${result.status}: ${command}`);
   }
 

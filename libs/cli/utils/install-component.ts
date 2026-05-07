@@ -1,14 +1,11 @@
 import { cpSync, existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { InstallResult } from '../models/install-result';
-import { getNotInstalled } from './get-not-installed';
 import { getPrefix } from './get-prefix';
-import { installDirective, InstallDirectiveFlags } from './install-directive';
-import { installLib } from './install-lib';
-import { installPipe, InstallPipeFlags } from './install-pipe';
-import { installValidator, InstallValidatorFlags } from './install-validator';
 import { getProjectPath } from './project-path';
-import { installUtil, InstallUtilFlags } from './install-util';
+import { InstallValidatorFlags } from './install-validator';
+import { InstallDirectiveFlags } from './install-directive';
+import { InstallUtilFlags } from './install-util';
+import { InstallBaseFlags } from './install-base';
 
 const originPath = path.join(__dirname, '../../');
 
@@ -45,25 +42,9 @@ export const InstallComponentFlagsList = [
   'select',
   'combobox',
   'filter',
+  'datatable',
 ] as const;
 export type InstallComponentFlags = (typeof InstallComponentFlagsList)[number];
-
-function copyComponent(projectName: string, component: InstallComponentFlags) {
-  const prefix = getPrefix(projectName);
-  const projectFolder = getProjectPath(projectName);
-  const componentFolderPath = `${projectFolder}/src/app/shared/components/${component}`;
-  const componentOriginPath = `${originPath}/ui/components/${component}`;
-
-  if (existsSync(componentOriginPath)) {
-    cpSync(componentOriginPath, componentFolderPath, {
-      recursive: true,
-    });
-
-    if (prefix) {
-      configPrefix(componentFolderPath, prefix);
-    }
-  }
-}
 
 function configPrefix(componentFolderPath: string, prefix: string) {
   const files = readdirSync(componentFolderPath);
@@ -93,23 +74,18 @@ function configPrefix(componentFolderPath: string, prefix: string) {
   }
 }
 
-export function installComponent(
-  projectName: string,
-  component: InstallComponentFlags,
-): InstallResult {
+export function installComponent(projectName: string, component: InstallComponentFlags) {
+  const prefix = getPrefix(projectName);
+  const projectFolder = getProjectPath(projectName);
+  const componentFolderPath = `${projectFolder}/src/app/shared/components/${component}`;
+  const componentOriginPath = `${originPath}/ui/components/${component}`;
+
   const componentDeps: InstallComponentFlags[] = [];
   const libDeps: string[] = [];
-  const pipeDeps: InstallPipeFlags[] = [];
   const validatorDeps: InstallValidatorFlags[] = [];
   const directiveDeps: InstallDirectiveFlags[] = [];
   const utilDeps: InstallUtilFlags[] = [];
-
-  const installedComponentDeps: InstallComponentFlags[] = [];
-  const installedLibDeps: string[] = [];
-  const installedPipeDeps: InstallPipeFlags[] = [];
-  const installedValidatorDeps: InstallValidatorFlags[] = [];
-  const installedDirectiveDeps: InstallDirectiveFlags[] = [];
-  const installedUtilDeps: InstallUtilFlags[] = [];
+  const baseDeps: InstallBaseFlags[] = [];
 
   switch (component) {
     case 'confirm':
@@ -143,7 +119,18 @@ export function installComponent(
       break;
     case 'combobox':
       libDeps.push('@angular/aria');
+      utilDeps.push(
+        'find-item-by-value',
+        'has-item-with-value',
+        'remove-item-by-value',
+        'toggle-item-by-value',
+        'map-items-by-values',
+        'are-items-equal-by-value',
+      );
       componentDeps.push('loading');
+      break;
+    case 'select':
+      utilDeps.push('find-item-by-value', 'toggle-primitive-value');
       break;
     case 'filter':
       componentDeps.push(
@@ -154,55 +141,34 @@ export function installComponent(
         'input-field',
         'input-cpf',
         'input-cnpj',
+        'currency',
       );
+      break;
+    case 'pagination':
+      componentDeps.push('select');
+      break;
+    case 'datatable':
+      componentDeps.push('filter', 'button', 'table', 'pagination');
+      baseDeps.push('list');
       break;
   }
 
-  for (const dep of getNotInstalled(projectName, 'lib', libDeps)) {
-    const installed = installLib(projectName, dep);
+  if (existsSync(componentOriginPath)) {
+    cpSync(componentOriginPath, componentFolderPath, {
+      recursive: true,
+    });
 
-    if (installed) {
-      installedLibDeps.push(dep);
-    } else {
-      console.warn(
-        `The library "${dep}" is required for the "${component}" component to work properly. Please install it as soon as possible.`,
-      );
+    if (prefix) {
+      configPrefix(componentFolderPath, prefix);
     }
   }
 
-  for (const dep of getNotInstalled(projectName, 'utils', utilDeps)) {
-    installUtil(projectName, dep);
-    installedUtilDeps.push(dep);
-  }
-
-  for (const dep of getNotInstalled(projectName, 'pipe', pipeDeps)) {
-    installPipe(projectName, dep);
-    installedPipeDeps.push(dep);
-  }
-
-  for (const dep of getNotInstalled(projectName, 'validator', validatorDeps)) {
-    installValidator(projectName, dep);
-    installedValidatorDeps.push(dep);
-  }
-
-  for (const dep of getNotInstalled(projectName, 'directives', directiveDeps)) {
-    installDirective(projectName, dep);
-    installedDirectiveDeps.push(dep);
-  }
-
-  for (const dep of getNotInstalled(projectName, 'component', componentDeps)) {
-    installComponent(projectName, dep);
-    installedComponentDeps.push(dep);
-  }
-
-  copyComponent(projectName, component);
-
   return {
-    components: installedComponentDeps,
-    libs: installedLibDeps,
-    pipes: installedPipeDeps,
-    validators: installedValidatorDeps,
-    directives: installedDirectiveDeps,
-    utils: installedUtilDeps,
+    componentDeps,
+    libDeps,
+    validatorDeps,
+    directiveDeps,
+    utilDeps,
+    baseDeps,
   };
 }

@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, computed, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { KlArray } from '@koalarx/utils/KlArray';
+import { filter, map } from 'rxjs';
 
 interface MenuOption {
   name: string;
@@ -13,15 +15,31 @@ interface MenuOptions {
   items: MenuOption[];
 }
 
+type ModulePage = 'get-started' | 'components' | 'blocks';
+
 @Component({
   selector: 'app-nav-menu',
   templateUrl: './nav-menu.html',
   imports: [RouterLink, RouterLinkActive],
 })
 export class NavMenu {
+  private readonly currentPage = toSignal(
+    inject(Router).events.pipe(
+      filter((event) => event instanceof NavigationEnd),
+      map(() => location.hash.split('/').slice(1)),
+    ),
+  );
+  readonly currentModulePage = computed<ModulePage | null>(() => {
+    const url = this.currentPage()?.[0];
+    if (url === 'get-started' || url === 'components' || url === 'blocks') {
+      return url;
+    }
+    return null;
+  });
+
   readonly getStarted = new KlArray<MenuOption>([
-    { name: 'Introduction', routerLink: 'introduction' },
-    { name: 'Installation', routerLink: 'installation' },
+    { name: 'Introduction', routerLink: 'get-started/introduction' },
+    { name: 'Installation', routerLink: 'get-started/installation' },
   ]).orderBy('name');
 
   readonly components = new KlArray<MenuOptions>([
@@ -39,7 +57,6 @@ export class NavMenu {
       name: 'Data Display',
       items: new KlArray<MenuOption>([
         { name: 'Collapse', routerLink: 'components/collapse' },
-        { name: 'Datatable', routerLink: 'components/datatable', commingSoon: true },
         { name: 'Table', routerLink: 'components/table' },
       ]).orderBy('name'),
     },
@@ -84,12 +101,16 @@ export class NavMenu {
     },
   ]).orderBy('name');
 
+  readonly blocks = new KlArray<MenuOption>([
+    { name: 'Datatable', routerLink: 'blocks/datatable' },
+  ]).orderBy('name');
+
   readonly resources = new KlArray<MenuOptions>([
     {
       name: 'Abstractions',
       items: new KlArray<MenuOption>([
         { name: 'HttpBase', routerLink: 'resources/http-base', commingSoon: true },
-        { name: 'ListBase', routerLink: 'resources/list-base', commingSoon: true },
+        { name: 'ListBase', routerLink: 'resources/list-base' },
         { name: 'FormBase', routerLink: 'resources/form-base', commingSoon: true },
         { name: 'PageBase', routerLink: 'resources/page-base', commingSoon: true },
       ]).orderBy('name'),

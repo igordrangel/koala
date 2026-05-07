@@ -1,0 +1,11 @@
+<span
+  class="mr-[0.45rem] [&_app-input-calendar]:inline-block [&_app-input-calendar]:w-auto [&_app-input-calendar_div.relative]:w-auto [&_app-input-calendar_input]:h-auto! [&_app-input-calendar_input]:min-h-0! [&_app-input-calendar_input]:w-auto! [&_app-input-calendar_input]:max-w-none! [&_app-input-calendar_input]:rounded-none! [&_app-input-calendar_input]:border-0! [&_app-input-calendar_input]:bg-transparent! [&_app-input-calendar_input]:px-0! [&_app-input-calendar_input]:py-0! [&_app-input-calendar_input]:pr-0! [&_app-input-calendar_input]:text-inherit! [&_app-input-calendar_input]:[font-size:inherit]! [&_app-input-calendar_input]:[font-weight:inherit]! [&_app-input-calendar_input]:shadow-none! [&_app-input-calendar_input]:outline-none! [&_app-input-calendar_input]:focus:outline-none! [&_app-input-calendar_input]:focus-visible:outline-none! [&_app-input-calendar_button.btn.btn-ghost.btn-xs]:pointer-events-none [&_app-input-calendar_button.btn.btn-ghost.btn-xs]:opacity-0"
+  [style.width.ch]="widthCh()"
+>
+  <app-input-calendar
+    [value]="value()"
+    format="dd/MM/yyyy"
+    [placeholder]="placeholder()"
+    (valueChange)="dateChange.emit($event)"
+  />
+</span>

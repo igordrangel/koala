@@ -1,3 +1,3 @@
 ```bash
-kl component -n alert
+kl install -n alert
 ```

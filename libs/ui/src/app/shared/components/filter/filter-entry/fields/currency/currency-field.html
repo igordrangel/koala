@@ -1,0 +1,17 @@
+<span class="inline-flex min-w-0 items-center">
+  <input
+    appInput
+    appCurrency
+    inputmode="numeric"
+    class="h-auto w-auto min-w-0 border-0 bg-transparent p-0 text-inherit shadow-none outline-none"
+    [attr.size]="fieldWidthCh()"
+    [style.width.ch]="fieldWidthCh()"
+    [placeholder]="placeholder()"
+    [prefix]="prefix()"
+    [decimalDigits]="decimalDigits()"
+    [thousandSeparator]="thousandSeparator()"
+    [decimalSeparator]="decimalSeparator()"
+    [formControl]="control()"
+    (input)="inputChange.emit($any($event.target).value)"
+  />
+</span>

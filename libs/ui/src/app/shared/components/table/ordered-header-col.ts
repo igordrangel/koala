@@ -30,7 +30,8 @@ export class OrderedHeaderCol implements OnDestroy {
       let direction: OrderDirection = this.direction();
 
       if (current) {
-        direction = current.direction === 'asc' ? 'desc' : 'asc';
+        direction =
+          current.field === field ? (current.direction === 'asc' ? 'desc' : 'asc') : 'asc';
       }
 
       return { field, direction };
@@ -79,15 +80,19 @@ export class OrderedHeaderCol implements OnDestroy {
     const sortDescIcon = 'fa-solid fa-arrow-down-wide-short mr-2';
     let sortIcon: string;
 
-    switch (orderBy?.direction) {
-      case 'asc':
-        sortIcon = sortAscIcon;
-        break;
-      case 'desc':
-        sortIcon = sortDescIcon;
-        break;
-      default:
-        sortIcon = defaultSortIcon;
+    if (orderBy?.field !== this.appTableOrderedHeaderCol()) {
+      sortIcon = defaultSortIcon;
+    } else {
+      switch (orderBy?.direction) {
+        case 'asc':
+          sortIcon = sortAscIcon;
+          break;
+        case 'desc':
+          sortIcon = sortDescIcon;
+          break;
+        default:
+          sortIcon = defaultSortIcon;
+      }
     }
 
     this.getCurrentSortIcon().className = sortIcon;

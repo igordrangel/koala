@@ -1,3 +1,3 @@
 ```bash
-kl component -n loading
+kl install -n loading
 ```

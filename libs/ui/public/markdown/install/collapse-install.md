@@ -1,3 +1,3 @@
 ```bash
-kl component -n collapse
+kl install -n collapse
 ```

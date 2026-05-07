@@ -1,17 +1,24 @@
 import { Component, computed, effect, input, linkedSignal, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Select, SelectOption } from '../select/select';
 
 export type PaginationSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 @Component({
   selector: 'app-pagination',
   templateUrl: './pagination.html',
-  imports: [FormsModule],
+  imports: [FormsModule, Select],
 })
 export class Pagination {
   private firstLoad = true;
 
-  readonly pageSizeOptions = [10, 20, 30, 50, 100];
+  readonly pageSizeOptions: SelectOption<number>[] = [
+    { label: '10', value: 10 },
+    { label: '20', value: 20 },
+    { label: '30', value: 30 },
+    { label: '50', value: 50 },
+    { label: '100', value: 100 },
+  ];
   readonly pageChange = output<number>();
   readonly pageSizeChange = output<number>();
 
@@ -77,21 +84,6 @@ export class Pagination {
         return 'btn-lg';
       case 'xl':
         return 'btn-xl';
-    }
-  });
-
-  readonly selectSizeClass = computed(() => {
-    switch (this.size()) {
-      case 'xs':
-        return 'select-xs min-w-14';
-      case 'sm':
-        return 'select-sm min-w-15';
-      case 'md':
-        return 'select-md min-w-16';
-      case 'lg':
-        return 'select-lg min-w-17';
-      case 'xl':
-        return 'select-xl min-w-18';
     }
   });
 

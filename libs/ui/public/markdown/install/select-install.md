@@ -1,3 +1,3 @@
 ```bash
-kl component -n select
+kl install -n select
 ```

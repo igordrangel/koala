@@ -1,4 +1,5 @@
 import { Signal } from '@angular/core';
+import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
 import { Resource, ResourceRef } from '@angular/core';
 import { ComboboxOption } from '../combobox/combobox';
 
@@ -10,6 +11,7 @@ export type FilterFieldType =
   | 'url'
   | 'cpf'
   | 'cnpj'
+  | 'currency'
   | 'date'
   | 'datetime'
   | 'month'
@@ -46,6 +48,13 @@ export type FilterOptionsResourceFactory = (
   filter?: Signal<string>,
 ) => FilterOptionsResource;
 
+export interface FilterCurrencyConfig {
+  prefix?: string;
+  decimalDigits?: number;
+  thousandSeparator?: string;
+  decimalSeparator?: string;
+}
+
 // ─── I18n ────────────────────────────────────────────────────────────────────
 export interface FilterI18n {
   /** Placeholder shown inside the picker input */
@@ -58,6 +67,8 @@ export interface FilterI18n {
   removeLabel: string;
   /** Footer note shown when all filter types have been added */
   allFiltersAdded: string;
+  /** Default placeholder for input fields */
+  inputPlaceholder: string;
   /** Default placeholder for select/combobox fields */
   selectPlaceholder: string;
 }
@@ -68,6 +79,7 @@ export const DEFAULT_FILTER_I18N: FilterI18n = {
   closeLabel: 'Close',
   removeLabel: 'Remove filter',
   allFiltersAdded: 'All available filter types have been added.',
+  inputPlaceholder: 'Fill in value',
   selectPlaceholder: 'Select',
 };
 
@@ -77,6 +89,8 @@ export interface FilterDefinition {
   label: string;
   type: FilterFieldType;
   placeholder?: string;
+  /** Optional currency mask/format options used by `currency` fields */
+  currency?: FilterCurrencyConfig;
   /** Static option list (select, selectMultiple, combobox) */
   options?: ComboboxOption[];
   /**
@@ -88,6 +102,10 @@ export interface FilterDefinition {
   allowMultiple?: boolean;
   /** Badge colour variant — overrides the global filter variant */
   variant?: FilterVariant;
+  /** Synchronous validators — chip shows error styling when invalid */
+  validators?: ValidatorFn | ValidatorFn[];
+  /** Asynchronous validators — chip shows error styling when invalid */
+  asyncValidators?: AsyncValidatorFn | AsyncValidatorFn[];
 }
 
 // ─── Internal state ───────────────────────────────────────────────────────────

@@ -1,3 +1,3 @@
 ```bash
-kl component -n table
+kl install -n table
 ```

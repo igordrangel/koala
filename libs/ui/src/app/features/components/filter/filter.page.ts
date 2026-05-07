@@ -139,6 +139,7 @@ export class FilterPage {
     FilterDef.date('created', 'Created after').build(),
     FilterDef.number('comments', 'Min comments').placeholder('0').build(),
     FilterDef.email('contact', 'Contact e-mail').build(),
+    FilterDef.currency('price', 'Price').build(),
   ];
 
   handleFiltersChange(filters: FilterValue[]) {

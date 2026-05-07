@@ -1,3 +1,3 @@
 ```bash
-kl component -n validator
+kl install -n validator
 ```

@@ -8,6 +8,7 @@ cpSync('libs/ui/src/app/shared/components', 'dist/ui/components', { recursive: t
 cpSync('libs/ui/src/app/shared/validators', 'dist/ui/validators', { recursive: true });
 cpSync('libs/ui/src/app/shared/directives', 'dist/ui/directives', { recursive: true });
 cpSync('libs/ui/src/app/shared/utils', 'dist/ui/utils', { recursive: true });
+cpSync('libs/ui/src/app/shared/base', 'dist/ui/base', { recursive: true });
 cpSync('libs/ui/src/theme', 'dist/ui/theme', { recursive: true });
 cpSync('libs/ui/src/theme/animations.css', 'dist/ui/theme/animations.css');
 cpSync('libs/ui/src/app/app.ts', 'dist/ui/app.ts');
@@ -27,7 +28,6 @@ cpSync('package.json', 'dist/package.json');
 cpSync('bin', 'dist/bin', { recursive: true });
 
 const packageJson = JSON.parse(readFileSync('dist/package.json', 'utf-8'));
-packageJson.oclif.commands = './cli/commands';
 
 delete packageJson.devDependencies;
 delete packageJson.scripts;

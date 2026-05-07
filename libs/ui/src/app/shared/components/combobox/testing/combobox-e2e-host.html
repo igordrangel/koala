@@ -1,0 +1,23 @@
+<div class="mx-auto flex max-w-5xl flex-col gap-6 p-6">
+  <app-combobox
+    placeholder="Search user..."
+    [options]="assigneeOptions"
+    [formControl]="assigneeControl"
+  />
+
+  <app-combobox
+    placeholder="Search labels..."
+    [multiple]="true"
+    [options]="labelOptions"
+    [formControl]="labelsControl"
+  />
+
+  <section
+    aria-label="Combobox payload"
+    class="rounded-lg border border-base-300 bg-base-100 p-4 text-sm"
+  >
+    <pre class="overflow-x-auto text-xs leading-6">{{
+      { assignee: assigneeControl.value, labels: labelsControl.value } | json
+    }}</pre>
+  </section>
+</div>

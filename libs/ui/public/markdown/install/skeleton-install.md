@@ -1,3 +1,3 @@
 ```bash
-kl component -n skeleton
+kl install -n skeleton
 ```

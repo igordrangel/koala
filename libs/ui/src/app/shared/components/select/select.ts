@@ -7,7 +7,9 @@ import {
   forwardRef,
   inject,
   input,
+  OnDestroy,
   signal,
+  viewChild,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import {
@@ -54,7 +56,7 @@ export type SelectBadgeSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
     '(focusout)': 'handleFocusOut()',
   },
 })
-export class Select implements ControlValueAccessor {
+export class Select implements ControlValueAccessor, OnDestroy {
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef<HTMLElement>);
 
   private onChange: (value: unknown) => void = () => {};
@@ -67,6 +69,7 @@ export class Select implements ControlValueAccessor {
   readonly multiple = input(false, { transform: booleanAttribute });
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly inline = input(false, { transform: booleanAttribute });
+  readonly hideClear = input(false, { transform: booleanAttribute });
   readonly badgeVariant = input<SelectBadgeVariant>('success');
   readonly badgeStyle = input<SelectBadgeStyle>('soft');
   readonly badgeSize = input<SelectBadgeSize>('xs');
@@ -74,6 +77,10 @@ export class Select implements ControlValueAccessor {
   readonly isOpen = signal(false);
   readonly activeIndex = signal(-1);
   readonly selectedValues = signal<unknown[]>([]);
+  readonly dropdownStyle = signal('');
+
+  private readonly buttonRef = viewChild<ElementRef<HTMLButtonElement>>('triggerBtn');
+  private _positionCleanup: (() => void)[] = [];
 
   readonly isDisabled = computed(() => this.disabled() || this.formDisabled);
 
@@ -94,7 +101,7 @@ export class Select implements ControlValueAccessor {
     return `${base} rounded-lg border border-base-300 bg-base-100 text-base-content shadow-xs ${getSelectSizeClass(this.size())}`;
   });
 
-  readonly dropdownClass = computed(() => (this.inline() ? 'min-w-36' : 'w-full'));
+  readonly dropdownClass = computed(() => (this.inline() ? 'min-w-36' : ''));
 
   readonly badgeClass = computed(() => {
     return `badge badge-${this.badgeVariant()} badge-${this.badgeStyle()} badge-${this.badgeSize()} h-auto gap-2 border border-base-300 px-2 py-1 font-medium`;
@@ -242,8 +249,80 @@ export class Select implements ControlValueAccessor {
     this.formDisabled = isDisabled;
   }
 
+  private measureOptionsWidth(btnEl: HTMLElement): number {
+    const labels = this.options().map((option) => option.label ?? `${option.value ?? ''}`);
+    if (!labels.length) {
+      return 0;
+    }
+
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    const computedFont = getComputedStyle(btnEl).font;
+
+    if (context && computedFont) {
+      context.font = computedFont;
+      const widest = labels.reduce(
+        (max, label) => Math.max(max, context.measureText(label).width),
+        0,
+      );
+      return Math.ceil(widest + 72);
+    }
+
+    const widestChars = labels.reduce((max, label) => Math.max(max, label.length), 0);
+    return widestChars * 8 + 72;
+  }
+
+  private computeDropdownPosition() {
+    const btnEl = this.buttonRef()?.nativeElement;
+    if (!btnEl) return;
+
+    const rect = btnEl.getBoundingClientRect();
+    const DROPDOWN_MAX_HEIGHT = 296; // max-h-72 (288px) + border/padding
+    const viewportPadding = 8;
+    const style: Record<string, string> = {};
+    const maxDropdownWidth = Math.max(220, window.innerWidth - viewportPadding * 2);
+    const measuredWidth = this.measureOptionsWidth(btnEl);
+
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
+
+    if (spaceBelow >= DROPDOWN_MAX_HEIGHT || spaceBelow >= spaceAbove) {
+      style['top'] = `${rect.bottom + 4}px`;
+    } else {
+      style['bottom'] = `${window.innerHeight - rect.top + 4}px`;
+    }
+
+    const minDropdownWidth = this.inline() ? 96 : rect.width;
+    const desiredWidth = Math.min(maxDropdownWidth, Math.max(minDropdownWidth, measuredWidth));
+    const spaceRight = window.innerWidth - rect.left;
+
+    if (spaceRight >= desiredWidth) {
+      style['left'] = `${rect.left}px`;
+    } else {
+      style['right'] = `${window.innerWidth - rect.right}px`;
+    }
+
+    style['width'] = `${desiredWidth}px`;
+    style['max-width'] = `${maxDropdownWidth}px`;
+
+    this.dropdownStyle.set(
+      Object.entries(style)
+        .map(([key, value]) => `${key}:${value}`)
+        .join(';'),
+    );
+  }
+
   private openDropdown() {
+    this.computeDropdownPosition();
     this.isOpen.set(true);
+
+    const reposition = () => this.computeDropdownPosition();
+    window.addEventListener('scroll', reposition, { passive: true, capture: true });
+    window.addEventListener('resize', reposition, { passive: true });
+    this._positionCleanup = [
+      () => window.removeEventListener('scroll', reposition, { capture: true }),
+      () => window.removeEventListener('resize', reposition),
+    ];
 
     const selectedValue = this.selectedValues()[0];
     const selectedIndex = this.options().findIndex((option) =>
@@ -262,6 +341,12 @@ export class Select implements ControlValueAccessor {
   private closeDropdown() {
     this.isOpen.set(false);
     this.activeIndex.set(-1);
+    this._positionCleanup.forEach((fn) => fn());
+    this._positionCleanup = [];
+  }
+
+  ngOnDestroy() {
+    this._positionCleanup.forEach((fn) => fn());
   }
 
   private moveActive(step: 1 | -1) {

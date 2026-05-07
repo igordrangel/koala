@@ -1,0 +1,19 @@
+<div class="mx-auto flex max-w-5xl flex-col gap-6 p-6">
+  <app-select placeholder="Pick status" [options]="statusOptions" [formControl]="statusControl" />
+
+  <app-select
+    placeholder="Pick labels"
+    [multiple]="true"
+    [options]="labelOptions"
+    [formControl]="labelsControl"
+  />
+
+  <section
+    aria-label="Select payload"
+    class="rounded-lg border border-base-300 bg-base-100 p-4 text-sm"
+  >
+    <pre class="overflow-x-auto text-xs leading-6">{{
+      { status: statusControl.value, labels: labelsControl.value } | json
+    }}</pre>
+  </section>
+</div>

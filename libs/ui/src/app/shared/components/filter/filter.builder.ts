@@ -1,10 +1,12 @@
 import { ComboboxOption } from '../combobox/combobox';
 import {
+  FilterCurrencyConfig,
   FilterDefinition,
   FilterFieldType,
   FilterOptionsResourceFactory,
   FilterVariant,
 } from './filter.models';
+import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
 
 class FilterDefBuilder {
   private _config: Partial<FilterDefinition>;
@@ -42,6 +44,21 @@ class FilterDefBuilder {
 
   resourceFactory(value: FilterOptionsResourceFactory): this {
     this._config.resourceFactory = value;
+    return this;
+  }
+
+  validators(value: ValidatorFn | ValidatorFn[]): this {
+    this._config.validators = value;
+    return this;
+  }
+
+  asyncValidators(value: AsyncValidatorFn | AsyncValidatorFn[]): this {
+    this._config.asyncValidators = value;
+    return this;
+  }
+
+  currency(value: FilterCurrencyConfig): this {
+    this._config.currency = value;
     return this;
   }
 
@@ -87,6 +104,10 @@ export class FilterDef {
 
   static cnpj(key: string, label: string): FilterDefBuilder {
     return new FilterDefBuilder(key, label, 'cnpj');
+  }
+
+  static currency(key: string, label: string): FilterDefBuilder {
+    return new FilterDefBuilder(key, label, 'currency');
   }
 
   // ─── Date / time ──────────────────────────────────────────────────────────
