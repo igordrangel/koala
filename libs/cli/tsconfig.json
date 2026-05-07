@@ -10,4 +10,8 @@
       "ES2020"
     ]
   },
+  "exclude": [
+    "**/*.unit.spec.ts",
+    "**/*.spec.ts"
+  ]
 }
