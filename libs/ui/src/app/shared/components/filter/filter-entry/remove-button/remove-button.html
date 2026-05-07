@@ -1,0 +1,10 @@
+<span
+  role="button"
+  tabindex="-1"
+  class="inline-flex h-3.5 w-3.5 shrink-0 cursor-pointer items-center justify-center rounded-full opacity-60 transition hover:bg-black/10 hover:opacity-100"
+  [attr.aria-label]="removeLabel()"
+  (click)="$event.stopPropagation(); remove.emit()"
+  (keydown.enter)="$event.stopPropagation(); remove.emit()"
+>
+  <i class="fa-solid fa-xmark" style="font-size: 0.55rem"></i>
+</span>

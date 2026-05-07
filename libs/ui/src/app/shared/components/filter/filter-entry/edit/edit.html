@@ -1,0 +1,92 @@
+<span [class]="chipClass()" class="cursor-default">
+  <span class="shrink-0 opacity-60">{{ definition().label }}:</span>
+
+  <span
+    #fieldEl
+    class="relative inline-flex min-w-0 items-center"
+    (keydown)="fieldKeydown.emit($event)"
+  >
+    @switch (definition().type) {
+      @case ('combobox') {
+        <app-filter-entry-select-field
+          type="combobox"
+          [options]="resolvedComboboxOptions()"
+          [placeholder]="resolvedPlaceholder()"
+          [fieldWidthCh]="fieldWidthCh()"
+          [comboboxClass]="comboboxClass()"
+          [resourceFactory]="comboboxResourceFactory()"
+          [comboboxControl]="comboboxControl()"
+          [selectControl]="selectControl()"
+          [selectMultipleControl]="selectMultipleControl()"
+          (optionSelected)="optionSelected.emit($event)"
+        />
+      }
+
+      @case ('select') {
+        <app-filter-entry-select-field
+          type="select"
+          [options]="resolvedOptions()"
+          [placeholder]="resolvedPlaceholder()"
+          [fieldWidthCh]="fieldWidthCh()"
+          [comboboxClass]="comboboxClass()"
+          [resourceFactory]="comboboxResourceFactory()"
+          [comboboxControl]="comboboxControl()"
+          [selectControl]="selectControl()"
+          [selectMultipleControl]="selectMultipleControl()"
+        />
+      }
+
+      @case ('date') {
+        <app-filter-entry-date-field
+          [widthCh]="dateFieldWidthCh()"
+          [value]="entryTextValue()"
+          [placeholder]="resolvedPlaceholder()"
+          (dateChange)="dateChange.emit($event)"
+        />
+      }
+
+      @case ('selectMultiple') {
+        <app-filter-entry-select-field
+          type="selectMultiple"
+          [options]="resolvedOptions()"
+          [placeholder]="resolvedPlaceholder()"
+          [fieldWidthCh]="fieldWidthCh()"
+          [comboboxClass]="comboboxClass()"
+          [resourceFactory]="comboboxResourceFactory()"
+          [comboboxControl]="comboboxControl()"
+          [selectControl]="selectControl()"
+          [selectMultipleControl]="selectMultipleControl()"
+        />
+      }
+
+      @case ('currency') {
+        <app-filter-entry-currency-field
+          [fieldWidthCh]="fieldWidthCh()"
+          [placeholder]="resolvedPlaceholder()"
+          [prefix]="currencyConfig().prefix"
+          [decimalDigits]="currencyDecimalDigits()"
+          [thousandSeparator]="currencyConfig().thousandSeparator"
+          [decimalSeparator]="currencyConfig().decimalSeparator"
+          [control]="currencyControl()"
+          (inputChange)="currencyInput.emit($event)"
+        />
+      }
+
+      @default {
+        <app-filter-entry-text-field
+          [size]="size()"
+          [fieldWidthCh]="fieldWidthCh()"
+          [inputType]="inputType()"
+          [inputMode]="inputMode()"
+          [inputMask]="inputMask()"
+          [placeholder]="resolvedPlaceholder()"
+          [value]="entryTextValue()"
+          (textInput)="textInput.emit($event)"
+            [validationControl]="validationControl()"
+        />
+      }
+    }
+  </span>
+
+  <app-filter-entry-remove-button [removeLabel]="removeLabel()" (remove)="remove.emit()" />
+</span>

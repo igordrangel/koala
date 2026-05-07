@@ -29,7 +29,15 @@ import {
   buildFilterDefinitionMap,
   buildFilterPickerOptions,
   createFilterEntry,
-} from './filter.helpers';
+} from './helpers';
+
+function hasFilterValue(value: unknown): boolean {
+  if (Array.isArray(value)) {
+    return value.length > 0;
+  }
+
+  return value !== null && value !== undefined && `${value}`.trim() !== '';
+}
 
 @Component({
   selector: 'app-filter',
@@ -69,7 +77,7 @@ export class Filter {
     return this.entries()
       .map((entry) => {
         const d = map.get(entry.key);
-        if (!d) return null;
+        if (!d || !hasFilterValue(entry.value)) return null;
         return {
           key: d.key,
           label: d.label,

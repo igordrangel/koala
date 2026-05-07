@@ -1,3 +1,3 @@
 ```bash
-kl component -n confirm
+kl install -n confirm
 ```

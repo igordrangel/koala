@@ -1,3 +1,3 @@
 ```bash
-kl component -n tab
+kl install -n tab
 ```

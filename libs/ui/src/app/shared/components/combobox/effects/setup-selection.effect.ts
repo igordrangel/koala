@@ -1,7 +1,6 @@
 import { effect, untracked } from '@angular/core';
 import { ComboboxOption } from '../combobox';
-import { isSameComboboxValue } from '../combobox.value.helpers';
-import { areOptionArraysEqualByValue, mapSelectedOptions } from '../combobox.multiple.helpers';
+import { isSameComboboxValue, areOptionArraysEqualByValue, mapSelectedOptions } from '../helpers';
 
 interface SelectionContext {
   multiple: () => boolean;

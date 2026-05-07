@@ -1,3 +1,3 @@
 ```bash
-kl component -n input-field
+kl install -n input-field
 ```

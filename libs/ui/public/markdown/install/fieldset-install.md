@@ -1,3 +1,3 @@
 ```bash
-kl component -n fieldset
+kl install -n fieldset
 ```

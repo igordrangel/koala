@@ -1,3 +1,3 @@
 ```bash
-kl component -n checkbox
+kl install -n checkbox
 ```

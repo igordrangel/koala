@@ -1,7 +1,7 @@
 import { Component, computed, input, output } from '@angular/core';
 import { Listbox as AriaListbox, Option as AriaOption } from '@angular/aria/listbox';
 import { ComboboxOption } from '../combobox';
-import { isSameComboboxValue } from '../combobox.value.helpers';
+import { isSameComboboxValue } from '../helpers';
 
 @Component({
   selector: 'app-combobox-options-panel',

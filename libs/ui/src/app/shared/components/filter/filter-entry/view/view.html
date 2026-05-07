@@ -1,0 +1,19 @@
+<button
+  type="button"
+  [class]="chipClass()"
+  class="cursor-pointer"
+  (click)="open.emit()"
+  (keydown)="chipKeydown.emit($event)"
+>
+  <span class="shrink-0 opacity-60">{{ definition().label }}:</span>
+
+  @if (displayValue()) {
+    <span class="max-w-40 truncate">{{ displayValue() }}</span>
+  } @else if (isRemoteValueLoading()) {
+    <span class="italic opacity-40">loading...</span>
+  } @else {
+    <span class="italic opacity-40">{{ i18n().emptyLabel }}</span>
+  }
+
+  <app-filter-entry-remove-button [removeLabel]="removeLabel()" (remove)="remove.emit()" />
+</button>

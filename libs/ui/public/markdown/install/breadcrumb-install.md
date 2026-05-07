@@ -1,3 +1,3 @@
 ```bash
-kl component -n breadcrumb
+kl install -n breadcrumb
 ```

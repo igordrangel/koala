@@ -1,3 +1,3 @@
 ```bash
-kl component -n dropdown
+kl install -n dropdown
 ```

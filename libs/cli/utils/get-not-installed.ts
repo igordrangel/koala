@@ -1,24 +1,18 @@
 import { existsSync, readFileSync } from 'node:fs';
+import { InstallBaseFlags } from './install-base';
 import { InstallComponentFlags } from './install-component';
-import { InstallPipeFlags } from './install-pipe';
-import { InstallValidatorFlags } from './install-validator';
-import { getProjectPath } from './project-path';
 import { InstallDirectiveFlags } from './install-directive';
 import { InstallUtilFlags } from './install-util';
+import { InstallValidatorFlags } from './install-validator';
+import { getProjectPath } from './project-path';
 
-export type PackageType = 'component' | 'pipe' | 'validator' | 'directives' | 'utils' | 'lib';
+export type PackageType = 'component' | 'validator' | 'directives' | 'utils' | 'lib' | 'base';
 
 export function getNotInstalled(
   projectName: string,
   type: 'component',
   deps: InstallComponentFlags[],
 ): InstallComponentFlags[];
-
-export function getNotInstalled(
-  projectName: string,
-  type: 'pipe',
-  deps: InstallPipeFlags[],
-): InstallPipeFlags[];
 
 export function getNotInstalled(
   projectName: string,
@@ -37,6 +31,12 @@ export function getNotInstalled(
   type: 'utils',
   deps: InstallUtilFlags[],
 ): InstallUtilFlags[];
+
+export function getNotInstalled(
+  projectName: string,
+  type: 'base',
+  deps: InstallBaseFlags[],
+): InstallBaseFlags[];
 
 export function getNotInstalled(projectName: string, type: 'lib', deps: string[]): string[];
 

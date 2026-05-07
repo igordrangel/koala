@@ -1,3 +1,3 @@
 ```bash
-kl component -n radio
+kl install -n radio
 ```

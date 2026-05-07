@@ -1,3 +1,3 @@
 ```bash
-kl component -n input-currency
+kl install -n input-currency
 ```

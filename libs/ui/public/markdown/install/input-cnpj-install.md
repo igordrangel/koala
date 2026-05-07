@@ -1,3 +1,3 @@
 ```bash
-kl component -n input-cnpj
+kl install -n input-cnpj
 ```

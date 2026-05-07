@@ -1,0 +1,35 @@
+@switch (type()) {
+  @case ('combobox') {
+    <app-combobox
+      [class]="comboboxClass()"
+      [style.width.ch]="fieldWidthCh()"
+      [placeholder]="placeholder()"
+      [searchDebounce]="300"
+      [options]="options()"
+      [resourceFactory]="resourceFactory()"
+      [formControl]="comboboxControl()"
+      (optionSelected)="optionSelected.emit($event)"
+    />
+  }
+
+  @case ('select') {
+    <app-select
+      inline
+      class="[&_button]:outline-none [&_button]:focus:outline-none [&_button]:focus-visible:outline-none"
+      [options]="options()"
+      [placeholder]="placeholder()"
+      [formControl]="selectControl()"
+    />
+  }
+
+  @default {
+    <app-select
+      inline
+      multiple
+      class="[&_button]:outline-none [&_button]:focus:outline-none [&_button]:focus-visible:outline-none"
+      [options]="options()"
+      [placeholder]="placeholder()"
+      [formControl]="selectMultipleControl()"
+    />
+  }
+}

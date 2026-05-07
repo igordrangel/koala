@@ -1,3 +1,3 @@
 ```bash
-kl component -n toggle
+kl install -n toggle
 ```

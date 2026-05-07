@@ -1,3 +1,3 @@
 ```bash
-kl component -n side-window
+kl install -n side-window
 ```

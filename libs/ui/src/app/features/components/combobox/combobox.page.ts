@@ -29,9 +29,9 @@ export class ComboboxPage {
     { value: 'pe', label: 'Pernambuco' },
   ];
 
-  readonly usersResourceFactory: ComboboxResourceFactory<number> = (
+  readonly usersResourceFactory: ComboboxResourceFactory<unknown> = (
     filter: Signal<string>,
-    selectedValues: Signal<number[]>,
+    selectedValues: Signal<unknown[]>,
   ) =>
     resource({
       params: () => ({

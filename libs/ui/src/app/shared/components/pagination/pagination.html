@@ -1,13 +1,16 @@
 <div class="flex justify-between items-center gap-10">
   <div class="flex items-center gap-4 dark:text-neutral-500">
-    <span class="whitespace-nowrap" [class]="textSizeClass()">Items per page limit</span>
-    <select class="select" [class]="selectSizeClass()" [(ngModel)]="currentPageSize">
-      @for (item of pageSizeOptions; track $index) {
-        <option [value]="item">{{ item }}</option>
-      }
-    </select>
-    <span [class]="textSizeClass()">|</span>
-    <span class="whitespace-nowrap" [class]="textSizeClass()">
+    <span class="whitespace-nowrap font-light" [class]="textSizeClass()">
+      Items per page limit
+    </span>
+    <app-select
+      hideClear
+      [size]="size()"
+      [options]="pageSizeOptions"
+      [(ngModel)]="currentPageSize"
+    />
+    <span class="font-light" [class]="textSizeClass()">|</span>
+    <span class="whitespace-nowrap font-light" [class]="textSizeClass()">
       {{ totalItemsOnCurrentPage() }} of {{ total() }}
     </span>
   </div>

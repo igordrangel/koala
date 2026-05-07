@@ -1,6 +1,5 @@
 import {
   booleanAttribute,
-  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
@@ -16,18 +15,7 @@ import {
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { Combobox as AriaCombobox } from '@angular/aria/combobox';
-import {
-  removeSelectedOption,
-  selectedOptionsToValues,
-  toggleSelectedOption,
-} from './combobox.multiple.helpers';
-import { getNextActiveIndex } from './combobox.navigation.helpers';
-import {
-  asArrayValue,
-  getRestoredInputValue,
-  hasLabelInSelectedOptions,
-  isEmptyValue,
-} from './combobox.state.helpers';
+import { getRestoredInputValue, asArrayValue, isEmptyValue } from './helpers';
 import { ComboboxOptionsPanelComponent } from './parts/combobox-options-panel.component';
 import { ComboboxTriggerComponent } from './parts/combobox-trigger.component';
 import {
@@ -36,6 +24,8 @@ import {
   setupRemoteResourceEffect,
   setupSelectionEffect,
 } from './effects';
+import { setupComboboxKeyboardHandling } from './combobox.keyboard-handlers';
+import { ComboboxInputHandlers } from './combobox.input-handlers';
 
 export interface ComboboxOption<TValue = unknown, TData = unknown> {
   value: TValue;
@@ -56,7 +46,6 @@ export type ComboboxResourceFactory<TValue = unknown, TData = unknown> = (
 @Component({
   selector: 'app-combobox',
   templateUrl: './combobox.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [AriaCombobox, ComboboxTriggerComponent, ComboboxOptionsPanelComponent],
   providers: [
     {
@@ -80,6 +69,40 @@ export class Combobox implements ControlValueAccessor {
   private formDisabled = false;
   private skipNextFilterSync = false;
   private suppressNextInputEvent = false;
+  private readonly inputHandlers = new ComboboxInputHandlers({
+    multiple: () => this.multiple(),
+    selectedOptions: () => this.selectedOptions(),
+    selectedOption: () => this.selectedOption(),
+    resolvedOptions: () => this.resolvedOptions(),
+    inputValue: () => this.inputValue(),
+    isOpen: () => this.isOpen(),
+    internalValue: () => this.internalValue(),
+    suppressNextInputEvent: this.suppressNextInputEvent,
+    skipNextFilterSync: this.skipNextFilterSync,
+    setInputValue: (value, resetFilter) => this.setInputValue(value, resetFilter),
+    setSelectedOptions: (options) => this.selectedOptions.set(options),
+    setSelectedOption: (option) => this.selectedOption.set(option),
+    setInternalValue: (value) => this.internalValue.set(value),
+    setIsOpen: (value) => this.isOpen.set(value),
+    setSuppressionFlag: (value) => {
+      this.suppressNextInputEvent = value;
+    },
+    setSkipNextFilterSyncFlag: (value) => {
+      this.skipNextFilterSync = value;
+    },
+    onChange: (value) => this.onChange(value),
+    clearMultipleInput: () => this.clearMultipleInput(),
+    updateActiveIndexFromOptions: () => this.updateActiveIndexFromOptions(),
+  });
+  private readonly keyboardHandler = setupComboboxKeyboardHandling({
+    isOpen: () => this.isOpen(),
+    activeIndex: () => this.activeIndex(),
+    resolvedOptions: () => this.resolvedOptions(),
+    setIsOpen: (value) => this.isOpen.set(value),
+    setActiveIndex: (value) => this.activeIndex.set(value),
+    selectOption: (option) => this.selectOption(option),
+    close: () => this.close(),
+  });
 
   readonly options = input<ComboboxOption[]>([]);
   readonly placeholder = input('Select an option');
@@ -227,25 +250,6 @@ export class Combobox implements ControlValueAccessor {
     this.activeIndex.set(options.length ? 0 : -1);
   }
 
-  private syncMultipleSelection(option: ComboboxOption) {
-    const next = toggleSelectedOption(this.selectedOptions(), option);
-    const nextValues = selectedOptionsToValues(next);
-
-    this.selectedOptions.set(next);
-    this.internalValue.set(nextValues);
-    this.onChange(nextValues);
-    this.suppressNextInputEvent = true;
-    this.clearMultipleInput();
-  }
-
-  private syncSingleSelection(option: ComboboxOption) {
-    this.selectedOption.set(option);
-    this.internalValue.set(option.value);
-    this.onChange(option.value);
-    this.setInputValue(option.label, true);
-    this.close();
-  }
-
   writeValue(value: unknown): void {
     if (this.multiple()) {
       this.internalValue.set(asArrayValue(value));
@@ -273,6 +277,10 @@ export class Combobox implements ControlValueAccessor {
     this.formDisabled = isDisabled;
   }
 
+  handleInputKeydown(event: KeyboardEvent) {
+    this.keyboardHandler(event);
+  }
+
   handleInputFocus() {
     if (this.isDisabled()) {
       return;
@@ -281,118 +289,32 @@ export class Combobox implements ControlValueAccessor {
     this.isOpen.set(true);
   }
 
-  handleInputKeydown(event: KeyboardEvent) {
-    const options = this.resolvedOptions();
-
-    switch (event.key) {
-      case 'ArrowDown':
-        event.preventDefault();
-        if (!this.isOpen()) {
-          this.isOpen.set(true);
-        }
-        if (!options.length) {
-          return;
-        }
-        this.activeIndex.update((index) => getNextActiveIndex(index, options.length, 'down'));
-        break;
-
-      case 'ArrowUp':
-        event.preventDefault();
-        if (!options.length) {
-          return;
-        }
-        this.activeIndex.update((index) => getNextActiveIndex(index, options.length, 'up'));
-        break;
-
-      case 'Enter': {
-        if (!this.isOpen()) {
-          return;
-        }
-        const activeOption = options[this.activeIndex()] ?? null;
-        if (!activeOption) {
-          return;
-        }
-        event.preventDefault();
-        this.selectOption(activeOption);
-        break;
-      }
-
-      case 'Escape':
-        if (!this.isOpen()) {
-          return;
-        }
-        event.preventDefault();
-        this.close();
-        break;
-    }
-  }
-
   handleInput(value: string) {
-    if (this.multiple() && this.suppressNextInputEvent) {
-      this.suppressNextInputEvent = false;
-      this.clearMultipleInput();
-      return;
-    }
-
-    if (this.multiple() && hasLabelInSelectedOptions(this.selectedOptions(), value)) {
-      this.clearMultipleInput();
-      return;
-    }
-
-    this.skipNextFilterSync = false;
-
-    if (!this.multiple() && value.trim() === '' && this.selectedOption() !== null) {
-      this.selectedOption.set(null);
-      this.internalValue.set(null);
-      this.onChange(null);
-    }
-
-    this.inputValue.set(value);
-
-    if (!this.isOpen()) {
-      this.isOpen.set(true);
-    }
-
-    queueMicrotask(() => this.updateActiveIndexFromOptions());
+    this.inputHandlers.handleInputEvent(value);
   }
 
   selectOption(option: ComboboxOption) {
     if (this.multiple()) {
-      this.syncMultipleSelection(option);
+      this.inputHandlers.syncMultipleSelection(option);
       this.optionSelected.emit(option);
       return;
     }
 
-    this.syncSingleSelection(option);
+    this.inputHandlers.syncSingleSelection(option);
     this.optionSelected.emit(option);
+    this.close();
   }
 
   clearSelection() {
-    if (this.multiple()) {
-      this.selectedOptions.set([]);
-      this.internalValue.set([]);
-      this.onChange([]);
-      this.clearMultipleInput();
-      return;
-    }
-
-    this.selectedOption.set(null);
-    this.internalValue.set(null);
-    this.onChange(null);
-    this.setInputValue('');
+    this.inputHandlers.clearSelection();
   }
 
   removeOption(optionValue: unknown) {
-    if (this.isDisabled() || !this.multiple()) {
+    if (this.isDisabled()) {
       return;
     }
 
-    const next = removeSelectedOption(this.selectedOptions(), optionValue);
-    const nextValues = selectedOptionsToValues(next);
-
-    this.selectedOptions.set(next);
-    this.internalValue.set(nextValues);
-    this.onChange(nextValues);
+    this.inputHandlers.removeOption(optionValue);
   }
 
   close() {

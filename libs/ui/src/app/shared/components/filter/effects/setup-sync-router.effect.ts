@@ -11,12 +11,21 @@ export function setupSyncRouterEffect(params: {
   router: Router;
   route: ActivatedRoute;
 }) {
+  let lastState = '';
+
   effect(() => {
     if (!params.hydrationComplete()) {
       return;
     }
 
     const values = params.resolvedValues();
+    const state = JSON.stringify(values);
+
+    if (state === lastState) {
+      return;
+    }
+
+    lastState = state;
     params.emitFiltersChange(values);
 
     const allKeys = params.definitions().map((d) => d.key);

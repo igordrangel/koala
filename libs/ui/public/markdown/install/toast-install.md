@@ -1,3 +1,3 @@
 ```bash
-kl component -n toast
+kl install -n toast
 ```

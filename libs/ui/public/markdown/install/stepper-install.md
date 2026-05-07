@@ -1,3 +1,3 @@
 ```bash
-kl component -n stepper
+kl install -n stepper
 ```

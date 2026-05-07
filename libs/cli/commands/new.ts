@@ -89,20 +89,8 @@ export default class New extends Command {
 
     cpSync(`${originPath}/ui/eslint.config.mts`, `${name}/eslint.config.mts`);
 
-    const folders: { [key: string]: string[] } = {
-      features: [],
-      shared: ['components', 'models', 'pipes', 'services', 'utils', 'validators'],
-    };
-
-    for (const [folder, subfolders] of Object.entries(folders)) {
-      switch (folder) {
-        default:
-          for (const subfolder of subfolders) {
-            mkdirSync(`${name}/src/app/${folder}/${subfolder}`, { recursive: true });
-            this.log(green('CREATED'), `${name}/src/app/${folder}/${subfolder}`);
-          }
-      }
-    }
+    mkdirSync(`${name}/src/app/shared`, { recursive: true });
+    this.log(green('CREATED'), `${name}/src/app/shared`);
   }
 
   public async run(): Promise<void> {

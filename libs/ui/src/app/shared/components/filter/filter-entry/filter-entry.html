@@ -1,154 +1,44 @@
-@if (isEditing()) {
-  <span [class]="chipClass()" class="cursor-default">
-    <span class="shrink-0 opacity-60">{{ definition().label }}:</span>
-
-    <span
-      #fieldEl
-      class="relative inline-flex min-w-0 items-center"
-      (keydown)="onFieldKeydown($event)"
-    >
-      @switch (definition().type) {
-        @case ('combobox') {
-          <app-combobox
-            [class]="comboboxClass()"
-            [style.width.ch]="fieldWidthCh()"
-            [placeholder]="resolvedPlaceholder()"
-            [searchDebounce]="300"
-            [options]="resolvedComboboxOptions()"
-            [resourceFactory]="comboboxResourceFactory()"
-            [formControl]="comboboxControl"
-            (optionSelected)="onComboboxOptionSelected($event)"
-          />
-        }
-
-        @case ('select') {
-          <app-select
-            inline
-            class="[&_button]:outline-none [&_button]:focus:outline-none [&_button]:focus-visible:outline-none"
-            [options]="resolvedOptions()"
-            [placeholder]="resolvedPlaceholder()"
-            [formControl]="selectControl"
-          />
-        }
-
-        @case ('date') {
-          <span
-            class="mr-[0.45rem] [&_app-input-calendar]:inline-block [&_app-input-calendar]:w-auto [&_app-input-calendar_div.relative]:w-auto [&_app-input-calendar_input]:h-auto! [&_app-input-calendar_input]:min-h-0! [&_app-input-calendar_input]:w-auto! [&_app-input-calendar_input]:max-w-none! [&_app-input-calendar_input]:rounded-none! [&_app-input-calendar_input]:border-0! [&_app-input-calendar_input]:bg-transparent! [&_app-input-calendar_input]:px-0! [&_app-input-calendar_input]:py-0! [&_app-input-calendar_input]:pr-0! [&_app-input-calendar_input]:text-inherit! [&_app-input-calendar_input]:[font-size:inherit]! [&_app-input-calendar_input]:[font-weight:inherit]! [&_app-input-calendar_input]:shadow-none! [&_app-input-calendar_input]:outline-none! [&_app-input-calendar_input]:focus:outline-none! [&_app-input-calendar_input]:focus-visible:outline-none! [&_app-input-calendar_button.btn.btn-ghost.btn-xs]:pointer-events-none [&_app-input-calendar_button.btn.btn-ghost.btn-xs]:opacity-0"
-            [style.width.ch]="dateFieldWidthCh()"
-          >
-            <app-input-calendar
-              [value]="entryTextValue()"
-              format="dd/MM/yyyy"
-              [placeholder]="resolvedPlaceholder()"
-              (valueChange)="onDateChange($event)"
-            />
-          </span>
-        }
-
-        @case ('selectMultiple') {
-          <app-select
-            inline
-            multiple
-            class="[&_button]:outline-none [&_button]:focus:outline-none [&_button]:focus-visible:outline-none"
-            [options]="resolvedOptions()"
-            [placeholder]="resolvedPlaceholder()"
-            [formControl]="selectMultipleControl"
-          />
-        }
-
-        @case ('cpf') {
-          <span class="inline-flex min-w-0 items-center">
-            <input
-              appInput
-              [appMask]="inputMask()!"
-              class="h-auto w-auto min-w-0 bg-transparent p-0 text-inherit border-0 shadow-none outline-none"
-              [size]="size()"
-              [attr.size]="fieldWidthCh()"
-              [style.width.ch]="fieldWidthCh()"
-              [type]="inputType()"
-              [inputMode]="inputMode()"
-              [placeholder]="resolvedPlaceholder()"
-              [value]="entryTextValue()"
-              (input)="onTextChange($any($event.target).value)"
-            />
-          </span>
-        }
-
-        @case ('cnpj') {
-          <span class="inline-flex min-w-0 items-center">
-            <input
-              appInput
-              [appMask]="inputMask()!"
-              class="h-auto w-auto min-w-0 bg-transparent p-0 text-inherit border-0 shadow-none outline-none"
-              [size]="size()"
-              [attr.size]="fieldWidthCh()"
-              [style.width.ch]="fieldWidthCh()"
-              [type]="inputType()"
-              [inputMode]="inputMode()"
-              [placeholder]="resolvedPlaceholder()"
-              [value]="entryTextValue()"
-              (input)="onTextChange($any($event.target).value)"
-            />
-          </span>
-        }
-
-        @default {
-          <span class="inline-flex min-w-0 items-center">
-            <input
-              appInput
-              class="h-auto w-auto min-w-0 bg-transparent p-0 text-inherit border-0 shadow-none outline-none"
-              [size]="size()"
-              [attr.size]="fieldWidthCh()"
-              [style.width.ch]="fieldWidthCh()"
-              [type]="inputType()"
-              [inputMode]="inputMode()"
-              [placeholder]="resolvedPlaceholder()"
-              [value]="entryTextValue()"
-              (input)="onTextChange($any($event.target).value)"
-            />
-          </span>
-        }
-      }
-    </span>
-
-    <span
-      role="button"
-      tabindex="-1"
-      class="inline-flex h-3.5 w-3.5 shrink-0 cursor-pointer items-center justify-center rounded-full opacity-60 transition hover:bg-black/10 hover:opacity-100"
-      [attr.aria-label]="removeLabel()"
-      (click)="$event.stopPropagation(); removeCurrent()"
-      (keydown.enter)="$event.stopPropagation(); removeCurrent()"
-    >
-      <i class="fa-solid fa-xmark" style="font-size: 0.55rem"></i>
-    </span>
-  </span>
+@if (state.isEditing()) {
+  <app-filter-entry-edit
+    [definition]="definition()"
+    [size]="size()"
+    [chipClass]="state.chipClass()"
+    [removeLabel]="state.removeLabel()"
+    [resolvedPlaceholder]="state.resolvedPlaceholder()"
+    [fieldWidthCh]="state.fieldWidthCh()"
+    [dateFieldWidthCh]="state.dateFieldWidthCh()"
+    [comboboxClass]="state.comboboxClass()"
+    [resolvedOptions]="state.resolvedOptions()"
+    [resolvedComboboxOptions]="state.resolvedComboboxOptions()"
+    [comboboxResourceFactory]="state.comboboxResourceFactory()"
+    [comboboxControl]="state.comboboxControl"
+    [selectControl]="state.selectControl"
+    [selectMultipleControl]="state.selectMultipleControl"
+    [currencyControl]="state.currencyControl"
+      [validationControl]="state.validationControl"
+    [currencyConfig]="state.currencyConfig()"
+    [currencyDecimalDigits]="state.currencyDecimalDigits()"
+    [entryTextValue]="state.entryTextValue()"
+    [inputType]="state.inputType()"
+    [inputMode]="state.inputMode()"
+    [inputMask]="state.inputMask()"
+    (optionSelected)="state.onComboboxOptionSelected($event)"
+    (dateChange)="state.onDateChange($event)"
+    (textInput)="state.onTextChange($event)"
+    (currencyInput)="state.onCurrencyInput($event)"
+    (remove)="state.removeCurrent()"
+    (fieldKeydown)="state.onFieldKeydown($event)"
+  />
 } @else {
-  <button
-    type="button"
-    [class]="chipClass()"
-    class="cursor-pointer"
-    (click)="openEdit()"
-    (keydown)="onChipKeydown($event)"
-  >
-    <span class="shrink-0 opacity-60">{{ definition().label }}:</span>
-
-    @if (displayValue()) {
-      <span class="max-w-40 truncate">{{ displayValue() }}</span>
-    } @else if (isRemoteValueLoading()) {
-      <span class="italic opacity-40">loading...</span>
-    } @else {
-      <span class="italic opacity-40">{{ i18n().emptyLabel }}</span>
-    }
-
-    <span
-      role="button"
-      tabindex="-1"
-      class="inline-flex h-3.5 w-3.5 shrink-0 cursor-pointer items-center justify-center rounded-full opacity-60 transition hover:bg-black/10 hover:opacity-100"
-      [attr.aria-label]="removeLabel()"
-      (click)="$event.stopPropagation(); removeCurrent()"
-      (keydown.enter)="$event.stopPropagation(); removeCurrent()"
-    >
-      <i class="fa-solid fa-xmark" style="font-size: 0.55rem"></i>
-    </span>
-  </button>
+  <app-filter-entry-view
+    [definition]="definition()"
+    [chipClass]="state.chipClass()"
+    [displayValue]="state.displayValue()"
+    [isRemoteValueLoading]="state.isRemoteValueLoading()"
+    [i18n]="i18n()"
+    [removeLabel]="state.removeLabel()"
+    (open)="state.openEdit()"
+    (remove)="state.removeCurrent()"
+    (chipKeydown)="state.onChipKeydown($event)"
+  />
 }

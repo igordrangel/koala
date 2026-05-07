@@ -1,6 +1,6 @@
 import { effect } from '@angular/core';
 import { ComboboxOption } from '../combobox';
-import { getInitialActiveIndex } from '../combobox.navigation.helpers';
+import { getInitialActiveIndex } from '../helpers';
 
 interface ActiveIndexContext {
   isOpen: () => boolean;

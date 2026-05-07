@@ -1,3 +1,3 @@
 ```bash
-kl component -n tooltip
+kl install -n tooltip
 ```

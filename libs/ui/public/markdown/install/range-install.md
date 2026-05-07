@@ -1,3 +1,3 @@
 ```bash
-kl component -n range
+kl install -n range
 ```

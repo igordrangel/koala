@@ -1,0 +1,28 @@
+<span class="inline-flex min-w-0 items-center">
+  @if (inputMask()) {
+    <input
+      appInput
+      [appMask]="inputMask()!"
+      class="h-auto w-auto min-w-0 border-0 bg-transparent p-0 text-inherit shadow-none outline-none"
+      [size]="size()"
+      [attr.size]="fieldWidthCh()"
+      [style.width.ch]="fieldWidthCh()"
+      [type]="inputType()"
+      [inputMode]="inputMode()"
+      [placeholder]="placeholder()"
+      [formControl]="validationControl()"
+    />
+  } @else {
+    <input
+      appInput
+      class="h-auto w-auto min-w-0 border-0 bg-transparent p-0 text-inherit shadow-none outline-none"
+      [size]="size()"
+      [attr.size]="fieldWidthCh()"
+      [style.width.ch]="fieldWidthCh()"
+      [type]="inputType()"
+      [inputMode]="inputMode()"
+      [placeholder]="placeholder()"
+      [formControl]="validationControl()"
+    />
+  }
+</span>
