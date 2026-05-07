@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import * as fs from 'node:fs';
-import readline from 'readline-sync';
+import prompts from 'prompts';
 import {
   getPmCommands,
   getAngularCreateCommand,
@@ -11,7 +11,9 @@ import {
 } from './package-manager';
 
 vi.mock('node:fs');
-vi.mock('readline-sync');
+vi.mock('prompts', () => ({
+  default: vi.fn(),
+}));
 vi.mock('./project-path', () => ({
   getProjectPath: (name: string) => `/path/to/${name}`,
 }));
@@ -120,23 +122,19 @@ describe('Package Manager Utils', () => {
   });
 
   describe('askPackageManager', () => {
-    it('should return selected package manager', () => {
-      vi.mocked(readline.keyInSelect).mockReturnValue(0);
+    it('should return selected package manager', async () => {
+      vi.mocked(prompts).mockResolvedValue({ pm: 'bun' });
 
-      const pm = askPackageManager();
+      const pm = await askPackageManager();
 
       expect(pm).toBe('bun');
-      expect(readline.keyInSelect).toHaveBeenCalledWith(
-        ['bun', 'npm', 'yarn', 'pnpm'],
-        'Which package manager do you want to use?',
-        { cancel: false },
-      );
+      expect(prompts).toHaveBeenCalled();
     });
 
-    it('should handle different selections', () => {
-      vi.mocked(readline.keyInSelect).mockReturnValue(2);
+    it('should handle different selections', async () => {
+      vi.mocked(prompts).mockResolvedValue({ pm: 'yarn' });
 
-      const pm = askPackageManager();
+      const pm = await askPackageManager();
 
       expect(pm).toBe('yarn');
     });

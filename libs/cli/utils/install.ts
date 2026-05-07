@@ -8,7 +8,10 @@ import { setupComponentTests } from './setup-component-tests';
 import { installUtil, InstallUtilFlags } from './install-util';
 import { installValidator, InstallValidatorFlags } from './install-validator';
 
-export function install(projectName: string, component: InstallComponentFlags): InstallResult {
+export async function install(
+  projectName: string,
+  component: InstallComponentFlags,
+): Promise<InstallResult> {
   const installedComponentDeps: InstallComponentFlags[] = [];
   const installedLibDeps: string[] = [];
   const missingLibDeps: string[] = [];
@@ -20,7 +23,7 @@ export function install(projectName: string, component: InstallComponentFlags): 
   const deps = installComponent(projectName, component);
 
   for (const dep of getNotInstalled(projectName, 'lib', deps.libDeps)) {
-    const installed = installLib(projectName, dep);
+    const installed = await installLib(projectName, dep);
 
     if (installed) {
       installedLibDeps.push(dep);
@@ -50,7 +53,7 @@ export function install(projectName: string, component: InstallComponentFlags): 
   }
 
   for (const component of getNotInstalled(projectName, 'component', deps.componentDeps)) {
-    const result = install(projectName, component);
+    const result = await install(projectName, component);
     installedComponentDeps.push(...result.components, component);
     installedLibDeps.push(...result.libs);
     installedUtilDeps.push(...result.utils);

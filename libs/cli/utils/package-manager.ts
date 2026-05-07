@@ -1,5 +1,6 @@
 import { existsSync } from 'node:fs';
-import readline from 'readline-sync';
+import chalk from 'chalk';
+import prompts from 'prompts';
 import { getProjectPath } from './project-path';
 
 export type PackageManager = 'bun' | 'npm' | 'yarn' | 'pnpm';
@@ -69,12 +70,26 @@ export function getProjectExecCommand(pm: PackageManager, command: string) {
   }
 }
 
-export function askPackageManager(): PackageManager {
+export async function askPackageManager(): Promise<PackageManager> {
   const options: PackageManager[] = ['bun', 'npm', 'yarn', 'pnpm'];
-  const index = readline.keyInSelect(options, 'Which package manager do you want to use?', {
-    cancel: false,
-  });
-  return options[index];
+
+  const response = await prompts(
+    {
+      type: 'select',
+      name: 'pm',
+      message: `${chalk.cyan('KoalaUI')} Select your package manager`,
+      hint: '- Use arrow keys and Enter',
+      choices: options.map((value) => ({ title: value, value })),
+      initial: 0,
+    },
+    {
+      onCancel: () => {
+        throw new Error('KoalaUI: package manager selection was cancelled.');
+      },
+    },
+  );
+
+  return response.pm as PackageManager;
 }
 
 export function detectPackageManager(projectName: string): PackageManager {

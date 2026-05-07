@@ -1,17 +1,28 @@
-import readline from 'readline-sync';
+import chalk from 'chalk';
+import prompts from 'prompts';
 import { detectPackageManager, getPmCommands } from './package-manager';
 import { getProjectPath } from './project-path';
 import { runCommand } from './run-command';
 
-export function installLib(projectName: string, lib: string) {
-  const answer = readline.question(
-    `The component you are trying to install requires the library "${lib}". Do you want to install it now? (y/n) `,
+export async function installLib(projectName: string, lib: string): Promise<boolean> {
+  const response = await prompts(
     {
-      defaultInput: 'y',
+      type: 'toggle',
+      name: 'confirm',
+      message: `${chalk.cyan('KoalaUI')} Install dependency ${chalk.yellow(lib)} now?`,
+      hint: 'Required by selected component',
+      initial: true,
+      active: 'Yes',
+      inactive: 'No',
+    },
+    {
+      onCancel: () => {
+        throw new Error('KoalaUI: dependency installation prompt was cancelled.');
+      },
     },
   );
 
-  if (answer.toLowerCase() !== 'y') {
+  if (!response.confirm) {
     return false;
   }
 

@@ -15,7 +15,7 @@ export default defineConfig({
 });
 `;
 
-function ensureUnitTestDependencies(projectName: string) {
+function ensureUnitTestDependencies(projectName: string, verbose = false) {
   const projectPath = getProjectPath(projectName);
   const packageJsonPath = `${projectPath}/package.json`;
   const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8')) as {
@@ -41,7 +41,10 @@ function ensureUnitTestDependencies(projectName: string) {
   }
 
   const pm = getPmCommands(detectPackageManager(projectName));
-  runCommand(`cd ${projectPath} && ${pm.installDev} ${missingDeps.join(' ')}`);
+  runCommand(`${pm.installDev} ${missingDeps.join(' ')}`, {
+    cwd: projectPath,
+    verbose,
+  });
 }
 
 function ensureUnitTestScripts(projectName: string) {
@@ -69,8 +72,8 @@ function ensureUnitTestConfig(projectName: string) {
   writeFileSync(configPath, VITEST_CONFIG);
 }
 
-export function setupUnitTests(projectName: string) {
-  ensureUnitTestDependencies(projectName);
+export function setupUnitTests(projectName: string, verbose = false) {
+  ensureUnitTestDependencies(projectName, verbose);
   ensureUnitTestScripts(projectName);
   ensureUnitTestConfig(projectName);
 }
