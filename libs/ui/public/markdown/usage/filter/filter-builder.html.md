@@ -1,8 +1,7 @@
 ```html
 <app-filter
-  storageKey="my-app.filters"
-  addFilterPlaceholder="Choose a filter type"
   [definitions]="filterDefinitions"
+  [i18n]="filterI18n"
   (filtersChange)="handleFiltersChange($event)"
 />
 ```

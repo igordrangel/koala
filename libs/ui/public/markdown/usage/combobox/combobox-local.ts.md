@@ -10,6 +10,7 @@ import { Combobox, ComboboxOption } from '@/shared/components/combobox/combobox'
 })
 export class ComboboxLocalSample {
   readonly localComboboxControl = new FormControl<string | null>(null);
+  readonly localMultipleComboboxControl = new FormControl<string[]>([], { nonNullable: true });
 
   readonly localOptions: ComboboxOption<string>[] = [
     { value: 'sp', label: 'Sao Paulo' },
