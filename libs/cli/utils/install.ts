@@ -11,6 +11,7 @@ import { installValidator, InstallValidatorFlags } from './install-validator';
 export async function install(
   projectName: string,
   component: InstallComponentFlags,
+  verbose = false,
 ): Promise<InstallResult> {
   const installedComponentDeps: InstallComponentFlags[] = [];
   const installedLibDeps: string[] = [];
@@ -23,7 +24,7 @@ export async function install(
   const deps = installComponent(projectName, component);
 
   for (const dep of getNotInstalled(projectName, 'lib', deps.libDeps)) {
-    const installed = await installLib(projectName, dep);
+    const installed = await installLib(projectName, dep, verbose);
 
     if (installed) {
       installedLibDeps.push(dep);
@@ -53,7 +54,7 @@ export async function install(
   }
 
   for (const component of getNotInstalled(projectName, 'component', deps.componentDeps)) {
-    const result = await install(projectName, component);
+    const result = await install(projectName, component, verbose);
     installedComponentDeps.push(...result.components, component);
     installedLibDeps.push(...result.libs);
     installedUtilDeps.push(...result.utils);

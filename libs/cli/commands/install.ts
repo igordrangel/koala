@@ -5,11 +5,13 @@ import { InstallComponentFlags, InstallComponentFlagsList } from '../utils/insta
 export interface InstallArgs {
   name: string;
   project?: string;
+  verbose?: boolean;
 }
 
 export async function runInstallCommand(args: InstallArgs): Promise<void> {
   const logger = console.log;
   const projectName = args.project || (process.cwd().split('/').pop() as string);
+  const verbose = args.verbose ?? false;
 
   if (!args.name) {
     throw new Error('Please provide components (e.g. "kl install datatable") or use --name/-n');
@@ -31,7 +33,7 @@ export async function runInstallCommand(args: InstallArgs): Promise<void> {
   for (const componentName of flagOptions) {
     logStep(logger, `Installing ${componentName}`);
 
-    const result = await install(projectName, componentName);
+    const result = await install(projectName, componentName, verbose);
 
     if (result.missingLibs.length > 0) {
       logWarning(

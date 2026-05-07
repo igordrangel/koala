@@ -49,7 +49,7 @@ function printHelp() {
   printBanner();
   console.log('Usage:');
   console.log('  kl new <project> [--pm bun|npm|yarn|pnpm] [--verbose]');
-  console.log('  kl install <component[,component]> [--project <name>]');
+  console.log('  kl install <component[,component]> [--project <name>] [--verbose]');
   console.log('');
   console.log('Commands:');
   console.log('  new      Create a new UI project');
@@ -60,14 +60,15 @@ function printInstallHelp() {
   console.log('add a component to the project');
   console.log('');
   console.log('USAGE');
-  console.log('  $ kl install <value> [-p <value>]');
-  console.log('  $ kl install -n <value> [-p <value>]');
+  console.log('  $ kl install <value> [-p <value>] [--verbose]');
+  console.log('  $ kl install -n <value> [-p <value>] [--verbose]');
   console.log('');
   console.log('FLAGS');
   console.log(
     '  -n, --name=<value>     list of components to install. Separate multiple components with a comma',
   );
   console.log('  -p, --project=<value>  name of the project');
+  console.log('  -v, --verbose          show detailed install logs');
 }
 
 export async function runCli(argv: string[]): Promise<number> {
@@ -101,7 +102,8 @@ export async function runCli(argv: string[]): Promise<number> {
 
       const name = getFirstPositionalArg(args) ?? getFlagValue(args, 'name', 'n');
       const project = getFlagValue(args, 'project', 'p');
-      await runInstallCommand({ name: name ?? '', project });
+      const verbose = hasFlag(args, 'verbose', 'v');
+      await runInstallCommand({ name: name ?? '', project, verbose });
       return 0;
     }
 

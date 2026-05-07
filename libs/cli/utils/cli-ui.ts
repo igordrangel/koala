@@ -32,5 +32,8 @@ export function logList(log: Logger, label: string, values: string[]) {
     return;
   }
 
-  log(`${label}: ${values.join(', ')}`);
+  log(`${label} (${values.length}):`);
+  for (const value of values) {
+    log(`  - ${value}`);
+  }
 }

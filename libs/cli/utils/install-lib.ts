@@ -4,7 +4,11 @@ import { detectPackageManager, getPmCommands } from './package-manager';
 import { getProjectPath } from './project-path';
 import { runCommand } from './run-command';
 
-export async function installLib(projectName: string, lib: string): Promise<boolean> {
+export async function installLib(
+  projectName: string,
+  lib: string,
+  verbose = false,
+): Promise<boolean> {
   const response = await prompts(
     {
       type: 'toggle',
@@ -31,6 +35,7 @@ export async function installLib(projectName: string, lib: string): Promise<bool
 
   runCommand(`${pmCmd.add} ${lib}`, {
     cwd: getProjectPath(projectName),
+    verbose,
   });
 
   return true;

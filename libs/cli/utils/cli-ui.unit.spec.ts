@@ -72,12 +72,15 @@ describe('CLI UI Logging Functions', () => {
   });
 
   describe('logList', () => {
-    it('should log label with comma-separated values', () => {
+    it('should log label and each value in separate lines', () => {
       const mockLog = vi.fn();
       logList(mockLog, 'Components', ['button', 'input', 'select']);
 
-      expect(mockLog).toHaveBeenCalledOnce();
-      expect(mockLog.mock.calls[0][0]).toBe('Components: button, input, select');
+      expect(mockLog).toHaveBeenCalledTimes(4);
+      expect(mockLog.mock.calls[0][0]).toBe('Components (3):');
+      expect(mockLog.mock.calls[1][0]).toBe('  - button');
+      expect(mockLog.mock.calls[2][0]).toBe('  - input');
+      expect(mockLog.mock.calls[3][0]).toBe('  - select');
     });
 
     it('should not call log when values array is empty', () => {
@@ -91,8 +94,9 @@ describe('CLI UI Logging Functions', () => {
       const mockLog = vi.fn();
       logList(mockLog, 'Component', ['button']);
 
-      expect(mockLog).toHaveBeenCalledOnce();
-      expect(mockLog.mock.calls[0][0]).toBe('Component: button');
+      expect(mockLog).toHaveBeenCalledTimes(2);
+      expect(mockLog.mock.calls[0][0]).toBe('Component (1):');
+      expect(mockLog.mock.calls[1][0]).toBe('  - button');
     });
   });
 });
