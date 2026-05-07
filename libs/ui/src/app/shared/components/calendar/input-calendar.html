@@ -1,14 +1,17 @@
-<div class="relative">
+<div class="relative w-full">
   <input
     #textInput
     type="text"
     appInput
+    class="w-full pr-10"
+    [size]="size()"
     [appMask]="inputMask()"
     [id]="id"
     [style.anchor-name]="`--${id}`"
     [value]="inputValue()"
     [placeholder]="placeholder()"
     (input)="onInputChange($event)"
+    (keydown)="onInputKeydown($event)"
     (focus)="openPopover()"
     (click)="openPopover()"
   />

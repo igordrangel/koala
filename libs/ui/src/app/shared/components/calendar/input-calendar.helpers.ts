@@ -70,7 +70,15 @@ function formatDateTime(value: string, format: InputCalendarFormat): string {
 }
 
 function formatMonth(value: string): string {
-  const dateValue = toKlDate(`${value}-01`);
+  const monthValue = parseMonthValue(value);
+
+  if (!monthValue) {
+    return value;
+  }
+
+  const dateValue = toKlDate(
+    `${String(monthValue.year).padStart(4, '0')}-${String(monthValue.month + 1).padStart(2, '0')}-01`,
+  );
 
   if (!dateValue) {
     return value;
@@ -142,7 +150,19 @@ function isValidDateParts(year: number, month: number, day: number): boolean {
 }
 
 function parseDateByFormat(value: string, format: InputCalendarFormat): string | undefined {
-  const result = /^(\d{2,4})\/(\d{2})\/(\d{2,4})$/.exec(value.trim());
+  const normalizedValue = value.trim();
+
+  let result: RegExpExecArray | null = null;
+
+  switch (format) {
+    case 'dd/MM/yyyy':
+    case 'MM/dd/yyyy':
+      result = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(normalizedValue);
+      break;
+    case 'yyyy/MM/dd':
+      result = /^(\d{4})\/(\d{2})\/(\d{2})$/.exec(normalizedValue);
+      break;
+  }
 
   if (!result) {
     return undefined;
@@ -223,7 +243,7 @@ function parseDateTimeInput(value: string, format: InputCalendarFormat): string 
 }
 
 function parseDateRangeInput(value: string, format: InputCalendarFormat): string | undefined {
-  const [startDate, endDate] = value.split(' - ');
+  const [startDate, endDate] = value.split(/\s-\s/);
 
   if (!startDate || !endDate) {
     return undefined;
@@ -237,6 +257,18 @@ function parseDateRangeInput(value: string, format: InputCalendarFormat): string
   }
 
   return `${parsedStart}/${parsedEnd}`;
+}
+
+function normalizeDateRangeInput(value: string): string {
+  if (!value) {
+    return value;
+  }
+
+  return value.replace(/^\s*-\s*/, '');
+}
+
+export function normalizeInputText(value: string, type: InputCalendarType): string {
+  return type === 'daterange' ? normalizeDateRangeInput(value) : value;
 }
 
 function toDateMask(format: InputCalendarFormat): string {
@@ -263,7 +295,7 @@ export function parseInputValue(
   type: InputCalendarType,
   format: InputCalendarFormat,
 ): string | undefined {
-  const normalizedValue = value.trim();
+  const normalizedValue = normalizeInputText(value, type).trim();
 
   if (!normalizedValue) {
     return '';
