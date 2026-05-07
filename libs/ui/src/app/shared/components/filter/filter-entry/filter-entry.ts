@@ -1,4 +1,4 @@
-import { Combobox, ComboboxOption } from '../../combobox/combobox';
+import { Combobox, ComboboxOption, ComboboxResourceFactory } from '../../combobox/combobox';
 import { InputCalendar } from '../../calendar/input-calendar';
 import { Input } from '../../input-field/input';
 import { Select } from '../../select/select';
@@ -26,6 +26,7 @@ import {
   FilterDefinition,
   FilterEntry,
   FilterI18n,
+  FilterOptionsResourceFactory,
   FilterOptionsResource,
   FilterSize,
   FilterVariant,
@@ -119,6 +120,10 @@ export class FilterEntryComponent {
 
   private readonly fieldRef = viewChild<ElementRef<HTMLElement>>('fieldEl');
   private readonly resourceRef = signal<FilterOptionsResource | null>(null);
+  private readonly selectedLabelCache = signal<Record<string, string>>({});
+  private adaptedComboboxFactory: ComboboxResourceFactory<unknown> | undefined;
+  private adaptedFromFactory: FilterOptionsResourceFactory | undefined;
+  private skipNextComboboxHydration = false;
 
   private readonly valuesSignal = computed<unknown[]>(() => {
     const v = this.entry().value;
@@ -133,7 +138,44 @@ export class FilterEntryComponent {
     return this.options();
   });
 
-  readonly isRemoteValueLoading = computed(() => {
+  readonly resolvedComboboxOptions = computed<ComboboxOption[]>(() => {
+    const options = this.resolvedOptions();
+    const value = this.entry().value;
+    const cachedLabel = this.getCachedSelectedLabel(value);
+
+    if (value == null || value === '' || !cachedLabel) {
+      return options;
+    }
+
+    const hasSelectedOption = options.some((option) => `${option.value}` === `${value}`);
+    if (hasSelectedOption) {
+      return options;
+    }
+
+    return [{ value, label: cachedLabel }, ...options];
+  });
+
+  readonly comboboxResourceFactory = computed<ComboboxResourceFactory<unknown> | undefined>(() => {
+    const definition = this.definition();
+    const factory = definition.resourceFactory;
+
+    if (definition.type !== 'combobox' || !factory) {
+      this.adaptedComboboxFactory = undefined;
+      this.adaptedFromFactory = undefined;
+      return undefined;
+    }
+
+    if (this.adaptedFromFactory === factory && this.adaptedComboboxFactory) {
+      return this.adaptedComboboxFactory;
+    }
+
+    this.adaptedFromFactory = factory;
+    this.adaptedComboboxFactory = (filter, selectedValues) => factory(selectedValues, filter);
+
+    return this.adaptedComboboxFactory;
+  });
+
+  readonly hasRemoteScalarValue = computed(() => {
     const definition = this.definition();
     const value = this.entry().value;
 
@@ -144,19 +186,21 @@ export class FilterEntryComponent {
       return false;
     }
 
-    if (value == null || value === '' || Array.isArray(value)) {
+    return value != null && value !== '' && !Array.isArray(value);
+  });
+
+  readonly isRemoteValueLoading = computed(() => {
+    if (!this.hasRemoteScalarValue()) {
       return false;
     }
 
-    const hasMatchingOption = this.resolvedOptions().some(
-      (option) => `${option.value}` === `${value}`,
-    );
+    const resource = this.resourceRef();
 
-    if (hasMatchingOption) {
-      return false;
+    if (!resource) {
+      return true;
     }
 
-    return !this.resourceRef()?.hasValue();
+    return resource.isLoading();
   });
 
   readonly displayValue = computed<string | null>(() => {
@@ -176,14 +220,19 @@ export class FilterEntryComponent {
     }
 
     if (type === 'select' || type === 'combobox') {
-      const foundOption = opts.find((o) => `${o.value}` === `${value}`);
-
-      if (foundOption) {
-        return foundOption.label;
+      const cachedLabel = this.getCachedSelectedLabel(value);
+      if (cachedLabel) {
+        return cachedLabel;
       }
 
       if (this.isRemoteValueLoading()) {
         return null;
+      }
+
+      const foundOption = opts.find((o) => `${o.value}` === `${value}`);
+
+      if (foundOption) {
+        return foundOption.label;
       }
 
       return `${value}`;
@@ -311,43 +360,94 @@ export class FilterEntryComponent {
     });
 
     effect(() => {
+      if (this.hasRemoteScalarValue()) {
+        return;
+      }
+
+      this.selectedLabelCache.set({});
+    });
+
+    effect(() => {
       if (this.autoOpen()) {
         queueMicrotask(() => this.openEdit());
       }
     });
 
     effect((onCleanup) => {
-      const factory = this.definition().resourceFactory;
-      let canceled = false;
-      let created: FilterOptionsResource | null = null;
+      const definition = this.definition();
+      const factory = definition.resourceFactory;
+      const hasRemoteScalarValue = this.hasRemoteScalarValue();
 
       this.resourceRef.set(null);
 
       if (!factory) {
-        onCleanup(() => {
-          canceled = true;
-        });
         return;
       }
 
-      queueMicrotask(() => {
-        if (canceled) return;
+      if (definition.type === 'combobox' && this.skipNextComboboxHydration) {
+        this.skipNextComboboxHydration = false;
+        return;
+      }
 
-        const resource = runInInjectionContext(this.injector, () => factory(this.valuesSignal));
+      if (definition.type === 'combobox' && !hasRemoteScalarValue) {
+        return;
+      }
 
-        if (canceled) {
-          if (isDestroyable(resource)) resource.destroy();
-          return;
-        }
+      this.setupResourceEffect(onCleanup, factory);
+    });
+  }
 
-        created = resource;
-        this.resourceRef.set(resource);
-      });
+  private cacheSelectedLabel(value: unknown, label: string) {
+    const key = `${value}`;
+    const trimmedLabel = label.trim();
 
-      onCleanup(() => {
-        canceled = true;
-        if (created && isDestroyable(created)) created.destroy();
-      });
+    if (!key || !trimmedLabel) {
+      return;
+    }
+
+    this.selectedLabelCache.set({ [key]: trimmedLabel });
+  }
+
+  private getCachedSelectedLabel(value: unknown): string | null {
+    if (value == null || value === '') {
+      return null;
+    }
+
+    const key = `${value}`;
+    return this.selectedLabelCache()[key] ?? null;
+  }
+
+  onComboboxOptionSelected(option: ComboboxOption) {
+    this.cacheSelectedLabel(option.value, option.label);
+    this.skipNextComboboxHydration = true;
+  }
+
+  private setupResourceEffect(
+    onCleanup: (callback: () => void) => void,
+    factory: FilterOptionsResourceFactory,
+  ): void {
+    let created: FilterOptionsResource | null = null;
+    let canceled = false;
+
+    const loadResource = () => {
+      if (canceled) return;
+
+      const resource = runInInjectionContext(this.injector, () => factory(this.valuesSignal));
+
+      if (canceled) {
+        if (isDestroyable(resource)) resource.destroy();
+        return;
+      }
+
+      created = resource;
+      this.resourceRef.set(resource);
+    };
+
+    queueMicrotask(loadResource);
+
+    onCleanup(() => {
+      canceled = true;
+      if (created && isDestroyable(created)) created.destroy();
     });
   }
 

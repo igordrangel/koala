@@ -1,11 +1,13 @@
 import { effect, untracked } from '@angular/core';
 import { ComboboxOption } from '../combobox';
+import { isSameComboboxValue } from '../combobox.value.helpers';
 import { areOptionArraysEqualByValue, mapSelectedOptions } from '../combobox.multiple.helpers';
 
 interface SelectionContext {
   multiple: () => boolean;
   internalValue: () => unknown;
   resolvedOptions: () => ComboboxOption[];
+  inputValue: () => string;
   selectedOptions: () => ComboboxOption[];
   selectedOption: () => ComboboxOption | null;
   isOpen: () => boolean;
@@ -41,31 +43,31 @@ export function setupSelectionEffect(context: SelectionContext) {
 
     const currentValue = context.internalValue();
     const selectedOption = context.selectedOption();
+    const options = context.resolvedOptions();
 
-    if (selectedOption && Object.is(selectedOption.value, currentValue)) {
+    if (selectedOption && isSameComboboxValue(selectedOption.value, currentValue)) {
       return;
     }
 
-    const matchedOption = context
-      .resolvedOptions()
-      .find((option) => Object.is(option.value, currentValue));
+    const matchedOption = options.find((option) => isSameComboboxValue(option.value, currentValue));
 
-    if (!matchedOption) {
-      if (currentValue == null || currentValue === '') {
-        context.setSelectedOption(null);
+    if (matchedOption) {
+      context.setSelectedOption(matchedOption);
 
-        if (!context.isOpen()) {
-          context.setInputValue('', true);
-        }
+      if (!context.isOpen() || context.inputValue().trim() === '') {
+        context.setInputValue(matchedOption.label, true);
       }
-
       return;
     }
 
-    context.setSelectedOption(matchedOption);
+    if (currentValue != null && currentValue !== '') {
+      return;
+    }
+
+    context.setSelectedOption(null);
 
     if (!context.isOpen()) {
-      context.setInputValue(matchedOption.label, true);
+      context.setInputValue('', true);
     }
   });
 }

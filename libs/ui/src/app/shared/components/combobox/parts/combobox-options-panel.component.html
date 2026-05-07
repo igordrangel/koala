@@ -2,11 +2,7 @@
   class="absolute z-30 mt-2 w-full overflow-hidden rounded-xl border border-base-300 bg-base-100 shadow-lg"
 >
   <div class="border-b border-base-300 px-3 py-2 text-xs text-base-content/60">
-    @if (isLoading()) {
-      <span class="font-medium text-base-content/80">{{ searchingMessage() }}</span>
-    } @else {
-      <span>{{ headerMessage() }}</span>
-    }
+    <span>{{ headerMessage() }}</span>
   </div>
 
   @if (isLoading()) {

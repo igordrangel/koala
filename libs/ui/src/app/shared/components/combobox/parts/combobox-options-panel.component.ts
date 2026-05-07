@@ -1,6 +1,7 @@
 import { Component, computed, input, output } from '@angular/core';
 import { Listbox as AriaListbox, Option as AriaOption } from '@angular/aria/listbox';
 import { ComboboxOption } from '../combobox';
+import { isSameComboboxValue } from '../combobox.value.helpers';
 
 @Component({
   selector: 'app-combobox-options-panel',
@@ -22,19 +23,17 @@ export class ComboboxOptionsPanelComponent {
   readonly selectOption = output<ComboboxOption>();
 
   readonly headerMessage = computed(() => {
-    if (this.isLoading()) {
-      return this.searchingMessage();
-    }
-
     const filter = this.filterValue();
     return filter ? `Results for "${filter}"` : 'Select an option';
   });
 
   isOptionSelected(optionValue: unknown): boolean {
     if (this.multiple()) {
-      return this.selectedOptions().some((selected) => Object.is(selected.value, optionValue));
+      return this.selectedOptions().some((selected) =>
+        isSameComboboxValue(selected.value, optionValue),
+      );
     }
 
-    return Object.is(this.selectedOption()?.value, optionValue);
+    return isSameComboboxValue(this.selectedOption()?.value, optionValue);
   }
 }

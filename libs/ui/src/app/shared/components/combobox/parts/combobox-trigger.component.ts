@@ -28,6 +28,19 @@ export class ComboboxTriggerComponent {
     this.multiple() ? this.selectedOptions().length > 0 : !!this.selectedOption(),
   );
 
+  readonly displayInputValue = computed(() => {
+    if (this.multiple()) {
+      return this.inputValue();
+    }
+
+    const typedValue = this.inputValue();
+    if (typedValue.trim() !== '') {
+      return typedValue;
+    }
+
+    return this.selectedOption()?.label ?? '';
+  });
+
   onRemoveTag(optionValue: unknown, event: MouseEvent) {
     event.stopPropagation();
     this.removeTag.emit(optionValue);

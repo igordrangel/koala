@@ -8,6 +8,7 @@ import {
   Injector,
   inject,
   input,
+  output,
   Resource,
   ResourceRef,
   signal,
@@ -49,6 +50,7 @@ export type ComboboxResourceResult<TValue = unknown, TData = unknown> =
 
 export type ComboboxResourceFactory<TValue = unknown, TData = unknown> = (
   filter: Signal<string>,
+  selectedValues: Signal<TValue[]>,
 ) => ComboboxResourceResult<TValue, TData>;
 
 @Component({
@@ -86,7 +88,7 @@ export class Combobox implements ControlValueAccessor {
   readonly searchDebounce = input(500);
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly multiple = input(false, { transform: booleanAttribute });
-  readonly resourceFactory = input<ComboboxResourceFactory | undefined>(undefined);
+  readonly resourceFactory = input<ComboboxResourceFactory<unknown> | undefined>(undefined);
 
   readonly isOpen = signal(false);
   readonly inputValue = signal('');
@@ -96,16 +98,39 @@ export class Combobox implements ControlValueAccessor {
   readonly selectedOptions = signal<ComboboxOption[]>([]);
   readonly internalValue = signal<unknown>(null);
   readonly remoteResource = signal<ComboboxResourceResult | null>(null);
+  readonly selectedValues = computed(() => {
+    const value = this.internalValue();
+
+    if (Array.isArray(value)) {
+      return value;
+    }
+
+    if (value == null || value === '') {
+      return [];
+    }
+
+    return [value];
+  });
 
   readonly isRemote = computed(() => !!this.resourceFactory());
   readonly isDisabled = computed(() => this.disabled() || this.formDisabled);
   readonly isLoading = computed(() => this.remoteResource()?.isLoading() ?? false);
+  readonly optionSelected = output<ComboboxOption>();
 
   readonly resolvedOptions = computed(() => {
     const remoteResource = this.remoteResource();
 
     if (remoteResource) {
-      return remoteResource.hasValue() ? (remoteResource.value() ?? []) : [];
+      if (remoteResource.hasValue()) {
+        return remoteResource.value() ?? [];
+      }
+
+      const fallbackOptions = this.options();
+      if (fallbackOptions.length) {
+        return fallbackOptions;
+      }
+
+      return [];
     }
 
     const filter = this.filterValue().trim().toLocaleLowerCase();
@@ -125,6 +150,7 @@ export class Combobox implements ControlValueAccessor {
       injector: this.injector,
       resourceFactory: () => this.resourceFactory(),
       filterSignal: this.filterValue.asReadonly(),
+      selectedValuesSignal: this.selectedValues,
       setRemoteResource: (resource) => this.remoteResource.set(resource),
     });
 
@@ -146,6 +172,7 @@ export class Combobox implements ControlValueAccessor {
       multiple: () => this.multiple(),
       internalValue: () => this.internalValue(),
       resolvedOptions: () => this.resolvedOptions(),
+      inputValue: () => this.inputValue(),
       selectedOptions: () => this.selectedOptions(),
       selectedOption: () => this.selectedOption(),
       isOpen: () => this.isOpen(),
@@ -312,6 +339,14 @@ export class Combobox implements ControlValueAccessor {
       return;
     }
 
+    this.skipNextFilterSync = false;
+
+    if (!this.multiple() && value.trim() === '' && this.selectedOption() !== null) {
+      this.selectedOption.set(null);
+      this.internalValue.set(null);
+      this.onChange(null);
+    }
+
     this.inputValue.set(value);
 
     if (!this.isOpen()) {
@@ -324,10 +359,12 @@ export class Combobox implements ControlValueAccessor {
   selectOption(option: ComboboxOption) {
     if (this.multiple()) {
       this.syncMultipleSelection(option);
+      this.optionSelected.emit(option);
       return;
     }
 
     this.syncSingleSelection(option);
+    this.optionSelected.emit(option);
   }
 
   clearSelection() {

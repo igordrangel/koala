@@ -9,12 +9,14 @@ function isDestroyableResource<TValue, TData>(
 
 export function setupRemoteResourceEffect(params: {
   injector: Injector;
-  resourceFactory: () => ComboboxResourceFactory | undefined;
+  resourceFactory: () => ComboboxResourceFactory<unknown> | undefined;
   filterSignal: Signal<string>;
+  selectedValuesSignal: Signal<unknown[]>;
   setRemoteResource: (resource: ComboboxResourceResult | null) => void;
 }) {
   effect((onCleanup) => {
     const factory = params.resourceFactory();
+    params.selectedValuesSignal();
     let createdResource: ComboboxResourceResult | null = null;
     let canceled = false;
 
@@ -32,7 +34,9 @@ export function setupRemoteResourceEffect(params: {
         return;
       }
 
-      const resource = runInInjectionContext(params.injector, () => factory(params.filterSignal));
+      const resource = runInInjectionContext(params.injector, () =>
+        factory(params.filterSignal, params.selectedValuesSignal),
+      );
 
       if (canceled) {
         if (isDestroyableResource(resource)) {

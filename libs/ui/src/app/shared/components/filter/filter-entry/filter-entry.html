@@ -13,8 +13,11 @@
             [class]="comboboxClass()"
             [style.width.ch]="fieldWidthCh()"
             [placeholder]="resolvedPlaceholder()"
-            [options]="resolvedOptions()"
+            [searchDebounce]="300"
+            [options]="resolvedComboboxOptions()"
+            [resourceFactory]="comboboxResourceFactory()"
             [formControl]="comboboxControl"
+            (optionSelected)="onComboboxOptionSelected($event)"
           />
         }
 

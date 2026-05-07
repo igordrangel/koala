@@ -39,8 +39,12 @@ export type FilterOptionsResource =
 /**
  * Receives a reactive signal with the current selected values so the resource
  * can pre-load labels for hydrated (value-only) entries from storage.
+ * When used by combobox fields, the current typed filter is also provided.
  */
-export type FilterOptionsResourceFactory = (values: Signal<unknown[]>) => FilterOptionsResource;
+export type FilterOptionsResourceFactory = (
+  values: Signal<unknown[]>,
+  filter?: Signal<string>,
+) => FilterOptionsResource;
 
 // ─── I18n ────────────────────────────────────────────────────────────────────
 export interface FilterI18n {

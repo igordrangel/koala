@@ -18,6 +18,11 @@ import {
 export class FilterSample {
   readonly appliedFilters = signal<FilterValue[]>([]);
 
+  private toUserId(value: unknown): number | null {
+    const numeric = typeof value === 'number' ? value : Number(`${value}`);
+    return Number.isInteger(numeric) && numeric > 0 ? numeric : null;
+  }
+
   private readonly statusOptions: ComboboxOption<string>[] = [
     { value: 'open', label: 'Open' },
     { value: 'closed', label: 'Closed' },
@@ -38,23 +43,64 @@ export class FilterSample {
     { value: 'refactor', label: 'Refactor' },
   ];
 
-  private readonly mockUsers: ComboboxOption<string>[] = [
-    { value: 'u-1', label: 'Igor Silva' },
-    { value: 'u-2', label: 'Amanda Costa' },
-    { value: 'u-3', label: 'Rafael Rocha' },
-    { value: 'u-4', label: 'Bianca Souza' },
-  ];
-
-  private readonly usersResourceFactory = (values: Signal<unknown[]>) =>
+  private readonly usersResourceFactory = (values: Signal<unknown[]>, filter?: Signal<string>) =>
     resource({
-      params: () => values(),
-      loader: async ({ params }) => {
-        await new Promise((resolve) => setTimeout(resolve, 200));
-        const valueSet = new Set(params.map((value) => `${value}`));
+      params: () => ({
+        selectedValues: values(),
+        filter: filter?.() ?? '',
+      }),
+      defaultValue: [],
+      loader: async ({ params, abortSignal }) => {
+        const selectedIds = params.selectedValues
+          .map((value) => this.toUserId(value))
+          .filter((value): value is number => value !== null);
 
-        return valueSet.size
-          ? this.mockUsers.filter((user) => valueSet.has(user.value))
-          : this.mockUsers;
+        const query = params.filter.trim();
+        const endpoint = query
+          ? `https://dummyjson.com/users/search?q=${encodeURIComponent(query)}`
+          : 'https://dummyjson.com/users?limit=8';
+
+        const baseUsers = await fetch(endpoint, { signal: abortSignal })
+          .then((res) => res.json())
+          .then((data: { users: { id: number; firstName: string; lastName: string }[] }) =>
+            data.users.map(
+              (user) =>
+                ({
+                  label: `${user.firstName} ${user.lastName}`,
+                  value: user.id,
+                  data: user,
+                }) as ComboboxOption<number>,
+            ),
+          );
+
+        const missingSelectedIds = selectedIds.filter(
+          (id) => !baseUsers.some((user) => Object.is(user.value, id)),
+        );
+
+        if (missingSelectedIds.length === 0) {
+          return baseUsers;
+        }
+
+        const selectedUsers = await Promise.all(
+          missingSelectedIds.map((id) =>
+            fetch(`https://dummyjson.com/users/${id}`, { signal: abortSignal })
+              .then((res) => (res.ok ? res.json() : null))
+              .then((user: { id: number; firstName: string; lastName: string } | null) =>
+                user
+                  ? ({
+                      label: `${user.firstName} ${user.lastName}`,
+                      value: user.id,
+                      data: user,
+                    } as ComboboxOption<number>)
+                  : null,
+              ),
+          ),
+        );
+
+        return [
+          ...baseUsers,
+          ...selectedUsers.filter((user): user is ComboboxOption<number> => !!user),
+        ];
       },
     });
 

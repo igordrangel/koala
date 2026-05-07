@@ -21,7 +21,8 @@ export function buildFilterPickerOptions(
 
   return definitions
     .filter((definition) => definition.allowMultiple || !activeKeys.has(definition.key))
-    .map((definition) => ({ value: definition.key, label: definition.label }));
+    .map((definition) => ({ value: definition.key, label: definition.label }))
+    .sort((left, right) => left.label.localeCompare(right.label, 'pt-BR', { sensitivity: 'base' }));
 }
 
 export function createFilterEntry(definition: FilterDefinition, index: number): FilterEntry {

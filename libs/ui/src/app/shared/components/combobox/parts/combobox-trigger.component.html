@@ -31,7 +31,7 @@
     [style.min-width]="multiple() ? '5rem' : null"
     [placeholder]="placeholder()"
     [disabled]="isDisabled()"
-    [value]="inputValue()"
+    [value]="displayInputValue()"
     [attr.aria-busy]="isLoading()"
     (focus)="focusRequested.emit()"
     (click)="focusRequested.emit()"
