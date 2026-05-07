@@ -1,0 +1,83 @@
+<button
+  type="button"
+  [class]="buttonClass()"
+  [disabled]="isDisabled()"
+  [attr.aria-haspopup]="'listbox'"
+  [attr.aria-expanded]="isOpen()"
+  [attr.aria-disabled]="isDisabled()"
+  (click)="toggleOpen()"
+>
+  @if (multiple() && selectedValues().length > 0) {
+    <span class="flex flex-1 flex-wrap gap-1 py-0.5">
+      @for (val of selectedValues(); track val) {
+        <span [class]="badgeClass()">
+          {{ getOptionLabel(val) }}
+          <i
+            class="fa-solid fa-xmark text-[10px] cursor-pointer"
+            (pointerdown)="removeOne($event, val)"
+          ></i>
+        </span>
+      }
+    </span>
+  } @else {
+    <span class="flex-1 truncate" [class.text-base-content/50]="selectedValues().length === 0">
+      {{ triggerLabel() }}
+    </span>
+  }
+
+  <span class="ml-auto flex shrink-0 items-center gap-1">
+    @if (selectedValues().length > 0 && !isDisabled() && !multiple()) {
+      <span
+        class="inline-flex h-5 w-5 items-center justify-center rounded text-base-content/50 transition hover:text-base-content/80"
+        role="button"
+        aria-label="Clear selection"
+        (pointerdown)="clearAll($event)"
+      >
+        <i class="fa-solid fa-xmark text-xs"></i>
+      </span>
+    }
+    <i
+      class="fa-solid fa-chevron-down text-xs text-base-content/50 transition-transform duration-200"
+      [class.rotate-180]="isOpen()"
+    ></i>
+  </span>
+</button>
+
+@if (isOpen()) {
+  <div
+    class="absolute z-30 mt-1 overflow-hidden rounded-xl border border-base-300 bg-base-100 shadow-lg"
+    [class]="dropdownClass()"
+    role="listbox"
+    [attr.aria-multiselectable]="multiple()"
+  >
+    @if (options().length === 0) {
+      <div class="px-3 py-6 text-center text-sm text-base-content/50">No options available</div>
+    } @else {
+      <ul class="max-h-72 overflow-y-auto p-1">
+        @for (option of options(); track option.value) {
+          <li>
+            <button
+              type="button"
+              role="option"
+              class="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm text-base-content outline-none transition hover:bg-base-200 focus:bg-base-200 cursor-pointer disabled:pointer-events-none disabled:opacity-50"
+              [class.font-medium]="isSelected(option.value)"
+              [attr.aria-selected]="isSelected(option.value)"
+              [disabled]="option.disabled"
+              (click)="selectOption(option.value)"
+            >
+              <span class="truncate">{{ option.label }}</span>
+              @if (isSelected(option.value)) {
+                <i
+                  class="fa-solid fa-check ml-auto text-sm shrink-0"
+                  [class]="checkIconClass()"
+                ></i>
+              } @else {
+                <span class="inline-block w-[1em] ml-auto shrink-0"></span>
+              }
+            </button>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+}

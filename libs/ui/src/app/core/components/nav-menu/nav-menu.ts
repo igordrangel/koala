@@ -76,7 +76,7 @@ export class NavMenu {
         { name: 'Combobox', routerLink: 'components/combobox' },
         { name: 'Toggle', routerLink: 'components/toggle' },
         { name: 'Textarea', routerLink: 'components/textarea' },
-        { name: 'Filter', routerLink: 'components/filter', commingSoon: true },
+        { name: 'Filter', routerLink: 'components/filter' },
         { name: 'Input Field', routerLink: 'components/input-field' },
         { name: 'Validator', routerLink: 'components/validator' },
         { name: 'Fieldset', routerLink: 'components/fieldset' },

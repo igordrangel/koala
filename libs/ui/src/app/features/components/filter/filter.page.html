@@ -1,0 +1,39 @@
+<app-section-container>
+  <ng-container title>Filter</ng-container>
+  <ng-container description>
+    A filter builder inspired by GitHub. Choose the filter type in a combobox, then fill each rule
+    using text, select, selectMultiple, or another combobox.
+  </ng-container>
+
+  <app-section-content>
+    <ng-container title>Builder</ng-container>
+    <ng-container description>
+      This component is dedicated to filtering only. Applied rules are mirrored to query params and
+      rehydrated when you come back to this screen.
+    </ng-container>
+
+    <div class="border border-base-300 rounded-lg p-5">
+      <app-filter
+        storageKey="koala.docs.components.filter"
+        addFilterPlaceholder="Choose a filter type"
+        [definitions]="filterDefinitions"
+        (filtersChange)="handleFiltersChange($event)"
+      />
+    </div>
+  </app-section-content>
+
+  <app-section-content>
+    <ng-container title>Applied Filters</ng-container>
+    <ng-container description>
+      Live output of the current filter payload, useful to plug directly into API query builders.
+    </ng-container>
+
+    <div class="border border-base-300 rounded-lg bg-base-100 p-4 text-sm">
+      @if (appliedFilters().length === 0) {
+        <p class="text-base-content/60">No filters selected.</p>
+      } @else {
+        <pre class="overflow-x-auto text-xs leading-6">{{ appliedFilters() | json }}</pre>
+      }
+    </div>
+  </app-section-content>
+</app-section-container>

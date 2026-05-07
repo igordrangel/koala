@@ -1,0 +1,21 @@
+<label
+  class="datetime-time-row input w-full flex items-center justify-end gap-2 border-t border-base-300 px-7 outline-none!"
+  (click)="openPicker($event)"
+>
+  <input
+    #timeInput
+    class="time-input w-auto"
+    type="time"
+    [value]="value()"
+    (click)="openPicker($event)"
+    (input)="onInput($event)"
+  />
+  <button
+    type="button"
+    class="flex items-center opacity-70 hover:opacity-100"
+    aria-label="Selecionar hora"
+    (click)="openPicker($event)"
+  >
+    <i class="fa-regular fa-clock"></i>
+  </button>
+</label>

@@ -1,0 +1,40 @@
+<div
+  class="absolute z-30 mt-2 w-full overflow-hidden rounded-xl border border-base-300 bg-base-100 shadow-lg"
+>
+  <div class="border-b border-base-300 px-3 py-2 text-xs text-base-content/60">
+    @if (isLoading()) {
+      <span class="font-medium text-base-content/80">{{ searchingMessage() }}</span>
+    } @else {
+      <span>{{ headerMessage() }}</span>
+    }
+  </div>
+
+  @if (isLoading()) {
+    <div class="px-3 py-6 text-sm text-base-content/60">{{ searchingMessage() }}</div>
+  } @else if (showEmptyState()) {
+    <div class="px-3 py-6 text-sm text-base-content/60">{{ emptyMessage() }}</div>
+  } @else {
+    <div ngListbox class="max-h-72 overflow-y-auto p-1" focusMode="roving" selectionMode="explicit">
+      @for (option of options(); track option.value; let i = $index) {
+        <button
+          ngOption
+          type="button"
+          class="flex w-full items-center rounded-lg px-3 py-2 text-left text-sm text-base-content outline-none transition hover:bg-base-200 focus:bg-base-200 cursor-pointer disabled:pointer-events-none disabled:opacity-50"
+          [class.bg-base-200]="isOptionSelected(option.value) || activeIndex() === i"
+          [class.font-medium]="isOptionSelected(option.value) || activeIndex() === i"
+          [value]="option.value"
+          [disabled]="option.disabled"
+          (click)="selectOption.emit(option)"
+        >
+          <span class="truncate">{{ option.label }}</span>
+
+          @if (isOptionSelected(option.value)) {
+            <span class="ml-auto text-base-content/60">
+              <i class="fa-solid fa-check text-sm"></i>
+            </span>
+          }
+        </button>
+      }
+    </div>
+  }
+</div>

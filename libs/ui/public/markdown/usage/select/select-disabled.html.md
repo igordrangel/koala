@@ -1,5 +1,3 @@
 ```html
-<select appSelect disabled>
-  <option disabled selected>Select an option</option>
-</select>
+<app-select disabled class="w-56" placeholder="Disabled" [options]="options" />
 ```

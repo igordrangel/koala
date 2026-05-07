@@ -1,0 +1,36 @@
+<div class="rounded-xl border border-base-300 bg-base-100 shadow-sm">
+  <div class="flex flex-wrap items-center gap-1 p-2" (click)="picker.focus()">
+    @for (entry of entries(); track entry.id) {
+      @if (getDefinition(entry.key); as definition) {
+        <app-filter-entry
+          [entry]="entry"
+          [definition]="definition"
+          [options]="getOptions(definition)"
+          [size]="size()"
+          [variant]="variant()"
+          [i18n]="i18n()"
+          [autoOpen]="pendingOpenId() === entry.id"
+          (valueChange)="onEntryValueChange($event)"
+          (remove)="removeFilter($event)"
+          (tabFromField)="picker.focus()"
+        />
+      }
+    }
+
+    <app-filter-picker
+      #picker
+      class="flex-1"
+      [options]="pickerOptions()"
+      [placeholder]="i18n().placeholder"
+      [size]="size()"
+      (pick)="addFilterByKey($event)"
+      (backspaceOnEmpty)="removeLastFilter()"
+    />
+  </div>
+
+  @if (!hasAvailableFilters() && entries().length > 0) {
+    <p class="border-t border-base-300 px-4 py-2 text-xs text-base-content/50">
+      {{ i18n().allFiltersAdded }}
+    </p>
+  }
+</div>

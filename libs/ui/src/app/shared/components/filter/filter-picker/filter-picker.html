@@ -1,0 +1,32 @@
+<input
+  #inputEl
+  type="text"
+  [class]="inputClass()"
+  autocomplete="off"
+  [placeholder]="placeholder()"
+  [value]="inputValue()"
+  (focus)="onFocus()"
+  (input)="onInput($any($event.target).value)"
+  (keydown)="onKeydown($event)"
+/>
+
+@if (isOpen() && filtered().length > 0) {
+  <div
+    class="absolute left-0 top-full z-40 mt-1 min-w-48 overflow-hidden rounded-xl border border-base-300 bg-base-100 shadow-lg"
+    role="listbox"
+  >
+    @for (option of filtered(); track option.value; let i = $index) {
+      <button
+        type="button"
+        role="option"
+        class="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-base-content transition"
+        [class.bg-base-200]="activeIndex() === i"
+        [class.font-medium]="activeIndex() === i"
+        (pointerdown)="$event.preventDefault()"
+        (click)="select(option)"
+      >
+        {{ option.label }}
+      </button>
+    }
+  </div>
+}

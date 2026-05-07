@@ -1,26 +1,27 @@
-<calendar-date
-  #calendar
-  class="cally bg-base-100 border border-base-300 shadow-lg rounded-box"
-  [value]="value()"
->
-  <svg
-    aria-label="Previous"
-    class="fill-current size-4"
-    slot="previous"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
+@if (type() === 'daterange') {
+  <calendar-range
+    #calendar
+    class="cally bg-base-100 border border-base-300 shadow-lg"
+    [class.rounded-box]="!squareBottom()"
+    [class.rounded-t-box]="squareBottom()"
+    [value]="value()"
   >
-    <path d="M15.75 19.5 8.25 12l7.5-7.5"></path>
-  </svg>
-  <svg
-    aria-label="Next"
-    class="fill-current size-4"
-    slot="next"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
+    <i aria-label="Previous" class="fa-solid fa-chevron-left" slot="previous"></i>
+    <i aria-label="Next" class="fa-solid fa-chevron-right" slot="next"></i>
+    <calendar-select-year slot="heading" max-years="100" />
+    <calendar-month />
+  </calendar-range>
+} @else {
+  <calendar-date
+    #calendar
+    class="cally bg-base-100 border border-base-300 shadow-lg"
+    [class.rounded-box]="!squareBottom()"
+    [class.rounded-t-box]="squareBottom()"
+    [value]="value()"
   >
-    <path d="m8.25 4.5 7.5 7.5-7.5 7.5"></path>
-  </svg>
-  <calendar-select-year slot="heading" max-years="100" />
-  <calendar-month />
-</calendar-date>
+    <i aria-label="Previous" class="fa-solid fa-chevron-left" slot="previous"></i>
+    <i aria-label="Next" class="fa-solid fa-chevron-right" slot="next"></i>
+    <calendar-select-year slot="heading" max-years="100" />
+    <calendar-month />
+  </calendar-date>
+}

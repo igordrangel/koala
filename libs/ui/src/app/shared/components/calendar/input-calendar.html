@@ -1,23 +1,59 @@
-<button
-  #datePickerInput
-  class="input input-border w-full cursor-pointer flex items-center justify-between"
-  [id]="id"
-  [style.anchor-name]="`--${id}`"
-  [attr.popovertarget]="popoverId"
->
-  <span>Pick a date</span>
+<div class="relative">
+  <input
+    #textInput
+    type="text"
+    appInput
+    [appMask]="inputMask()"
+    [id]="id"
+    [style.anchor-name]="`--${id}`"
+    [value]="inputValue()"
+    [placeholder]="placeholder()"
+    (input)="onInputChange($event)"
+    (focus)="openPopover()"
+    (click)="openPopover()"
+  />
 
   @if (value()) {
-    <button class="cursor-pointer" (click)="clear($event)">
+    <button
+      type="button"
+      class="btn btn-ghost btn-xs absolute top-1/2 right-2 -translate-y-1/2 min-h-0 h-6 w-6 p-0"
+      aria-label="Clear selected date"
+      (click)="clear($event)"
+    >
       <i class="fa-solid fa-xmark"></i>
     </button>
   }
-</button>
+</div>
 <div
+  #popover
   popover
-  class="dropdown bg-base-100 rounded-box shadow-lg"
+  class="input-calendar-popover dropdown bg-base-100 rounded-box shadow-lg flex flex-col overflow-hidden"
+  [class.datetime-popover]="type() === 'datetime'"
   [id]="popoverId"
   [style.position-anchor]="`--${id}`"
 >
-  <app-calendar [value]="value()" (selectedDate)="setValue($event)" />
+  @if (type() === 'month') {
+    <app-input-calendar-month-picker
+      [displayedYear]="displayedYear()"
+      [value]="value()"
+      [monthOptions]="monthOptions"
+      (previousYear)="changeDisplayedYear(-1)"
+      (nextYear)="changeDisplayedYear(1)"
+      (monthSelect)="setMonthValue($event)"
+    />
+  } @else {
+    <div class="datetime-calendar-wrapper">
+      <app-calendar
+        [type]="type() === 'daterange' ? 'daterange' : 'date'"
+        [squareBottom]="type() === 'datetime'"
+        [value]="value()"
+        (selectedDate)="setDateValue($event)"
+        (selectedRange)="setRangeValue($event)"
+      />
+    </div>
+  }
+
+  @if (type() === 'datetime') {
+    <app-input-calendar-time-row [value]="timeValue()" (valueChange)="setTimeValue($event)" />
+  }
 </div>

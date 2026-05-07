@@ -1,10 +1,8 @@
-import { Loading } from '@/shared/components/loading/loading';
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
-  effect,
   ElementRef,
   forwardRef,
   Injector,
@@ -12,13 +10,25 @@ import {
   input,
   Resource,
   ResourceRef,
-  runInInjectionContext,
   signal,
   Signal,
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
-import { Combobox as AriaCombobox, ComboboxInput } from '@angular/aria/combobox';
-import { Listbox as AriaListbox, Option as AriaOption } from '@angular/aria/listbox';
+import { Combobox as AriaCombobox } from '@angular/aria/combobox';
+import {
+  removeSelectedOption,
+  selectedOptionsToValues,
+  toggleSelectedOption,
+} from './combobox.multiple.helpers';
+import { getNextActiveIndex } from './combobox.navigation.helpers';
+import { ComboboxOptionsPanelComponent } from './parts/combobox-options-panel.component';
+import { ComboboxTriggerComponent } from './parts/combobox-trigger.component';
+import {
+  setupActiveIndexEffect,
+  setupFilterSyncEffect,
+  setupRemoteResourceEffect,
+  setupSelectionEffect,
+} from './effects';
 
 export interface ComboboxOption<TValue = unknown, TData = unknown> {
   value: TValue;
@@ -35,17 +45,11 @@ export type ComboboxResourceFactory<TValue = unknown, TData = unknown> = (
   filter: Signal<string>,
 ) => ComboboxResourceResult<TValue, TData>;
 
-function isDestroyableResource<TValue, TData>(
-  resource: ComboboxResourceResult<TValue, TData>,
-): resource is ResourceRef<ComboboxOption<TValue, TData>[] | undefined> {
-  return 'destroy' in resource;
-}
-
 @Component({
   selector: 'app-combobox',
   templateUrl: './combobox.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [AriaCombobox, ComboboxInput, AriaListbox, AriaOption, Loading],
+  imports: [AriaCombobox, ComboboxTriggerComponent, ComboboxOptionsPanelComponent],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -67,6 +71,7 @@ export class Combobox implements ControlValueAccessor {
   private onTouched: () => void = () => {};
   private formDisabled = false;
   private skipNextFilterSync = false;
+  private suppressNextInputEvent = false;
 
   readonly options = input<ComboboxOption[]>([]);
   readonly placeholder = input('Select an option');
@@ -74,12 +79,15 @@ export class Combobox implements ControlValueAccessor {
   readonly searchingMessage = input('Searching...');
   readonly searchDebounce = input(500);
   readonly disabled = input(false, { transform: booleanAttribute });
+  readonly multiple = input(false, { transform: booleanAttribute });
   readonly resourceFactory = input<ComboboxResourceFactory | undefined>(undefined);
 
   readonly isOpen = signal(false);
   readonly inputValue = signal('');
   readonly filterValue = signal('');
+  readonly activeIndex = signal(-1);
   readonly selectedOption = signal<ComboboxOption | null>(null);
+  readonly selectedOptions = signal<ComboboxOption[]>([]);
   readonly internalValue = signal<unknown>(null);
   readonly remoteResource = signal<ComboboxResourceResult | null>(null);
 
@@ -107,102 +115,117 @@ export class Combobox implements ControlValueAccessor {
   );
 
   constructor() {
-    effect((onCleanup) => {
-      const factory = this.resourceFactory();
-      let createdResource: ComboboxResourceResult | null = null;
-      let canceled = false;
-
-      this.remoteResource.set(null);
-
-      if (!factory) {
-        onCleanup(() => {
-          canceled = true;
-        });
-
-        return;
-      }
-
-      queueMicrotask(() => {
-        if (canceled) {
-          return;
-        }
-
-        const resource = runInInjectionContext(this.injector, () =>
-          factory(this.filterValue.asReadonly()),
-        );
-
-        if (canceled) {
-          if (isDestroyableResource(resource)) {
-            resource.destroy();
-          }
-
-          return;
-        }
-
-        createdResource = resource;
-        this.remoteResource.set(resource);
-      });
-
-      onCleanup(() => {
-        canceled = true;
-
-        if (createdResource && isDestroyableResource(createdResource)) {
-          createdResource.destroy();
-        }
-      });
+    setupRemoteResourceEffect({
+      injector: this.injector,
+      resourceFactory: () => this.resourceFactory(),
+      filterSignal: this.filterValue.asReadonly(),
+      setRemoteResource: (resource) => this.remoteResource.set(resource),
     });
 
-    effect((onCleanup) => {
-      const value = this.inputValue();
-      const debounce = this.searchDebounce();
+    setupFilterSyncEffect({
+      inputValue: () => this.inputValue(),
+      searchDebounce: () => this.searchDebounce(),
+      consumeSkipNextFilterSync: () => {
+        if (!this.skipNextFilterSync) {
+          return false;
+        }
 
-      if (this.skipNextFilterSync) {
         this.skipNextFilterSync = false;
-        this.filterValue.set('');
-        return;
-      }
-
-      const timeout = setTimeout(() => {
-        this.filterValue.set(value.trim());
-      }, debounce);
-
-      onCleanup(() => {
-        clearTimeout(timeout);
-      });
+        return true;
+      },
+      setFilterValue: (value) => this.filterValue.set(value),
     });
 
-    effect(() => {
-      const currentValue = this.internalValue();
-      const selectedOption = this.selectedOption();
+    setupSelectionEffect({
+      multiple: () => this.multiple(),
+      internalValue: () => this.internalValue(),
+      resolvedOptions: () => this.resolvedOptions(),
+      selectedOptions: () => this.selectedOptions(),
+      selectedOption: () => this.selectedOption(),
+      isOpen: () => this.isOpen(),
+      setSelectedOptions: (value) => this.selectedOptions.set(value),
+      setSelectedOption: (value) => this.selectedOption.set(value),
+      setInputValue: (value, resetFilter) => this.setInputValue(value, resetFilter),
+    });
 
-      if (selectedOption && Object.is(selectedOption.value, currentValue)) {
-        return;
-      }
-
-      const matchedOption = this.resolvedOptions().find((option) =>
-        Object.is(option.value, currentValue),
-      );
-
-      if (!matchedOption) {
-        if (currentValue == null || currentValue === '') {
-          this.selectedOption.set(null);
-          if (!this.isOpen()) {
-            this.setInputValue('', true);
-          }
-        }
-
-        return;
-      }
-
-      this.selectedOption.set(matchedOption);
-
-      if (!this.isOpen()) {
-        this.setInputValue(matchedOption.label, true);
-      }
+    setupActiveIndexEffect({
+      isOpen: () => this.isOpen(),
+      resolvedOptions: () => this.resolvedOptions(),
+      selectedOption: () => this.selectedOption(),
+      setActiveIndex: (index) => this.activeIndex.set(index),
     });
   }
 
+  private restoreSelectedLabel() {
+    if (this.multiple()) {
+      this.setInputValue('', true);
+      return;
+    }
+
+    const selectedOption = this.selectedOption();
+    this.setInputValue(selectedOption?.label ?? '', true);
+  }
+
+  private setInputValue(value: string, resetFilter = false) {
+    if (resetFilter) {
+      this.skipNextFilterSync = true;
+    }
+
+    this.inputValue.set(value);
+
+    if (resetFilter) {
+      this.filterValue.set('');
+    }
+  }
+
+  private forceClearInputElement() {
+    const clear = () => {
+      const inputEl = this.elementRef.nativeElement.querySelector('input');
+      if (inputEl instanceof HTMLInputElement) {
+        inputEl.value = '';
+      }
+    };
+
+    queueMicrotask(clear);
+    requestAnimationFrame(clear);
+  }
+
+  private clearMultipleInput() {
+    this.setInputValue('', true);
+    this.forceClearInputElement();
+  }
+
+  private updateActiveIndexFromOptions() {
+    const options = this.resolvedOptions();
+    this.activeIndex.set(options.length ? 0 : -1);
+  }
+
+  private syncMultipleSelection(option: ComboboxOption) {
+    const next = toggleSelectedOption(this.selectedOptions(), option);
+    const nextValues = selectedOptionsToValues(next);
+
+    this.selectedOptions.set(next);
+    this.internalValue.set(nextValues);
+    this.onChange(nextValues);
+    this.suppressNextInputEvent = true;
+    this.clearMultipleInput();
+  }
+
+  private syncSingleSelection(option: ComboboxOption) {
+    this.selectedOption.set(option);
+    this.internalValue.set(option.value);
+    this.onChange(option.value);
+    this.setInputValue(option.label, true);
+    this.close();
+  }
+
   writeValue(value: unknown): void {
+    if (this.multiple()) {
+      this.internalValue.set(Array.isArray(value) ? value : []);
+      this.setInputValue('', true);
+      return;
+    }
+
     this.internalValue.set(value);
 
     if (value == null || value === '') {
@@ -231,31 +254,113 @@ export class Combobox implements ControlValueAccessor {
     this.isOpen.set(true);
   }
 
+  handleInputKeydown(event: KeyboardEvent) {
+    const options = this.resolvedOptions();
+
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        if (!this.isOpen()) {
+          this.isOpen.set(true);
+        }
+        if (!options.length) {
+          return;
+        }
+        this.activeIndex.update((index) => getNextActiveIndex(index, options.length, 'down'));
+        break;
+
+      case 'ArrowUp':
+        event.preventDefault();
+        if (!options.length) {
+          return;
+        }
+        this.activeIndex.update((index) => getNextActiveIndex(index, options.length, 'up'));
+        break;
+
+      case 'Enter': {
+        if (!this.isOpen()) {
+          return;
+        }
+        const activeOption = options[this.activeIndex()] ?? null;
+        if (!activeOption) {
+          return;
+        }
+        event.preventDefault();
+        this.selectOption(activeOption);
+        break;
+      }
+
+      case 'Escape':
+        if (!this.isOpen()) {
+          return;
+        }
+        event.preventDefault();
+        this.close();
+        break;
+    }
+  }
+
   handleInput(value: string) {
+    if (this.multiple() && this.suppressNextInputEvent) {
+      this.suppressNextInputEvent = false;
+      this.clearMultipleInput();
+      return;
+    }
+
+    if (this.multiple() && this.selectedOptions().some((option) => option.label === value)) {
+      this.clearMultipleInput();
+      return;
+    }
+
     this.inputValue.set(value);
 
     if (!this.isOpen()) {
       this.isOpen.set(true);
     }
+
+    queueMicrotask(() => this.updateActiveIndexFromOptions());
   }
 
   selectOption(option: ComboboxOption) {
-    this.selectedOption.set(option);
-    this.internalValue.set(option.value);
-    this.onChange(option.value);
-    this.setInputValue(option.label, true);
-    this.close();
+    if (this.multiple()) {
+      this.syncMultipleSelection(option);
+      return;
+    }
+
+    this.syncSingleSelection(option);
   }
 
   clearSelection() {
+    if (this.multiple()) {
+      this.selectedOptions.set([]);
+      this.internalValue.set([]);
+      this.onChange([]);
+      this.clearMultipleInput();
+      return;
+    }
+
     this.selectedOption.set(null);
     this.internalValue.set(null);
     this.onChange(null);
     this.setInputValue('');
   }
 
+  removeOption(optionValue: unknown) {
+    if (this.isDisabled() || !this.multiple()) {
+      return;
+    }
+
+    const next = removeSelectedOption(this.selectedOptions(), optionValue);
+    const nextValues = selectedOptionsToValues(next);
+
+    this.selectedOptions.set(next);
+    this.internalValue.set(nextValues);
+    this.onChange(nextValues);
+  }
+
   close() {
     this.isOpen.set(false);
+    this.activeIndex.set(-1);
     this.restoreSelectedLabel();
     this.onTouched();
   }
@@ -290,22 +395,5 @@ export class Combobox implements ControlValueAccessor {
 
       this.close();
     }, 0);
-  }
-
-  private restoreSelectedLabel() {
-    const selectedOption = this.selectedOption();
-    this.setInputValue(selectedOption?.label ?? '', true);
-  }
-
-  private setInputValue(value: string, resetFilter = false) {
-    if (resetFilter) {
-      this.skipNextFilterSync = true;
-    }
-
-    this.inputValue.set(value);
-
-    if (resetFilter) {
-      this.filterValue.set('');
-    }
   }
 }

@@ -9,7 +9,7 @@
     <ng-container title>Local Filtering</ng-container>
     <ng-container description>
       When you pass a static option list, the component filters it internally and behaves like a
-      searchable select.
+      searchable select. You can also enable multiple selection.
     </ng-container>
 
     <div appTabGroup align="start" class="flex items-center">
@@ -18,12 +18,22 @@
           class="grid gap-6 border border-t-0 border-base-300 rounded-b-lg p-6 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)]"
         >
           <div class="rounded-2xl border border-base-300 bg-base-100 p-6 shadow-sm">
-            <app-combobox
-              placeholder="Select a state"
-              emptyMessage="No states found"
-              [options]="localOptions"
-              [formControl]="localComboboxControl"
-            />
+            <div class="space-y-4">
+              <app-combobox
+                placeholder="Select a state"
+                emptyMessage="No states found"
+                [options]="localOptions"
+                [formControl]="localComboboxControl"
+              />
+
+              <app-combobox
+                multiple
+                placeholder="Select multiple states"
+                emptyMessage="No states found"
+                [options]="localOptions"
+                [formControl]="localMultipleComboboxControl"
+              />
+            </div>
           </div>
 
           <div class="rounded-2xl border border-base-300 bg-base-100 p-6 shadow-sm">
@@ -35,6 +45,17 @@
             >
               {{ localComboboxControl.value || 'No item selected' }}
             </div>
+            <p class="mt-4 text-xs font-semibold uppercase tracking-[0.18em] text-base-content/60">
+              Multiple values
+            </p>
+            <pre
+              class="mt-2 rounded-lg border border-base-300 bg-base-200 px-3 py-2 text-sm text-base-content"
+              >{{
+                localMultipleComboboxControl.value.length
+                  ? localMultipleComboboxControl.value.join(', ')
+                  : 'No items selected'
+              }}</pre
+            >
             <p class="mt-4 text-sm leading-6 text-base-content/70">
               Filtering happens inside the component by comparing the typed text against each option
               label.

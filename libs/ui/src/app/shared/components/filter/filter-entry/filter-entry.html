@@ -1,0 +1,111 @@
+@if (isEditing()) {
+  <span [class]="chipClass()" class="cursor-default">
+    <span class="shrink-0 opacity-60">{{ definition().label }}:</span>
+
+    <span
+      #fieldEl
+      class="relative inline-flex min-w-0 items-center"
+      (keydown)="onFieldKeydown($event)"
+    >
+      @switch (definition().type) {
+        @case ('combobox') {
+          <app-combobox
+            [class]="comboboxClass()"
+            [style.width.ch]="fieldWidthCh()"
+            [placeholder]="resolvedPlaceholder()"
+            [options]="resolvedOptions()"
+            [formControl]="comboboxControl"
+          />
+        }
+
+        @case ('select') {
+          <app-select
+            inline
+            [options]="resolvedOptions()"
+            [placeholder]="resolvedPlaceholder()"
+            [formControl]="selectControl"
+          />
+        }
+
+        @case ('date') {
+          <span
+            class="mr-[0.45rem] [&_button.input]:h-auto! [&_button.input]:min-h-0! [&_button.input]:w-auto! [&_button.input]:max-w-56! [&_button.input]:rounded-none! [&_button.input]:border-0! [&_button.input]:bg-transparent! [&_button.input]:px-0! [&_button.input]:py-0! [&_button.input]:text-inherit! [&_button.input]:[font-size:inherit]! [&_button.input]:[font-weight:inherit]! [&_button.input]:shadow-none! [&_button.input]:outline-none! [&_button.input]:focus:outline-none! [&_button.input]:focus-visible:outline-none! [&_button.input>span]:text-inherit! [&_app-input-calendar>button>span.cursor-pointer]:hidden"
+            [style.width.ch]="fieldWidthCh()"
+          >
+            <app-input-calendar
+              [value]="entryTextValue()"
+              format="dd/MM/yyyy"
+              [placeholder]="resolvedPlaceholder()"
+              (valueChange)="onDateChange($event)"
+            />
+          </span>
+        }
+
+        @case ('selectMultiple') {
+          <app-select
+            inline
+            multiple
+            [options]="resolvedOptions()"
+            [placeholder]="resolvedPlaceholder()"
+            [formControl]="selectMultipleControl"
+          />
+        }
+
+        @default {
+          <span class="inline-flex min-w-0 items-center">
+            <input
+              appInput
+              class="h-auto w-auto min-w-0 p-0 max-w-none flex-none bg-transparent text-inherit border-0 shadow-none outline-none"
+              [size]="size()"
+              [attr.size]="fieldWidthCh()"
+              [style.width.ch]="fieldWidthCh()"
+              [type]="inputType()"
+              [inputMode]="inputMode()"
+              [placeholder]="definition().placeholder || ''"
+              [value]="entryTextValue()"
+              (input)="onTextChange($any($event.target).value)"
+            />
+          </span>
+        }
+      }
+    </span>
+
+    <span
+      role="button"
+      tabindex="-1"
+      class="inline-flex h-3.5 w-3.5 shrink-0 cursor-pointer items-center justify-center rounded-full opacity-60 transition hover:bg-black/10 hover:opacity-100"
+      [attr.aria-label]="removeLabel()"
+      (click)="$event.stopPropagation(); removeCurrent()"
+      (keydown.enter)="$event.stopPropagation(); removeCurrent()"
+    >
+      <i class="fa-solid fa-xmark" style="font-size: 0.55rem"></i>
+    </span>
+  </span>
+} @else {
+  <button
+    type="button"
+    [class]="chipClass()"
+    class="cursor-pointer"
+    (click)="openEdit()"
+    (keydown)="onChipKeydown($event)"
+  >
+    <span class="shrink-0 opacity-60">{{ definition().label }}:</span>
+
+    @if (displayValue()) {
+      <span class="max-w-40 truncate">{{ displayValue() }}</span>
+    } @else {
+      <span class="italic opacity-40">{{ i18n().emptyLabel }}</span>
+    }
+
+    <span
+      role="button"
+      tabindex="-1"
+      class="inline-flex h-3.5 w-3.5 shrink-0 cursor-pointer items-center justify-center rounded-full opacity-60 transition hover:bg-black/10 hover:opacity-100"
+      [attr.aria-label]="removeLabel()"
+      (click)="$event.stopPropagation(); removeCurrent()"
+      (keydown.enter)="$event.stopPropagation(); removeCurrent()"
+    >
+      <i class="fa-solid fa-xmark" style="font-size: 0.55rem"></i>
+    </span>
+  </button>
+}

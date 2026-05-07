@@ -16,6 +16,7 @@ import {
 })
 export class ComboboxPage {
   readonly localComboboxControl = new FormControl<string | null>(null);
+  readonly localMultipleComboboxControl = new FormControl<string[]>([], { nonNullable: true });
   readonly remoteComboboxControl = new FormControl<number | null>(null);
 
   readonly localOptions: ComboboxOption<string>[] = [

@@ -1,27 +1,7 @@
 ```html
-<select appSelect size="xs" [formControl]="selectControl">
-  @for (option of options; track $index) {
-    <option [value]="option.value">{{ option.label }}</option>
-  }
-</select>
-<select appSelect size="sm" [formControl]="selectControl">
-  @for (option of options; track $index) {
-    <option [value]="option.value">{{ option.label }}</option>
-  }
-</select>
-<select appSelect size="md" [formControl]="selectControl">
-  @for (option of options; track $index) {
-    <option [value]="option.value">{{ option.label }}</option>
-  }
-</select>
-<select appSelect size="lg" [formControl]="selectControl">
-  @for (option of options; track $index) {
-    <option [value]="option.value">{{ option.label }}</option>
-  }
-</select>
-<select appSelect size="xl" [formControl]="selectControl">
-  @for (option of options; track $index) {
-    <option [value]="option.value">{{ option.label }}</option>
-  }
-</select>
+<app-select size="xs" class="w-56" placeholder="xs" [options]="options" />
+<app-select size="sm" class="w-56" placeholder="sm" [options]="options" />
+<app-select size="md" class="w-56" placeholder="md" [options]="options" />
+<app-select size="lg" class="w-56" placeholder="lg" [options]="options" />
+<app-select size="xl" class="w-56" placeholder="xl" [options]="options" />
 ```

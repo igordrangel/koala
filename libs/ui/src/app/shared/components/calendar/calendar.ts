@@ -1,7 +1,7 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
-  effect,
   ElementRef,
   input,
   output,
@@ -9,27 +9,32 @@ import {
 } from '@angular/core';
 import { KlDate } from '@koalarx/utils/light/KlDate';
 import 'cally';
+import { setupCalendarChangeEffect } from './effects/setup-calendar-change.effect';
+
+export type CalendarType = 'date' | 'daterange';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.html',
   styleUrl: './calendar.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class Calendar {
-  private readonly calendar = viewChild<ElementRef>('calendar');
-  private readonly onDateChange = (event: CustomEvent<Date>) => {
-    const date = new KlDate(event.detail);
-    date.add(1, 'days').setHours(0, 0, 0, 0);
-    this.selectedDate.emit(date);
-  };
+  private readonly calendar = viewChild<ElementRef<HTMLElement & { value?: string }>>('calendar');
 
+  readonly type = input<CalendarType>('date');
   readonly value = input<string>();
+  readonly squareBottom = input<boolean>(false);
   readonly selectedDate = output<KlDate>();
+  readonly selectedRange = output<string>();
 
   constructor() {
-    effect(() => {
-      this.calendar()?.nativeElement.addEventListener('focusday', this.onDateChange);
+    setupCalendarChangeEffect({
+      calendar: () => this.calendar(),
+      type: () => this.type(),
+      emitSelectedDate: (date) => this.selectedDate.emit(date),
+      emitSelectedRange: (value) => this.selectedRange.emit(value),
     });
   }
 }
