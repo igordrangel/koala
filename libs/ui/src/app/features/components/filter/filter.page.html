@@ -12,28 +12,53 @@
       rehydrated when you come back to this screen.
     </ng-container>
 
-    <div class="border border-base-300 rounded-lg p-5">
-      <app-filter
-        storageKey="koala.docs.components.filter"
-        addFilterPlaceholder="Choose a filter type"
-        [definitions]="filterDefinitions"
-        (filtersChange)="handleFiltersChange($event)"
-      />
-    </div>
-  </app-section-content>
+    <div appTabGroup align="start" class="flex items-center">
+      <div appTab label="Preview" checked>
+        <div class="border border-t-0 border-base-300 rounded-b-lg p-5">
+          <app-filter
+            storageKey="koala.docs.components.filter"
+            addFilterPlaceholder="Choose a filter type"
+            [definitions]="filterDefinitions"
+            (filtersChange)="handleFiltersChange($event)"
+          />
 
-  <app-section-content>
-    <ng-container title>Applied Filters</ng-container>
-    <ng-container description>
-      Live output of the current filter payload, useful to plug directly into API query builders.
-    </ng-container>
+          <div class="mt-6 border border-base-300 rounded-lg bg-base-100 p-4 text-sm">
+            <ng-container title>Applied Filters</ng-container>
+            <ng-container description>
+              Live output of the current filter payload, useful to plug directly into API query
+              builders.
+            </ng-container>
 
-    <div class="border border-base-300 rounded-lg bg-base-100 p-4 text-sm">
-      @if (appliedFilters().length === 0) {
-        <p class="text-base-content/60">No filters selected.</p>
-      } @else {
-        <pre class="overflow-x-auto text-xs leading-6">{{ appliedFilters() | json }}</pre>
-      }
+            @if (appliedFilters().length === 0) {
+              <p class="text-base-content/60">No filters selected.</p>
+            } @else {
+              <pre class="overflow-x-auto text-xs leading-6">{{ appliedFilters() | json }}</pre>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div appTab label="HTML">
+        <div class="flex p-2 border border-t-0 border-base-300 rounded-b-lg">
+          <app-code-viewer
+            class="w-full"
+            language="html"
+            name="filter-builder.html"
+            src="markdown/usage/filter/filter-builder.html.md"
+          />
+        </div>
+      </div>
+
+      <div appTab label="TS">
+        <div class="flex p-2 border border-t-0 border-base-300 rounded-b-lg">
+          <app-code-viewer
+            class="w-full"
+            language="typescript"
+            name="filter.ts"
+            src="markdown/usage/filter/filter.ts.md"
+          />
+        </div>
+      </div>
     </div>
   </app-section-content>
 </app-section-container>

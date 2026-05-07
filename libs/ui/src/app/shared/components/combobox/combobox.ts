@@ -21,6 +21,12 @@ import {
   toggleSelectedOption,
 } from './combobox.multiple.helpers';
 import { getNextActiveIndex } from './combobox.navigation.helpers';
+import {
+  asArrayValue,
+  getRestoredInputValue,
+  hasLabelInSelectedOptions,
+  isEmptyValue,
+} from './combobox.state.helpers';
 import { ComboboxOptionsPanelComponent } from './parts/combobox-options-panel.component';
 import { ComboboxTriggerComponent } from './parts/combobox-trigger.component';
 import {
@@ -157,13 +163,7 @@ export class Combobox implements ControlValueAccessor {
   }
 
   private restoreSelectedLabel() {
-    if (this.multiple()) {
-      this.setInputValue('', true);
-      return;
-    }
-
-    const selectedOption = this.selectedOption();
-    this.setInputValue(selectedOption?.label ?? '', true);
+    this.setInputValue(getRestoredInputValue(this.multiple(), this.selectedOption()), true);
   }
 
   private setInputValue(value: string, resetFilter = false) {
@@ -221,14 +221,14 @@ export class Combobox implements ControlValueAccessor {
 
   writeValue(value: unknown): void {
     if (this.multiple()) {
-      this.internalValue.set(Array.isArray(value) ? value : []);
+      this.internalValue.set(asArrayValue(value));
       this.setInputValue('', true);
       return;
     }
 
     this.internalValue.set(value);
 
-    if (value == null || value === '') {
+    if (isEmptyValue(value)) {
       this.selectedOption.set(null);
       this.setInputValue('', true);
     }
@@ -307,7 +307,7 @@ export class Combobox implements ControlValueAccessor {
       return;
     }
 
-    if (this.multiple() && this.selectedOptions().some((option) => option.label === value)) {
+    if (this.multiple() && hasLabelInSelectedOptions(this.selectedOptions(), value)) {
       this.clearMultipleInput();
       return;
     }

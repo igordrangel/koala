@@ -4,7 +4,7 @@ import { getProjectPath } from './project-path';
 
 const originPath = path.join(__dirname, '../../');
 
-export const InstallUtilFlagsList = ['string-mask'] as const;
+export const InstallUtilFlagsList = ['string-mask', 'currency-mask'] as const;
 export type InstallUtilFlags = (typeof InstallUtilFlagsList)[number];
 
 export function installUtil(projectName: string, util: InstallUtilFlags) {

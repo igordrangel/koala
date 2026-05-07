@@ -37,12 +37,14 @@ export const InstallComponentFlagsList = [
   'input-cpf',
   'input-cnpj',
   'input-currency',
+  'currency',
   'checkbox',
   'radio',
   'toggle',
   'range',
   'select',
   'combobox',
+  'filter',
 ] as const;
 export type InstallComponentFlags = (typeof InstallComponentFlagsList)[number];
 
@@ -119,6 +121,8 @@ export function installComponent(
       break;
     case 'calendar':
       libDeps.push('cally');
+      componentDeps.push('input-field');
+      directiveDeps.push('mask');
       break;
     case 'input-cpf':
     case 'input-cnpj':
@@ -133,9 +137,24 @@ export function installComponent(
 
       componentDeps.push('input-field');
       break;
+    case 'currency':
+      directiveDeps.push('currency');
+      utilDeps.push('currency-mask');
+      break;
     case 'combobox':
       libDeps.push('@angular/aria');
       componentDeps.push('loading');
+      break;
+    case 'filter':
+      componentDeps.push(
+        'combobox',
+        'select',
+        'loading',
+        'calendar',
+        'input-field',
+        'input-cpf',
+        'input-cnpj',
+      );
       break;
   }
 

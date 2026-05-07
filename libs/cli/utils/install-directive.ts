@@ -4,7 +4,7 @@ import { getProjectPath } from './project-path';
 
 const originPath = path.join(__dirname, '../../');
 
-export const InstallDirectiveFlagsList = ['mask'] as const;
+export const InstallDirectiveFlagsList = ['mask', 'currency'] as const;
 export type InstallDirectiveFlags = (typeof InstallDirectiveFlagsList)[number];
 
 export function installDirective(projectName: string, directive: InstallDirectiveFlags) {

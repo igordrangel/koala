@@ -1,16 +1,8 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  output,
-  viewChild,
-  ElementRef,
-  input,
-} from '@angular/core';
+import { Component, output, viewChild, ElementRef, input } from '@angular/core';
 
 @Component({
   selector: 'app-input-calendar-time-row',
   templateUrl: './input-calendar-time-row.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputCalendarTimeRowComponent {
   private readonly timeInput = viewChild<ElementRef<HTMLInputElement>>('timeInput');

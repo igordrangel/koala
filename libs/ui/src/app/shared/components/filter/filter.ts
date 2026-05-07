@@ -25,6 +25,11 @@ import {
   setupHydrationEffect,
   setupSyncRouterEffect,
 } from './effects';
+import {
+  buildFilterDefinitionMap,
+  buildFilterPickerOptions,
+  createFilterEntry,
+} from './filter.helpers';
 
 @Component({
   selector: 'app-filter',
@@ -49,20 +54,12 @@ export class Filter {
   readonly pendingOpenId = signal<string | null>(null);
 
   private readonly hydrationComplete = signal(false);
-  private nextId = 0;
   private readonly nextIdRef = { value: 0 };
 
-  readonly definitionMap = computed(() => {
-    const map = new Map<string, FilterDefinition>();
-    for (const d of this.definitions()) map.set(d.key, d);
-    return map;
-  });
+  readonly definitionMap = computed(() => buildFilterDefinitionMap(this.definitions()));
 
   readonly pickerOptions = computed<ComboboxOption<string>[]>(() => {
-    const activeKeys = new Set(this.entries().map((e) => e.key));
-    return this.definitions()
-      .filter((d) => d.allowMultiple || !activeKeys.has(d.key))
-      .map((d) => ({ value: d.key, label: d.label }));
+    return buildFilterPickerOptions(this.definitions(), this.entries());
   });
 
   readonly hasAvailableFilters = computed(() => this.pickerOptions().length > 0);
@@ -84,8 +81,6 @@ export class Filter {
   });
 
   constructor() {
-    this.nextIdRef.value = this.nextId;
-
     setupSyncRouterEffect({
       hydrationComplete: () => this.hydrationComplete(),
       resolvedValues: () => this.resolvedValues(),
@@ -111,8 +106,6 @@ export class Filter {
           getValues: (key) => this.route.snapshot.queryParamMap.getAll(key),
         }),
     });
-
-    this.nextId = this.nextIdRef.value;
   }
 
   private addFilter(key: string): string | null {
@@ -120,11 +113,7 @@ export class Filter {
     if (!d) return null;
     if (!d.allowMultiple && this.entries().some((e) => e.key === key)) return null;
 
-    const entry: FilterEntry = {
-      id: `${d.key}-${this.nextId++}`,
-      key: d.key,
-      value: d.type === 'selectMultiple' ? [] : null,
-    };
+    const entry = createFilterEntry(d, this.nextIdRef.value++);
 
     this.entries.update((entries) => [...entries, entry]);
     return entry.id;

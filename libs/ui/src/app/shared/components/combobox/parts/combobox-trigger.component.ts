@@ -1,12 +1,11 @@
 import { Loading } from '@/shared/components/loading/loading';
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import { ComboboxInput } from '@angular/aria/combobox';
 import { ComboboxOption } from '../combobox';
 
 @Component({
   selector: 'app-combobox-trigger',
   templateUrl: './combobox-trigger.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ComboboxInput, Loading],
 })
 export class ComboboxTriggerComponent {

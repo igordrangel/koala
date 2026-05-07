@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   computed,
   effect,
@@ -38,7 +37,6 @@ const RANGE_SEPARATOR = ' - ';
   selector: 'app-input-calendar',
   templateUrl: './input-calendar.html',
   styleUrls: ['./input-calendar.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     Calendar,
     InputCalendarMonthPickerComponent,
@@ -158,7 +156,7 @@ export class InputCalendar {
       }
     }
 
-    const [fromCanonical = '', toCanonical = ''] = this.value().split('/');
+    const [, toCanonical = ''] = this.value().split('/');
     const hasCanonicalToDate = !!toCanonical;
     const fromDigits = (separatorIndex === -1 ? value : value.slice(0, separatorIndex)).replace(
       /\D/g,
@@ -267,12 +265,17 @@ export class InputCalendar {
     const popoverElement = this.popover()?.nativeElement as
       | (HTMLElement & { showPopover?: () => void })
       | undefined;
+    const textInput = this.textInput()?.nativeElement;
 
     if (!popoverElement || !popoverElement.showPopover) {
       return;
     }
 
     popoverElement.showPopover();
+
+    if (textInput && document.activeElement !== textInput) {
+      queueMicrotask(() => textInput.focus());
+    }
   }
 
   setDateValue(value: KlDate) {

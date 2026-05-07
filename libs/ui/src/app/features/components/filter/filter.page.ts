@@ -1,5 +1,5 @@
 import { JsonPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, resource, signal, Signal } from '@angular/core';
+import { Component, resource, signal, Signal } from '@angular/core';
 import { Section } from '../../../core/components/section';
 import { ComboboxOption } from '../../../shared/components/combobox/combobox';
 import {
@@ -8,12 +8,12 @@ import {
   FilterDefinition,
   FilterValue,
 } from '../../../shared/components/filter/filter';
+import { Tabs } from '../../../shared/components/tabs';
 
 @Component({
   selector: 'app-filter-page',
   templateUrl: './filter.page.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [JsonPipe, Section, Filter],
+  imports: [JsonPipe, Section, Filter, Tabs],
 })
 export class FilterPage {
   readonly appliedFilters = signal<FilterValue[]>([]);
@@ -57,6 +57,8 @@ export class FilterPage {
 
   readonly filterDefinitions: FilterDefinition[] = [
     FilterDef.text('author', 'Author').placeholder('e.g. igor').build(),
+    FilterDef.cpf('cpf', 'CPF').build(),
+    FilterDef.cnpj('cnpj', 'CNPJ').build(),
     FilterDef.select('status', 'Status').options(this.statusOptions).build(),
     FilterDef.selectMultiple('labels', 'Labels').options(this.labelOptions).build(),
     FilterDef.combobox('type', 'Type').options(this.typeOptions).build(),

@@ -22,9 +22,11 @@ export class Input {
   }
 
   readonly size = input<InputSize>('sm');
+  readonly bare = input(false);
 
   constructor() {
     afterRenderEffect(() => {
+      if (this.bare()) return;
       this.elementRef.nativeElement.classList.add('input', 'validator', this.inputSizeClass);
     });
   }

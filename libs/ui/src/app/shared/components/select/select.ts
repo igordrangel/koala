@@ -10,6 +10,13 @@ import {
   signal,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import {
+  getOptionLabel,
+  getSelectCheckIconClass,
+  getSelectSizeClass,
+  getTriggerLabel,
+  toggleSelectValue,
+} from './select.helpers';
 
 export interface SelectOption<TValue = unknown> {
   value: TValue;
@@ -65,18 +72,13 @@ export class Select implements ControlValueAccessor {
   readonly badgeSize = input<SelectBadgeSize>('xs');
 
   readonly isOpen = signal(false);
+  readonly activeIndex = signal(-1);
   readonly selectedValues = signal<unknown[]>([]);
 
   readonly isDisabled = computed(() => this.disabled() || this.formDisabled);
 
   readonly triggerLabel = computed(() => {
-    const selected = this.selectedValues();
-    if (selected.length === 0) return this.placeholder();
-    if (selected.length === 1) {
-      const opt = this.options().find((o) => Object.is(o.value, selected[0]));
-      return opt?.label ?? this.placeholder();
-    }
-    return this.placeholder();
+    return getTriggerLabel(this.selectedValues(), this.options(), this.placeholder());
   });
 
   readonly buttonClass = computed(() => {
@@ -89,15 +91,7 @@ export class Select implements ControlValueAccessor {
       return `${base} bg-transparent border-0 h-auto min-h-0 px-0 py-0 shadow-none rounded-none text-inherit`;
     }
 
-    const sizeMap: Record<SelectSize, string> = {
-      xs: 'min-h-6 text-xs px-2',
-      sm: 'min-h-8 text-sm px-2.5',
-      md: 'min-h-10 text-sm px-3',
-      lg: 'min-h-12 text-base px-3.5',
-      xl: 'min-h-14 text-lg px-4',
-    };
-
-    return `${base} rounded-lg border border-base-300 bg-base-100 text-base-content shadow-xs ${sizeMap[this.size()]}`;
+    return `${base} rounded-lg border border-base-300 bg-base-100 text-base-content shadow-xs ${getSelectSizeClass(this.size())}`;
   });
 
   readonly dropdownClass = computed(() => (this.inline() ? 'min-w-36' : 'w-full'));
@@ -107,29 +101,18 @@ export class Select implements ControlValueAccessor {
   });
 
   readonly checkIconClass = computed(() => {
-    switch (this.badgeVariant()) {
-      case 'primary':
-        return 'text-primary';
-      case 'secondary':
-        return 'text-secondary';
-      case 'accent':
-        return 'text-accent';
-      case 'info':
-        return 'text-info';
-      case 'success':
-        return 'text-success';
-      case 'warning':
-        return 'text-warning';
-      case 'error':
-        return 'text-error';
-      default:
-        return 'text-neutral';
-    }
+    return getSelectCheckIconClass(this.badgeVariant());
   });
 
   toggleOpen() {
     if (this.isDisabled()) return;
-    this.isOpen.update((v) => !v);
+
+    if (this.isOpen()) {
+      this.closeDropdown();
+      return;
+    }
+
+    this.openDropdown();
   }
 
   isSelected(value: unknown): boolean {
@@ -141,16 +124,67 @@ export class Select implements ControlValueAccessor {
 
     if (this.multiple()) {
       const current = this.selectedValues();
-      const next = this.isSelected(value)
-        ? current.filter((v) => !Object.is(v, value))
-        : [...current, value];
+      const next = toggleSelectValue(current, value);
       this.selectedValues.set(next);
       this.onChange(next);
     } else {
       this.selectedValues.set([value]);
-      this.isOpen.set(false);
+      this.closeDropdown();
       this.onChange(value);
       this.onTouched();
+    }
+  }
+
+  onTriggerKeydown(event: KeyboardEvent) {
+    if (this.isDisabled()) {
+      return;
+    }
+
+    switch (event.key) {
+      case 'ArrowDown':
+        event.preventDefault();
+        if (!this.isOpen()) {
+          this.openDropdown();
+          return;
+        }
+        this.moveActive(1);
+        return;
+
+      case 'ArrowUp':
+        event.preventDefault();
+        if (!this.isOpen()) {
+          this.openDropdown();
+          return;
+        }
+        this.moveActive(-1);
+        return;
+
+      case 'Enter':
+      case ' ': {
+        event.preventDefault();
+
+        if (!this.isOpen()) {
+          this.openDropdown();
+          return;
+        }
+
+        const option = this.options()[this.activeIndex()];
+        if (!option || option.disabled) {
+          return;
+        }
+
+        this.selectOption(option.value);
+        return;
+      }
+
+      case 'Escape':
+        if (!this.isOpen()) {
+          return;
+        }
+        event.preventDefault();
+        this.closeDropdown();
+        this.onTouched();
+        return;
     }
   }
 
@@ -170,13 +204,13 @@ export class Select implements ControlValueAccessor {
   }
 
   getOptionLabel(value: unknown): string {
-    return this.options().find((o) => Object.is(o.value, value))?.label ?? `${value}`;
+    return getOptionLabel(this.options(), value, `${value}`);
   }
 
   handleDocumentPointerDown(event: PointerEvent) {
     if (!this.elementRef.nativeElement.contains(event.target as Node)) {
       if (this.isOpen()) {
-        this.isOpen.set(false);
+        this.closeDropdown();
         this.onTouched();
       }
     }
@@ -206,5 +240,47 @@ export class Select implements ControlValueAccessor {
 
   setDisabledState(isDisabled: boolean): void {
     this.formDisabled = isDisabled;
+  }
+
+  private openDropdown() {
+    this.isOpen.set(true);
+
+    const selectedValue = this.selectedValues()[0];
+    const selectedIndex = this.options().findIndex((option) =>
+      Object.is(option.value, selectedValue),
+    );
+
+    if (selectedIndex >= 0 && !this.options()[selectedIndex]?.disabled) {
+      this.activeIndex.set(selectedIndex);
+      return;
+    }
+
+    const firstEnabled = this.options().findIndex((option) => !option.disabled);
+    this.activeIndex.set(firstEnabled);
+  }
+
+  private closeDropdown() {
+    this.isOpen.set(false);
+    this.activeIndex.set(-1);
+  }
+
+  private moveActive(step: 1 | -1) {
+    const options = this.options();
+
+    if (!options.length) {
+      this.activeIndex.set(-1);
+      return;
+    }
+
+    let index = this.activeIndex();
+
+    for (let i = 0; i < options.length; i++) {
+      index = (index + step + options.length) % options.length;
+
+      if (!options[index]?.disabled) {
+        this.activeIndex.set(index);
+        return;
+      }
+    }
   }
 }

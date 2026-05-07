@@ -1,5 +1,5 @@
 import { Tabs } from '@/shared/components/tabs';
-import { ChangeDetectionStrategy, Component, resource, Signal } from '@angular/core';
+import { Component, resource, Signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Section } from '../../../core/components/section';
 import {
@@ -11,7 +11,6 @@ import {
 @Component({
   selector: 'app-combobox-page',
   templateUrl: './combobox.page.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ReactiveFormsModule, Section, Tabs, Combobox],
 })
 export class ComboboxPage {

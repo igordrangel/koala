@@ -15,8 +15,17 @@ export function buildQueryParams(
   }
 
   for (const v of values) {
-    if (v.value === null || v.value === undefined || v.value === '') continue;
-    params[v.key] = Array.isArray(v.value) ? v.value.map(String) : String(v.value);
+    if (Array.isArray(v.value)) {
+      params[v.key] = v.value.length > 0 ? v.value.map(String) : '';
+      continue;
+    }
+
+    if (v.value === null || v.value === undefined) {
+      params[v.key] = '';
+      continue;
+    }
+
+    params[v.key] = String(v.value);
   }
 
   return params;

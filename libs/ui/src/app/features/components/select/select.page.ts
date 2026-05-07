@@ -1,5 +1,5 @@
 import { JsonPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Section } from '../../../core/components/section';
 import {
@@ -11,7 +11,6 @@ import { Tabs } from '../../../shared/components/tabs';
 @Component({
   selector: 'app-select-page',
   templateUrl: './select.page.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ReactiveFormsModule, JsonPipe, Section, Tabs, Select],
 })
 export class SelectPage {

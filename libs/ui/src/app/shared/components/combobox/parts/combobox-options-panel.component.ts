@@ -1,11 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import { Listbox as AriaListbox, Option as AriaOption } from '@angular/aria/listbox';
 import { ComboboxOption } from '../combobox';
 
 @Component({
   selector: 'app-combobox-options-panel',
   templateUrl: './combobox-options-panel.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [AriaListbox, AriaOption],
 })
 export class ComboboxOptionsPanelComponent {

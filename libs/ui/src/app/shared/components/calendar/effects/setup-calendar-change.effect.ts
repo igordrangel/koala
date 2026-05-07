@@ -9,6 +9,16 @@ interface SetupCalendarChangeEffectParams {
   emitSelectedRange: (value: string) => void;
 }
 
+function bindEvent(
+  element: HTMLElement,
+  eventName: string,
+  handler: EventListener,
+  onCleanup: (cleanupFn: () => void) => void,
+) {
+  element.addEventListener(eventName, handler);
+  onCleanup(() => element.removeEventListener(eventName, handler));
+}
+
 export function setupCalendarChangeEffect(params: SetupCalendarChangeEffectParams): void {
   const onDateChange = (event: CustomEvent<Date>) => {
     if (params.type() !== 'date') {
@@ -40,14 +50,10 @@ export function setupCalendarChangeEffect(params: SetupCalendarChangeEffectParam
     }
 
     if (params.type() === 'daterange') {
-      const handler = onRangeChange as EventListener;
-      calendar.addEventListener('change', handler);
-      onCleanup(() => calendar.removeEventListener('change', handler));
+      bindEvent(calendar, 'change', onRangeChange as EventListener, onCleanup);
       return;
     }
 
-    const handler = onDateChange as EventListener;
-    calendar.addEventListener('focusday', handler);
-    onCleanup(() => calendar.removeEventListener('focusday', handler));
+    bindEvent(calendar, 'focusday', onDateChange as EventListener, onCleanup);
   });
 }

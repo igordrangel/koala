@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  effect,
   ElementRef,
   inject,
   input,
@@ -43,9 +42,10 @@ export class FilterPicker {
   readonly inputValue = signal('');
   readonly isOpen = signal(false);
   readonly activeIndex = signal(-1);
-
-  // Reactive class value
-  readonly inputClass = signal('');
+  readonly inputClass = computed(
+    () =>
+      `w-full min-w-24 border-0 bg-transparent px-2 text-base-content outline-none placeholder:text-base-content/40 ${INPUT_SIZE[this.size()]}`,
+  );
 
   private readonly inputRef = viewChild<ElementRef<HTMLInputElement>>('inputEl');
 
@@ -56,15 +56,6 @@ export class FilterPicker {
     }
     return this.options().filter((o) => o.label.toLocaleLowerCase().includes(q));
   });
-
-  constructor() {
-    // Update inputClass
-    effect(() => {
-      this.size(); // read to trigger update
-      const classes = `w-full min-w-24 border-0 bg-transparent px-2 text-base-content outline-none placeholder:text-base-content/40 ${INPUT_SIZE[this.size()]}`;
-      this.inputClass.set(classes);
-    });
-  }
 
   focus() {
     this.inputRef()?.nativeElement.focus();

@@ -2,6 +2,7 @@ import { Combobox, ComboboxOption } from '../../combobox/combobox';
 import { InputCalendar } from '../../calendar/input-calendar';
 import { Input } from '../../input-field/input';
 import { Select } from '../../select/select';
+import { Mask } from '../../../directives/mask.directive';
 import { KlDate } from '@koalarx/utils/light/KlDate';
 import {
   ChangeDetectionStrategy,
@@ -73,17 +74,21 @@ const INPUT_TYPE_BY_FIELD: Record<string, string> = {
 
 const INPUT_MODE_BY_FIELD: Record<string, string> = {
   cpf: 'numeric',
-  cnpj: 'numeric',
   number: 'numeric',
   email: 'email',
   url: 'url',
+};
+
+const INPUT_MASK_BY_FIELD: Partial<Record<string, string>> = {
+  cpf: '000.000.000-00',
+  cnpj: 'SS.SSS.SSS/SSSS-SS',
 };
 
 @Component({
   selector: 'app-filter-entry',
   templateUrl: './filter-entry.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, Combobox, Input, InputCalendar, Select],
+  imports: [ReactiveFormsModule, Combobox, Input, InputCalendar, Mask, Select],
   host: {
     class: 'relative inline-flex',
     '(click)': '$event.stopPropagation()',
@@ -128,6 +133,32 @@ export class FilterEntryComponent {
     return this.options();
   });
 
+  readonly isRemoteValueLoading = computed(() => {
+    const definition = this.definition();
+    const value = this.entry().value;
+
+    if (
+      !definition.resourceFactory ||
+      (definition.type !== 'select' && definition.type !== 'combobox')
+    ) {
+      return false;
+    }
+
+    if (value == null || value === '' || Array.isArray(value)) {
+      return false;
+    }
+
+    const hasMatchingOption = this.resolvedOptions().some(
+      (option) => `${option.value}` === `${value}`,
+    );
+
+    if (hasMatchingOption) {
+      return false;
+    }
+
+    return !this.resourceRef()?.hasValue();
+  });
+
   readonly displayValue = computed<string | null>(() => {
     const value = this.entry().value;
     const opts = this.resolvedOptions();
@@ -145,7 +176,17 @@ export class FilterEntryComponent {
     }
 
     if (type === 'select' || type === 'combobox') {
-      return opts.find((o) => `${o.value}` === `${value}`)?.label ?? `${value}`;
+      const foundOption = opts.find((o) => `${o.value}` === `${value}`);
+
+      if (foundOption) {
+        return foundOption.label;
+      }
+
+      if (this.isRemoteValueLoading()) {
+        return null;
+      }
+
+      return `${value}`;
     }
 
     if (type === 'date' && typeof value === 'string') {
@@ -164,9 +205,28 @@ export class FilterEntryComponent {
     return value == null ? '' : `${value}`;
   });
 
-  readonly resolvedPlaceholder = computed(
-    () => this.definition().placeholder || this.i18n().selectPlaceholder,
-  );
+  readonly resolvedPlaceholder = computed<string>(() => {
+    const definition = this.definition();
+
+    if (definition.placeholder) {
+      return definition.placeholder;
+    }
+
+    switch (definition.type) {
+      case 'cpf':
+        return '000.000.000-00';
+      case 'cnpj':
+        return 'SS.SSS.SSS/SSSS-SS';
+      case 'date':
+        return 'dd/MM/yyyy';
+      case 'datetime':
+        return 'dd/MM/yyyy HH:mm';
+      case 'month':
+        return 'MM/yyyy';
+      default:
+        return this.i18n().selectPlaceholder || 'Select';
+    }
+  });
 
   readonly inputType = computed(() => {
     const fieldType = this.definition().type;
@@ -178,12 +238,36 @@ export class FilterEntryComponent {
     return INPUT_MODE_BY_FIELD[fieldType] ?? 'text';
   });
 
+  readonly inputMask = computed(() => {
+    const fieldType = this.definition().type;
+    return INPUT_MASK_BY_FIELD[fieldType];
+  });
+
   readonly removeLabel = computed(() => this.i18n().removeLabel);
 
-  // Reactive class/style values
-  readonly chipClass = signal('');
-  readonly comboboxClass = signal('');
-  readonly fieldWidthCh = signal(0);
+  readonly chipClass = computed(() => {
+    const variant: FilterVariant = this.definition().variant ?? this.variant();
+    return `inline-flex items-center rounded-full border font-medium transition ${CHIP_SIZE[this.size()]} ${CHIP_VARIANT[variant]}`;
+  });
+  readonly comboboxClass = computed(
+    () =>
+      `!inline-block !w-auto ${FIELD_SIZE[this.size()]} [&]:!inline-block [&]:!w-auto [&_div.group]:!h-auto [&_div.group]:!min-h-0 [&_div.group]:!w-auto [&_div.group]:!rounded-none [&_div.group]:!border-0 [&_div.group]:!bg-transparent [&_div.group]:!px-0 [&_div.group]:!shadow-none [&_div.group]:!ring-0 [&_div.group]:![font-size:inherit] [&_input]:!h-auto [&_input]:!w-auto [&_input]:!border-0 [&_input]:!bg-transparent [&_input]:!px-0 [&_input]:!py-0 [&_input]:!text-inherit [&_input]:![font-size:inherit] [&_input]:!shadow-none [&_input]:!outline-none`,
+  );
+  readonly fieldWidthCh = computed(() => {
+    const definitionType = this.definition().type;
+    const base = this.displayValue() || this.entryTextValue() || this.resolvedPlaceholder();
+    const baseLength = Math.max(1, (base || '').length);
+
+    if (definitionType === 'email') {
+      return baseLength;
+    }
+
+    return Math.min(24, baseLength + 1);
+  });
+  readonly dateFieldWidthCh = computed(() => {
+    const width = this.fieldWidthCh();
+    return width < 10 ? 10 : width;
+  });
 
   constructor() {
     this.comboboxControl.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((v) => {
@@ -224,31 +308,6 @@ export class FilterEntryComponent {
         const v = this.entry().value;
         this.selectMultipleControl.setValue(Array.isArray(v) ? v : [], { emitEvent: false });
       }
-    });
-
-    // Update chipClass
-    effect(() => {
-      const v: FilterVariant = this.definition().variant ?? this.variant();
-      const classes = `inline-flex items-center rounded-full border font-medium transition ${CHIP_SIZE[this.size()]} ${CHIP_VARIANT[v]}`;
-      this.chipClass.set(classes);
-    });
-
-    // Update combobox class
-    effect(() => {
-      this.size(); // read to trigger update
-      const classes = `!inline-block !w-auto ${FIELD_SIZE[this.size()]} [&]:!inline-block [&]:!w-auto [&_div.group]:!h-auto [&_div.group]:!min-h-0 [&_div.group]:!w-auto [&_div.group]:!rounded-none [&_div.group]:!border-0 [&_div.group]:!bg-transparent [&_div.group]:!px-0 [&_div.group]:!shadow-none [&_div.group]:!ring-0 [&_input]:!h-auto [&_input]:!w-auto [&_input]:!border-0 [&_input]:!bg-transparent [&_input]:!px-0 [&_input]:!py-0 [&_input]:!text-inherit [&_input]:!shadow-none [&_input]:!outline-none`;
-      this.comboboxClass.set(classes);
-    });
-
-    // Update field width
-    effect(() => {
-      const base =
-        this.displayValue() ||
-        this.entryTextValue() ||
-        this.definition().placeholder ||
-        this.i18n().selectPlaceholder;
-      const len = Math.max(1, Math.min(8, (base || '').length));
-      this.fieldWidthCh.set(len);
     });
 
     effect(() => {
@@ -320,25 +379,24 @@ export class FilterEntryComponent {
       }
 
       const calendarHost = currentHost;
-      const calendarButton = calendarHost?.querySelector(
-        ':scope > button',
-      ) as HTMLButtonElement | null;
+      const calendarInput = calendarHost?.querySelector(
+        ':scope > div.relative > input',
+      ) as HTMLInputElement | null;
       const calendarPopover = calendarHost?.querySelector(':scope > [popover]') as
         | (HTMLElement & { showPopover?: () => void })
         | null;
 
-      calendarButton?.focus();
+      calendarInput?.focus();
 
       if (calendarPopover?.showPopover) {
         try {
           calendarPopover.showPopover();
+          queueMicrotask(() => calendarInput?.focus());
           return;
-        } catch {
-          // Fallback para navegadores/estados sem suporte consistente.
-        }
+        } catch {}
       }
 
-      calendarButton?.click();
+      calendarInput?.click();
     };
 
     requestAnimationFrame(() => {
@@ -353,7 +411,7 @@ export class FilterEntryComponent {
 
     this.isEditing.set(true);
 
-    queueMicrotask(() => {
+    setTimeout(() => {
       const wrapper = this.fieldRef()?.nativeElement;
       const first = wrapper?.querySelector<HTMLElement>('input, select, button[type=button]');
       first?.focus();
