@@ -1,4 +1,5 @@
 import { runInstallCommand } from './commands/install';
+import { runInitCommand } from './commands/init';
 import { runNewCommand } from './commands/new';
 import { PackageManager } from './utils/package-manager';
 
@@ -28,7 +29,11 @@ function getFirstPositionalArg(args: string[]): string | undefined {
     }
 
     // Skip flag value when format is "--flag value" or "-f value"
-    if ((current.startsWith('--') || current.startsWith('-')) && args[i + 1] && !args[i + 1].startsWith('-')) {
+    if (
+      (current.startsWith('--') || current.startsWith('-')) &&
+      args[i + 1] &&
+      !args[i + 1].startsWith('-')
+    ) {
       i += 1;
     }
   }
@@ -49,10 +54,12 @@ function printHelp() {
   printBanner();
   console.log('Usage:');
   console.log('  kl new <project> [--pm bun|npm|yarn|pnpm] [--verbose]');
+  console.log('  kl init [--project <name>] [--verbose]');
   console.log('  kl install <component[,component]> [--project <name>] [--verbose]');
   console.log('');
   console.log('Commands:');
   console.log('  new      Create a new UI project');
+  console.log('  init     Initialize an existing Angular project with Koala');
   console.log('  install  Add one or more components to the project');
 }
 
@@ -69,6 +76,26 @@ function printInstallHelp() {
   );
   console.log('  -p, --project=<value>  name of the project');
   console.log('  -v, --verbose          show detailed install logs');
+}
+
+function printInitHelp() {
+  console.log('initialize an existing Angular project with Koala');
+  console.log('');
+  console.log('USAGE');
+  console.log('  $ kl init');
+  console.log('  $ kl init [-p <value>] [--verbose]');
+  console.log('');
+  console.log('FLAGS');
+  console.log('  -p, --project=<value>  name of the project (defaults to current directory)');
+  console.log('  -v, --verbose          show detailed logs');
+  console.log('');
+  console.log('This command will:');
+  console.log('  • Validate the Angular project structure');
+  console.log('  • Create the standard folder structure if needed');
+  console.log('  • Detect and adapt to existing test frameworks');
+  console.log('  • Configure Vitest and Playwright if no tests are found');
+  console.log('  • Install required dependencies');
+  console.log('  • Set up ESLint and VS Code configuration');
 }
 
 export async function runCli(argv: string[]): Promise<number> {
@@ -91,6 +118,18 @@ export async function runCli(argv: string[]): Promise<number> {
       const pm = getFlagValue(args, 'pm', 'm') as PackageManager | undefined;
       const verbose = hasFlag(args, 'verbose', 'v');
       await runNewCommand({ name: name ?? '', pm, verbose });
+      return 0;
+    }
+
+    if (command === 'init') {
+      if (hasFlag(args, 'help', 'h')) {
+        printInitHelp();
+        return 0;
+      }
+
+      const project = getFlagValue(args, 'project', 'p');
+      const verbose = hasFlag(args, 'verbose', 'v');
+      await runInitCommand({ project, verbose });
       return 0;
     }
 
