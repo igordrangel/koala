@@ -64,7 +64,7 @@ export async function install(
     missingLibDeps.push(...result.missingLibs);
   }
 
-  setupComponentTests(projectName);
+  await setupComponentTests(projectName);
 
   return {
     components: [...new Set(installedComponentDeps)],

@@ -1,6 +1,6 @@
 {
   "name": "@koalarx/ui-cli",
-  "version": "0.17.1",
+  "version": "0.17.2",
   "scripts": {
     "build": "bun scripts/build",
     "build:doc": "cd libs/ui && bun run build:prod",
@@ -14,7 +14,7 @@
     "prepare:release": "npm version major",
     "test:cli": "vitest run libs/cli",
     "test:cli:watch": "vitest libs/cli",
-    "test:ui": "cd libs/ui && bun run test:unit",
+    "test:ui": "cd libs/ui && bun run test:unit && bun run e2e",
     "test": "bun run test:cli && bun run test:ui"
   },
   "prettier": {
