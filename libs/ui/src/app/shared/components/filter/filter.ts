@@ -22,6 +22,9 @@ import {
   FilterSize,
   FilterValue,
   FilterVariant,
+  FilterBadgeVariant,
+  FilterBadgeStyle,
+  FilterBadgeSize,
 } from './filter.models';
 import {
   hydrateEntriesFromQueryParams,
@@ -50,6 +53,9 @@ export class Filter {
   readonly size = input<FilterSize>('sm');
   readonly variant = input<FilterVariant>('default');
   readonly i18n = input<FilterI18n>(DEFAULT_FILTER_I18N);
+  readonly badgeVariant = input<FilterBadgeVariant>('success');
+  readonly badgeStyle = input<FilterBadgeStyle>('soft');
+  readonly badgeSize = input<FilterBadgeSize>('sm');
 
   readonly filtersChange = output<FilterValue[]>();
 

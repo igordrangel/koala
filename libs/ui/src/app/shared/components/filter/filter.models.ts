@@ -23,6 +23,19 @@ export type FilterFieldType =
 // ─── Size & Variant ───────────────────────────────────────────────────────────
 export type FilterSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
+export type FilterBadgeVariant =
+  | 'neutral'
+  | 'primary'
+  | 'secondary'
+  | 'accent'
+  | 'info'
+  | 'success'
+  | 'warning'
+  | 'error';
+
+export type FilterBadgeStyle = 'soft' | 'outline' | 'dash';
+export type FilterBadgeSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+
 export type FilterVariant =
   | 'default'
   | 'primary'

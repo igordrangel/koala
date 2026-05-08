@@ -8,6 +8,9 @@ import {
   FilterI18n,
   FilterSize,
   FilterVariant,
+  FilterBadgeVariant,
+  FilterBadgeStyle,
+  FilterBadgeSize,
 } from '../filter.models';
 import { FilterEntryEditComponent } from './edit/edit';
 import { FilterEntryState } from './filter-entry.state';
@@ -35,6 +38,9 @@ export class FilterEntryComponent {
   readonly variant = input<FilterVariant>('default');
   readonly autoOpen = input(false);
   readonly i18n = input<FilterI18n>(DEFAULT_FILTER_I18N);
+  readonly badgeVariant = input<FilterBadgeVariant>('success');
+  readonly badgeStyle = input<FilterBadgeStyle>('soft');
+  readonly badgeSize = input<FilterBadgeSize>('sm');
 
   readonly valueChange = output<{ entryId: string; value: unknown }>();
   readonly remove = output<string>();
@@ -52,6 +58,9 @@ export class FilterEntryComponent {
     variant: () => this.variant(),
     autoOpen: () => this.autoOpen(),
     i18n: () => this.i18n(),
+    badgeVariant: () => this.badgeVariant(),
+    badgeStyle: () => this.badgeStyle(),
+    badgeSize: () => this.badgeSize(),
     emitValue: (value) => this.valueChange.emit({ entryId: this.entry().id, value }),
     emitRemove: (id) => this.remove.emit(id),
     emitTab: () => this.tabFromField.emit(),
