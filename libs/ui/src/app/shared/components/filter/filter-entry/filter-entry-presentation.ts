@@ -3,15 +3,16 @@ import { KlDate } from '@koalarx/utils/light/KlDate';
 import { ComboboxOption } from '../../combobox/combobox';
 import {
   DEFAULT_FILTER_I18N,
+  FilterBadgeSize,
+  FilterBadgeStyle,
+  FilterBadgeVariant,
   FilterCurrencyConfig,
   FilterDefinition,
   FilterI18n,
   FilterSize,
-  FilterVariant,
 } from '../filter.models';
 import {
   CHIP_SIZE,
-  CHIP_VARIANT,
   FIELD_SIZE,
   INPUT_MASK_BY_FIELD,
   INPUT_MODE_BY_FIELD,
@@ -35,10 +36,12 @@ export function createFilterEntryPresentation(config: {
   isRemoteValueLoading: Getter<boolean>;
   i18n: Getter<FilterI18n | undefined>;
   size: Getter<FilterSize>;
-  variant: Getter<FilterVariant>;
   isInvalid: Getter<boolean>;
   isEditing: Getter<boolean>;
   currencyInputDisplay: Getter<string>;
+  badgeVariant: Getter<FilterBadgeVariant>;
+  badgeStyle: Getter<FilterBadgeStyle>;
+  badgeSize: Getter<FilterBadgeSize>;
 }) {
   const currencyConfig = computed<FilterCurrencyConfig>(() => config.definition().currency ?? {});
   const displayValue = computed<string | null>(() => {
@@ -98,14 +101,18 @@ export function createFilterEntryPresentation(config: {
   const inputMask = computed(() => INPUT_MASK_BY_FIELD[config.definition().type]);
   const currencyDecimalDigits = computed(() => getCurrencyDecimalDigitsAttr(currencyConfig()));
   const removeLabel = computed(() => i18n().removeLabel);
+
   const chipClass = computed(() => {
     const sizeClass = CHIP_SIZE[config.size()];
     if (config.isInvalid()) {
-      return `inline-flex items-center rounded-full border font-medium transition ${sizeClass} badge badge-soft badge-error`;
+      return `inline-flex items-center rounded-full font-medium transition ${sizeClass} badge badge-error badge-soft h-auto border border-base-300`;
     }
-    const variant = config.definition().variant ?? config.variant();
-    return `inline-flex items-center rounded-full border font-medium transition ${sizeClass} ${CHIP_VARIANT[variant]}`;
+    const badgeVariant = config.badgeVariant();
+    const badgeStyle = config.badgeStyle();
+    const badgeSize = config.badgeSize();
+    return `inline-flex items-center rounded-full font-medium transition ${sizeClass} badge badge-${badgeVariant} badge-${badgeStyle} badge-${badgeSize} h-auto border border-base-300`;
   });
+
   const comboboxClass = computed(
     () =>
       `!inline-block !w-auto ${FIELD_SIZE[config.size()]} [&]:!inline-block [&]:!w-auto [&_div.group]:!h-auto [&_div.group]:!min-h-0 [&_div.group]:!w-auto [&_div.group]:!rounded-none [&_div.group]:!border-0 [&_div.group]:!bg-transparent [&_div.group]:!px-0 [&_div.group]:!shadow-none [&_div.group]:!ring-0 [&_div.group]:![font-size:inherit] [&_input]:!h-auto [&_input]:!w-auto [&_input]:!border-0 [&_input]:!bg-transparent [&_input]:!px-0 [&_input]:!py-0 [&_input]:!text-inherit [&_input]:![font-size:inherit] [&_input]:!shadow-none [&_input]:!outline-none`,

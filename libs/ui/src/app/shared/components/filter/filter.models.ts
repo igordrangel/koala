@@ -23,6 +23,19 @@ export type FilterFieldType =
 // ─── Size & Variant ───────────────────────────────────────────────────────────
 export type FilterSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
+export type FilterBadgeVariant =
+  | 'neutral'
+  | 'primary'
+  | 'secondary'
+  | 'accent'
+  | 'info'
+  | 'success'
+  | 'warning'
+  | 'error';
+
+export type FilterBadgeStyle = 'soft' | 'outline' | 'dash';
+export type FilterBadgeSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+
 export type FilterVariant =
   | 'default'
   | 'primary'
@@ -71,7 +84,33 @@ export interface FilterI18n {
   inputPlaceholder: string;
   /** Default placeholder for select/combobox fields */
   selectPlaceholder: string;
+  /** Labels used by the keyboard shortcuts helper popover */
+  shortcuts?: Partial<FilterShortcutsI18n>;
 }
+
+export interface FilterShortcutsI18n {
+  title: string;
+  buttonLabel: string;
+  buttonTooltip: string;
+  applyValue: string;
+  cancelOrRemove: string;
+  editNearestChip: string;
+  removeLastChip: string;
+  selectType: string;
+  arrowLeftAriaLabel: string;
+}
+
+export const DEFAULT_FILTER_SHORTCUTS_I18N: FilterShortcutsI18n = {
+  title: 'Keyboard shortcuts',
+  buttonLabel: 'Open keyboard shortcuts',
+  buttonTooltip: 'Keyboard shortcut tips',
+  applyValue: 'Apply value in edit mode',
+  cancelOrRemove: 'Cancel edit (or remove empty filter)',
+  editNearestChip: 'Edit nearest chip from picker (empty input)',
+  removeLastChip: 'Remove last chip from picker (empty input)',
+  selectType: 'Select type in picker list',
+  arrowLeftAriaLabel: 'ArrowLeft',
+};
 
 export const DEFAULT_FILTER_I18N: FilterI18n = {
   placeholder: 'Filter by...',
@@ -81,6 +120,7 @@ export const DEFAULT_FILTER_I18N: FilterI18n = {
   allFiltersAdded: 'All available filter types have been added.',
   inputPlaceholder: 'Fill in value',
   selectPlaceholder: 'Select',
+  shortcuts: DEFAULT_FILTER_SHORTCUTS_I18N,
 };
 
 // ─── Definition ───────────────────────────────────────────────────────────────

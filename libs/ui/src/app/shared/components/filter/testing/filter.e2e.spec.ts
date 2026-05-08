@@ -33,7 +33,7 @@ test.describe('Filter - Usabilidade e teclado', () => {
     await expect(authorInput).toBeVisible();
 
     await authorInput.fill('igor');
-    await authorInput.press('Tab');
+    await authorInput.press('Enter');
 
     await expect(getPayload(page).getByText('"key": "author"')).toBeVisible();
     await expect(getPayload(page).getByText('"value": "igor"')).toBeVisible();
@@ -63,6 +63,26 @@ test.describe('Filter - Usabilidade e teclado', () => {
     await expect(authorInput).not.toBeFocused();
   });
 
+  test('ArrowLeft no campo Filter by vazio deve abrir edicao do chip mais proximo', async ({
+    page,
+  }) => {
+    await addFilterByEnter(page, 'Author');
+
+    const authorInput = page.getByRole('textbox', { name: 'e.g. igor' });
+    await expect(authorInput).toBeVisible();
+    await authorInput.fill('igor');
+    await authorInput.press('Enter');
+
+    const picker = getPicker(page);
+    await expect(picker).toBeFocused();
+
+    await picker.press('ArrowLeft');
+
+    const reopenedAuthorInput = page.getByRole('textbox', { name: 'e.g. igor' });
+    await expect(reopenedAuthorInput).toBeFocused();
+    await expect(reopenedAuthorInput).toHaveValue('igor');
+  });
+
   test('Escape no campo em edicao sem valor aplicado deve remover o filtro', async ({ page }) => {
     await addFilterByEnter(page, 'Author');
 
@@ -82,7 +102,7 @@ test.describe('Filter - Usabilidade e teclado', () => {
 
     const authorInput = page.getByRole('textbox', { name: 'e.g. igor' });
     await authorInput.fill('igor');
-    await authorInput.press('Tab');
+    await authorInput.press('Enter');
 
     const authorChip = page.getByRole('button', { name: /Author:\s*igor/i }).first();
     await expect(authorChip).toBeVisible();
@@ -121,7 +141,7 @@ test.describe('Filter - Usabilidade e teclado', () => {
 
     const authorInput = page.getByRole('textbox', { name: 'e.g. igor' });
     await authorInput.fill('igor');
-    await authorInput.press('Tab');
+    await authorInput.press('Enter');
 
     const authorChip = page.getByRole('button', { name: /Author:\s*igor/i }).first();
     const removeButton = page.locator('[aria-label="Remove filter"]').first();
@@ -181,7 +201,7 @@ test.describe('Filter - Usabilidade e teclado', () => {
 
     const authorInput = page.getByRole('textbox', { name: 'e.g. igor' });
     await authorInput.fill('igor');
-    await authorInput.press('Tab');
+    await authorInput.press('Enter');
     await expect(getPicker(page)).toBeFocused();
 
     await addFilterByEnter(page, 'Assignee');

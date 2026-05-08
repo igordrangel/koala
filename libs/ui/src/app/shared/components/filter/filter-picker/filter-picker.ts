@@ -38,6 +38,7 @@ export class FilterPicker {
 
   readonly pick = output<string>();
   readonly backspaceOnEmpty = output<void>();
+  readonly arrowLeftOnEmpty = output<void>();
 
   readonly inputValue = signal('');
   readonly isOpen = signal(false);
@@ -84,6 +85,13 @@ export class FilterPicker {
       case 'ArrowUp':
         event.preventDefault();
         this.activeIndex.update((i) => Math.max(i - 1, 0));
+        break;
+
+      case 'ArrowLeft':
+        if (!this.inputValue().trim()) {
+          event.preventDefault();
+          this.arrowLeftOnEmpty.emit();
+        }
         break;
 
       case 'Enter':

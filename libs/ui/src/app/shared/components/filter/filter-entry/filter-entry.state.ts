@@ -8,6 +8,9 @@ import {
   FilterI18n,
   FilterSize,
   FilterVariant,
+  FilterBadgeVariant,
+  FilterBadgeStyle,
+  FilterBadgeSize,
 } from '../filter.models';
 import { isValidationControlInvalid, validateControlCandidate } from './filter-entry.utils';
 import { setupTextFieldEffects } from './fields/text/text-field.effects';
@@ -77,6 +80,9 @@ export class FilterEntryState {
       emitValue: (value: unknown) => void;
       emitRemove: (id: string) => void;
       emitTab: () => void;
+      badgeVariant: Getter<FilterBadgeVariant>;
+      badgeStyle: Getter<FilterBadgeStyle>;
+      badgeSize: Getter<FilterBadgeSize>;
     },
   ) {
     this.resources = new FilterEntryResourceState({
@@ -94,10 +100,12 @@ export class FilterEntryState {
       isRemoteValueLoading: () => this.resources.isRemoteValueLoading(),
       i18n: () => this.i18n(),
       size: () => this.size(),
-      variant: () => this.variant(),
       isInvalid: () => this.isInvalid(),
       isEditing: () => this.isEditing(),
       currencyInputDisplay: () => this.currencyInputDisplay(),
+      badgeVariant: () => this.config.badgeVariant(),
+      badgeStyle: () => this.config.badgeStyle(),
+      badgeSize: () => this.config.badgeSize(),
     });
 
     this.resolvedOptions = this.resources.resolvedOptions;
@@ -195,11 +203,7 @@ export class FilterEntryState {
   onComboboxOptionSelected(option: ComboboxOption) {
     this.resources.onComboboxOptionSelected(option);
 
-    if (
-      this.isEditing() &&
-      this.definition().type === 'combobox' &&
-      this.closeEdit()
-    ) {
+    if (this.isEditing() && this.definition().type === 'combobox' && this.closeEdit()) {
       this.config.emitTab();
     }
   }

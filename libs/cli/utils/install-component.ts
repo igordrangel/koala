@@ -134,6 +134,9 @@ export function installComponent(projectName: string, component: InstallComponen
       break;
     case 'filter':
       componentDeps.push(
+        'button',
+        'tooltip',
+        'dropdown',
         'combobox',
         'select',
         'loading',

@@ -1,5 +1,5 @@
 <div class="rounded-xl border border-base-300 bg-base-100 shadow-sm">
-  <div class="flex flex-wrap items-center gap-1 py-1 px-2" (click)="picker.focus()">
+  <div class="relative flex flex-wrap items-center gap-1 py-1 px-2" (click)="picker.focus()">
     @for (entry of entries(); track entry.id) {
       @if (getDefinition(entry.key); as definition) {
         <app-filter-entry
@@ -13,6 +13,7 @@
           (valueChange)="onEntryValueChange($event)"
           (remove)="removeFilter($event)"
           (tabFromField)="picker.focus()"
+          (editModeChange)="onEntryEditModeChange($event)"
         />
       }
     }
@@ -25,6 +26,70 @@
       [size]="size()"
       (pick)="addFilterByKey($event)"
       (backspaceOnEmpty)="removeLastFilter()"
+      (arrowLeftOnEmpty)="editLastFilter()"
     />
+
+    <app-dropdown (click)="$event.stopPropagation()">
+      <button
+        trigger
+        class="tooltip tooltip-top btn btn-ghost btn-xs h-7! w-7! min-h-7! rounded-full border border-base-300/70 text-base-content/60 hover:text-base-content"
+        [attr.data-tip]="shortcutsI18n().buttonTooltip"
+        type="button"
+        [attr.aria-label]="shortcutsI18n().buttonLabel"
+      >
+        <i class="fa-solid fa-keyboard"></i>
+      </button>
+
+      <div options class="w-80 max-w-[min(90vw,20rem)] p-3">
+        <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-base-content/60">
+          {{ shortcutsI18n().title }}
+        </p>
+
+        <div class="space-y-1 text-sm text-base-content/80">
+          <div class="grid grid-cols-[1fr_auto] items-center gap-4 rounded-md px-1.5 py-1">
+            <span>{{ shortcutsI18n().applyValue }}</span>
+            <div class="flex items-center gap-1 whitespace-nowrap">
+              <kbd class="kbd kbd-sm min-w-8 px-2">Enter</kbd>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-[1fr_auto] items-center gap-4 rounded-md px-1.5 py-1">
+            <span>{{ shortcutsI18n().cancelOrRemove }}</span>
+            <div class="flex items-center gap-1 whitespace-nowrap">
+              <kbd class="kbd kbd-sm min-w-8 px-2">Esc</kbd>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-[1fr_auto] items-center gap-4 rounded-md px-1.5 py-1">
+            <span>{{ shortcutsI18n().editNearestChip }}</span>
+            <div class="flex items-center gap-1 whitespace-nowrap">
+              <kbd
+                class="kbd kbd-sm min-w-8 px-2"
+                [attr.aria-label]="shortcutsI18n().arrowLeftAriaLabel"
+                [attr.title]="shortcutsI18n().arrowLeftAriaLabel"
+              >
+                <i class="fa-solid fa-arrow-left text-sm"></i>
+              </kbd>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-[1fr_auto] items-center gap-4 rounded-md px-1.5 py-1">
+            <span>{{ shortcutsI18n().removeLastChip }}</span>
+            <div class="flex items-center gap-1 whitespace-nowrap">
+              <kbd class="kbd kbd-sm min-w-8 px-2">Backspace</kbd>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-[1fr_auto] items-center gap-4 rounded-md px-1.5 py-1">
+            <span>{{ shortcutsI18n().selectType }}</span>
+            <div class="flex items-center gap-1 whitespace-nowrap">
+              <kbd class="kbd kbd-sm min-w-8 px-2">Enter</kbd>
+              <span class="text-xs text-base-content/50">/</span>
+              <kbd class="kbd kbd-sm min-w-8 px-2">Tab</kbd>
+            </div>
+          </div>
+        </div>
+      </div>
+    </app-dropdown>
   </div>
 </div>
