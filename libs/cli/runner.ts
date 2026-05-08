@@ -1,7 +1,21 @@
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import { runInstallCommand } from './commands/install';
 import { runInitCommand } from './commands/init';
 import { runNewCommand } from './commands/new';
 import { PackageManager } from './utils/package-manager';
+
+function getCliVersion(): string {
+  try {
+    const packageJsonPath = path.resolve(__dirname, '../../package.json');
+    const packageJsonContent = fs.readFileSync(packageJsonPath, 'utf8');
+    const packageJson = JSON.parse(packageJsonContent) as { version?: string };
+
+    return typeof packageJson.version === 'string' ? packageJson.version : 'unknown';
+  } catch {
+    return 'unknown';
+  }
+}
 
 function getFlagValue(args: string[], longName: string, shortName: string): string | undefined {
   const longIndex = args.indexOf(`--${longName}`);
@@ -56,11 +70,13 @@ function printHelp() {
   console.log('  kl new <project> [--pm bun|npm|yarn|pnpm] [--verbose]');
   console.log('  kl init [--project <name>] [--verbose]');
   console.log('  kl install <component[,component]> [--project <name>] [--verbose]');
+  console.log('  kl version');
   console.log('');
   console.log('Commands:');
   console.log('  new      Create a new UI project');
   console.log('  init     Initialize an existing Angular project with Koala');
   console.log('  install  Add one or more components to the project');
+  console.log('  version  Show the CLI version');
 }
 
 function printInstallHelp() {
@@ -103,6 +119,11 @@ export async function runCli(argv: string[]): Promise<number> {
 
   if (!command || command === '--help' || command === '-h') {
     printHelp();
+    return 0;
+  }
+
+  if (command === 'version' || command === '--version' || command === '-V') {
+    console.log(getCliVersion());
     return 0;
   }
 
