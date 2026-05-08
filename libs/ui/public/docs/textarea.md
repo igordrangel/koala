@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-kl install -n textarea
+kl install textarea
 ```
 
 ### Sizes

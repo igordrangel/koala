@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-kl install -n collapse
+kl install collapse
 ```
 
 ### Accordion

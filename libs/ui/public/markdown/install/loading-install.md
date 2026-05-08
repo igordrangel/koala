@@ -1,3 +1,3 @@
 ```bash
-kl install -n loading
+kl install loading
 ```

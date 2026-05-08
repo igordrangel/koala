@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-kl install -n side-window
+kl install side-window
 ```
 
 ### Close Corner

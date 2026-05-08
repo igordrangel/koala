@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-kl install -n toggle
+kl install toggle
 ```
 
 ### Disabled

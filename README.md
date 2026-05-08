@@ -47,14 +47,36 @@ kl new --name my-project --pm npm
 
 ---
 
-### `kl component`
+### `kl install`
 
 Adds one or more UI components to the project.
 
 ```bash
-kl component --name button
-kl component --name button,loading,dropdown
-kl component --name modal --project meu-projeto
+kl install button
+kl install button,loading,dropdown
+kl install modal --project meu-projeto
+```
+
+---
+
+### `kl init`
+
+Initializes an existing Angular project with the Koala structure and required tooling.
+
+```bash
+kl init
+kl init --project meu-projeto
+kl init --project meu-projeto --verbose
+```
+
+---
+
+### `kl version`
+
+Shows the installed CLI version.
+
+```bash
+kl version
 ```
 
 ---

@@ -1,3 +1,3 @@
 ```bash
-kl install -n button
+kl install button
 ```

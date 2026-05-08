@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-kl install -n filter
+kl install filter
 ```
 
 ### Builder

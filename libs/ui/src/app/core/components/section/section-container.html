@@ -1,7 +1,7 @@
 <section class="p-4">
-  <div class="flex items-start justify-between mb-6 gap-4">
+  <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-6 gap-4">
     <div class="flex flex-col">
-      <h1 class="text-5xl font-bold empty:hidden">
+      <h1 class="text-4xl sm:text-5xl font-bold empty:hidden">
         <ng-content select="[title]" />
       </h1>
       <small class="text-base font-light opacity-75 empty:hidden">
@@ -12,8 +12,8 @@
     <button
       (click)="copyAiDocUrl()"
       appTooltip="Copy this component's Markdown doc URL to use with AI"
-      tooltipPosition="left"
-      class="flex items-center gap-1.5 shrink-0 mt-1 px-3 py-1.5 rounded-lg border border-base-300 bg-base-100 hover:bg-base-200 text-xs font-medium text-base-content/70 hover:text-base-content transition-colors cursor-pointer"
+      tooltipPosition="bottom"
+      class="flex items-center gap-1.5 shrink-0 self-start sm:self-auto mt-0 sm:mt-1 px-3 py-1.5 rounded-lg border border-base-300 bg-base-100 hover:bg-base-200 text-xs font-medium text-base-content/70 hover:text-base-content transition-colors cursor-pointer"
     >
       @if (copied()) {
         <svg

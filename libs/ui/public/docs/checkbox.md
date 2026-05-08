@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-kl install -n checkbox
+kl install checkbox
 ```
 
 ### Disabled

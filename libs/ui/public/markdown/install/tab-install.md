@@ -1,3 +1,3 @@
 ```bash
-kl install -n tab
+kl install tabs
 ```

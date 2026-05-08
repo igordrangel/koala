@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-kl install -n confirm
+kl install confirm
 ```
 
 ### HTML

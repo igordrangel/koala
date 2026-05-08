@@ -1,3 +1,3 @@
 ```bash
-kl install -n toast
+kl install toast
 ```

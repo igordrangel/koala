@@ -1,3 +1,3 @@
 ```bash
-kl install -n range
+kl install range
 ```

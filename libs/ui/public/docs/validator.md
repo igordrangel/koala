@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-kl install -n validator
+kl install validator
 ```
 
 ### HTML

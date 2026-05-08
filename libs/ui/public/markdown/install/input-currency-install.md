@@ -1,3 +1,3 @@
 ```bash
-kl install -n input-currency
+kl install input-currency
 ```

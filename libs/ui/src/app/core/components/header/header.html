@@ -2,11 +2,13 @@
   <div class="flex items-center">
     <span class="flex items-center gap-3 mr-6">
       <i class="app-icon kl-logotype size-6!"></i>
-      <span class="badge badge-sm badge-soft bg-neutral-800 font-semibold">beta</span>
+      <span class="badge badge-sm badge-soft bg-neutral-800 font-semibold hidden sm:inline-flex">{{
+        version
+      }}</span>
     </span>
 
     <a
-      class="opacity-60"
+      class="opacity-60 hidden md:inline-flex"
       appButton
       btnSize="sm"
       btnVariant="ghost"
@@ -17,7 +19,7 @@
     </a>
 
     <a
-      class="opacity-60"
+      class="opacity-60 hidden md:inline-flex"
       appButton
       btnSize="sm"
       btnVariant="ghost"
@@ -28,7 +30,7 @@
     </a>
 
     <a
-      class="opacity-60"
+      class="opacity-60 hidden md:inline-flex"
       appButton
       btnSize="sm"
       btnVariant="ghost"
@@ -43,7 +45,7 @@
     <a
       href="https://www.npmjs.com/package/koala-utils"
       target="_blank"
-      class="relative"
+      class="relative hidden lg:inline-flex"
       appButton
       btnSize="sm"
       btnVariant="ghost"
@@ -54,7 +56,7 @@
     <a
       href="https://nest.koalarx.com"
       target="_blank"
-      class="relative"
+      class="relative hidden lg:inline-flex"
       appButton
       btnSize="sm"
       btnVariant="ghost"
@@ -62,7 +64,7 @@
       @koalarx/nest
       <i class="fa-solid fa-arrow-up-long opacity-50 rotate-45 text-[0.6rem]"></i>
     </a>
-    <span class="ml-2 mr-1 opacity-20">|</span>
+    <span class="ml-2 mr-1 opacity-20 hidden lg:inline">|</span>
     <button
       appButton
       btnSize="sm"

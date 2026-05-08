@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-kl install -n combobox
+kl install combobox
 ```
 
 ### Local
