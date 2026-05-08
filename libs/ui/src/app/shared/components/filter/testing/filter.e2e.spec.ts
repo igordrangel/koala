@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-const FILTER_ROUTE = '/e2e/filter';
+const FILTER_ROUTE = '/#/e2e/filter';
 
 function getPicker(page: import('@playwright/test').Page) {
   return page.getByRole('textbox', { name: 'Filter by...' });

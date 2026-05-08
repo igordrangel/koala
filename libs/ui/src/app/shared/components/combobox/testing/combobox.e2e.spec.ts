@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-const COMBOBOX_ROUTE = '/e2e/combobox';
+const COMBOBOX_ROUTE = '/#/e2e/combobox';
 
 function getPayload(page: import('@playwright/test').Page) {
   return page.getByLabel('Combobox payload');

@@ -52,11 +52,11 @@ const E2E_APP_HTML_CONTENT = `<router-outlet />
 `;
 
 const E2E_CONFIG_CONTENT = `import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withHashLocation } from '@angular/router';
 import { e2eRoutes } from './e2e.routes';
 
 export const e2eAppConfig: ApplicationConfig = {
-  providers: [provideBrowserGlobalErrorListeners(), provideRouter(e2eRoutes)],
+  providers: [provideBrowserGlobalErrorListeners(), provideRouter(e2eRoutes, withHashLocation())],
 };
 `;
 
