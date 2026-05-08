@@ -95,6 +95,16 @@ export function getNotInstalled(projectName: string, type: PackageType, deps: st
       }
       break;
     }
+    case 'base': {
+      const projectFolder = getProjectPath(projectName);
+
+      for (const dep of deps) {
+        if (!existsSync(`${projectFolder}/src/app/shared/base/${dep}`)) {
+          notInstalled.push(dep);
+        }
+      }
+      break;
+    }
   }
 
   return notInstalled;

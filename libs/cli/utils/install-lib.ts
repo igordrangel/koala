@@ -33,8 +33,9 @@ export async function installLib(
   const pm = detectPackageManager(projectName);
   const pmCmd = getPmCommands(pm);
 
-  runCommand(`${pmCmd.add} ${lib}`, {
+  await runCommand(`${pmCmd.add} ${lib}`, {
     cwd: getProjectPath(projectName),
+    loaderText: `Installing ${lib}`,
     verbose,
   });
 

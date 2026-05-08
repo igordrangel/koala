@@ -28,45 +28,45 @@ describe('CLI UI Logging Functions', () => {
   });
 
   describe('logStep', () => {
-    it('should log message with [STEP] prefix', () => {
+    it('should log message with ℹ prefix', () => {
       const mockLog = vi.fn();
       logStep(mockLog, 'Installing components');
 
       expect(mockLog).toHaveBeenCalledOnce();
-      expect(mockLog.mock.calls[0][0]).toContain('[STEP]');
+      expect(mockLog.mock.calls[0][0]).toContain('ℹ');
       expect(mockLog.mock.calls[0][0]).toContain('Installing components');
     });
   });
 
   describe('logSuccess', () => {
-    it('should log message with [OK] prefix', () => {
+    it('should log message with ✔ prefix', () => {
       const mockLog = vi.fn();
       logSuccess(mockLog, 'Installation completed');
 
       expect(mockLog).toHaveBeenCalledOnce();
-      expect(mockLog.mock.calls[0][0]).toContain('[OK]');
+      expect(mockLog.mock.calls[0][0]).toContain('✔');
       expect(mockLog.mock.calls[0][0]).toContain('Installation completed');
     });
   });
 
   describe('logWarning', () => {
-    it('should log message with [WARN] prefix', () => {
+    it('should log message with ⚠ prefix', () => {
       const mockLog = vi.fn();
       logWarning(mockLog, 'Some components already installed');
 
       expect(mockLog).toHaveBeenCalledOnce();
-      expect(mockLog.mock.calls[0][0]).toContain('[WARN]');
+      expect(mockLog.mock.calls[0][0]).toContain('⚠');
       expect(mockLog.mock.calls[0][0]).toContain('Some components already installed');
     });
   });
 
   describe('logError', () => {
-    it('should log message with [FAIL] prefix', () => {
+    it('should log message with ✖ prefix', () => {
       const mockLog = vi.fn();
       logError(mockLog, 'Installation failed');
 
       expect(mockLog).toHaveBeenCalledOnce();
-      expect(mockLog.mock.calls[0][0]).toContain('[FAIL]');
+      expect(mockLog.mock.calls[0][0]).toContain('✖');
       expect(mockLog.mock.calls[0][0]).toContain('Installation failed');
     });
   });

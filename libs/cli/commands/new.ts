@@ -1,4 +1,3 @@
-import chalk from 'chalk';
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import {
@@ -21,22 +20,27 @@ export interface NewArgs {
   verbose?: boolean;
 }
 
-function createAngularProject(
+async function createAngularProject(
   name: string,
   pmName: PackageManager,
   pm: PmCommands,
   verbose = false,
-) {
-  runCommand(getAngularCreateCommand(name, pmName), { verbose });
-  runCommand(`${pm.install} @koalarx/utils clsx`, {
+): Promise<void> {
+  await runCommand(getAngularCreateCommand(name, pmName), {
+    verbose,
+    loaderText: `Creating project ${name}`,
+  });
+  await runCommand(`${pm.install} @koalarx/utils clsx`, {
     cwd: name,
     verbose,
+    loaderText: 'Installing base dependencies',
   });
-  runCommand(
+  await runCommand(
     `${pm.installDev} angular-eslint @vitest/eslint-plugin eslint-plugin-prettier typescript-eslint daisyui`,
     {
       cwd: name,
       verbose,
+      loaderText: 'Installing development dependencies',
     },
   );
 
@@ -93,7 +97,7 @@ function createFolderStructure(name: string) {
   cpSync(`${originPath}/ui/eslint.config.mts`, `${name}/eslint.config.mts`);
 
   mkdirSync(`${name}/src/app/shared`, { recursive: true });
-  console.log(chalk.green('CREATED'), `${name}/src/app/shared`);
+  logSuccess(console.log, `${name}/src/app/shared created`);
 }
 
 export async function runNewCommand(args: NewArgs): Promise<void> {
@@ -108,26 +112,25 @@ export async function runNewCommand(args: NewArgs): Promise<void> {
   const pm = getPmCommands(pmName);
 
   logHeader(console.log, 'KOALA UI PROJECT SETUP', `Project: ${name}`);
-  logStep(console.log, 'Creating Angular project structure');
-  createAngularProject(name, pmName, pm, verbose);
+
+  await createAngularProject(name, pmName, pm, verbose);
   logSuccess(console.log, 'Angular project created');
 
-  logStep(console.log, 'Applying Koala folder structure and styles');
   createFolderStructure(name);
-  logSuccess(console.log, 'Koala structure ready');
+  logSuccess(console.log, 'Koala structure applied');
 
-  logStep(console.log, 'Configuring test stack (unit + e2e + CI workflow)');
-  setupGlobalTests(name, verbose);
+  await setupGlobalTests(name, verbose);
   logSuccess(console.log, 'Test stack configured');
 
-  logStep(console.log, 'Generating environments and lint baseline');
-  runCommand(getProjectExecCommand(pmName, 'ng generate environments'), {
+  await runCommand(getProjectExecCommand(pmName, 'ng generate environments'), {
     cwd: name,
     verbose,
+    loaderText: 'Generating environment files',
   });
-  runCommand(getProjectExecCommand(pmName, 'eslint . --fix'), {
+  await runCommand(getProjectExecCommand(pmName, 'eslint . --fix'), {
     cwd: name,
     verbose,
+    loaderText: 'Linting project',
   });
   logSuccess(console.log, 'Project ready');
 }
