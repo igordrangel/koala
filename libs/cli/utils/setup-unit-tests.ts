@@ -56,8 +56,9 @@ function ensureUnitTestScripts(projectName: string) {
   };
 
   packageJson.scripts ??= {};
-  packageJson.scripts['test:unit'] ??= 'vitest run';
-  packageJson.scripts['test:unit:watch'] ??= 'vitest';
+  packageJson.scripts.test = 'vitest run && playwright test';
+  packageJson.scripts['test:unit'] = 'vitest run';
+  packageJson.scripts['test:unit:watch'] = 'vitest';
 
   writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
 }

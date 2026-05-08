@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-const COMBOBOX_ROUTE = '/#/e2e/combobox';
+const COMBOBOX_ROUTE = '/e2e/combobox';
 
 function getPayload(page: import('@playwright/test').Page) {
   return page.getByLabel('Combobox payload');
@@ -14,10 +14,7 @@ async function getPayloadJson(page: import('@playwright/test').Page): Promise<{
   return JSON.parse(raw) as { assignee: number | null; labels: string[] };
 }
 
-function getComboboxInput(
-  container: import('@playwright/test').Locator,
-  placeholder: string,
-) {
+function getComboboxInput(container: import('@playwright/test').Locator, placeholder: string) {
   return container.locator(`input[placeholder="${placeholder}"]`).first();
 }
 

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-const SELECT_ROUTE = '/#/e2e/select';
+const SELECT_ROUTE = '/e2e/select';
 
 function getPayload(page: import('@playwright/test').Page) {
   return page.getByLabel('Select payload');

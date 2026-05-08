@@ -14,13 +14,13 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'list',
   use: {
-    baseURL: 'http://127.0.0.1:4300',
+    baseURL: 'http://127.0.0.1:4310',
     trace: 'on-first-retry',
   },
   webServer: {
-    command: 'npx ng serve --host 127.0.0.1 --port 4300',
-    url: 'http://127.0.0.1:4300',
-    reuseExistingServer: true,
+    command: 'npx ng serve --configuration e2e --host 127.0.0.1 --port 4310',
+    url: 'http://127.0.0.1:4310',
+    reuseExistingServer: false,
     timeout: 120000,
   },
   projects: [
@@ -75,6 +75,24 @@ function ensurePlaywrightConfig(projectName: string) {
   const configPath = `${projectPath}/playwright.config.ts`;
 
   if (existsSync(configPath)) {
+    const configContent = readFileSync(configPath, 'utf-8');
+    const updatedContent = configContent
+      .replace("baseURL: 'http://127.0.0.1:4300'", "baseURL: 'http://127.0.0.1:4310'")
+      .replace(
+        "command: 'npx ng serve --host 127.0.0.1 --port 4300'",
+        "command: 'npx ng serve --configuration e2e --host 127.0.0.1 --port 4310'",
+      )
+      .replace(
+        "command: 'npx ng serve --configuration e2e --host 127.0.0.1 --port 4300'",
+        "command: 'npx ng serve --configuration e2e --host 127.0.0.1 --port 4310'",
+      )
+      .replace("url: 'http://127.0.0.1:4300'", "url: 'http://127.0.0.1:4310'")
+      .replace('reuseExistingServer: true', 'reuseExistingServer: false');
+
+    if (updatedContent !== configContent) {
+      writeFileSync(configPath, updatedContent, 'utf-8');
+    }
+
     return;
   }
 
