@@ -1,0 +1,53 @@
+# Koala UI
+
+> An Angular component library in the style of shadcn/ui.
+> Components are copied directly into your project via the Koala CLI.
+
+## Docs
+
+- [Get Started](https://koalaui.com/docs/get-started.md): Installation and setup
+- [Alert](https://koalaui.com/docs/alert.md): Alert component
+- [Breadcrumb](https://koalaui.com/docs/breadcrumb.md): Breadcrumb component
+- [Button](https://koalaui.com/docs/button.md): Button component
+- [Calendar](https://koalaui.com/docs/calendar.md): Calendar component
+- [Checkbox](https://koalaui.com/docs/checkbox.md): Checkbox component
+- [Collapse](https://koalaui.com/docs/collapse.md): Collapse component
+- [Combobox](https://koalaui.com/docs/combobox.md): Combobox component
+- [Confirm](https://koalaui.com/docs/confirm.md): Confirm component
+- [Data Table](https://koalaui.com/docs/datatable.md): Data Table component
+- [Dropdown](https://koalaui.com/docs/dropdown.md): Dropdown component
+- [Fieldset](https://koalaui.com/docs/fieldset.md): Fieldset component
+- [Filter](https://koalaui.com/docs/filter.md): Filter component
+- [Input CNPJ](https://koalaui.com/docs/input-cnpj.md): Input CNPJ component
+- [Input CPF](https://koalaui.com/docs/input-cpf.md): Input CPF component
+- [Input Currency](https://koalaui.com/docs/input-currency.md): Input Currency component
+- [Input Field](https://koalaui.com/docs/input-field.md): Input Field component
+- [Loading](https://koalaui.com/docs/loading.md): Loading component
+- [Modal](https://koalaui.com/docs/modal.md): Modal component
+- [Pagination](https://koalaui.com/docs/pagination.md): Pagination component
+- [Radio](https://koalaui.com/docs/radio.md): Radio component
+- [Range](https://koalaui.com/docs/range.md): Range component
+- [Select](https://koalaui.com/docs/select.md): Select component
+- [Side Window](https://koalaui.com/docs/side-window.md): Side Window component
+- [Skeleton](https://koalaui.com/docs/skeleton.md): Skeleton component
+- [Stepper](https://koalaui.com/docs/stepper.md): Stepper component
+- [Table](https://koalaui.com/docs/table.md): Table component
+- [Tabs](https://koalaui.com/docs/tabs.md): Tabs component
+- [Textarea](https://koalaui.com/docs/textarea.md): Textarea component
+- [Toast](https://koalaui.com/docs/toast.md): Toast component
+- [Toggle](https://koalaui.com/docs/toggle.md): Toggle component
+- [Tooltip](https://koalaui.com/docs/tooltip.md): Tooltip component
+- [Validator](https://koalaui.com/docs/validator.md): Validator component
+
+## CLI
+
+```bash
+# Install CLI
+bun add -g @koalarx/ui-cli
+
+# Create project
+kl new -n my-app
+
+# Add components
+kl install -n button,modal,dropdown
+```

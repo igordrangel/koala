@@ -7,6 +7,7 @@
     "start": "bun run build && bun ./bin/run",
     "ui:start": "cd libs/ui && bun start",
     "generate:command": "bun scripts/generate-command",
+    "generate:llms": "node scripts/generate-llms.js",
     "version": "git add -A libs",
     "postversion": "git push && git push --tags",
     "prepare:hotfix": "npm version patch",
