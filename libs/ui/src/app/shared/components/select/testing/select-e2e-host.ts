@@ -9,7 +9,8 @@ import { Select, SelectOption } from '../select';
   imports: [JsonPipe, ReactiveFormsModule, Select],
 })
 export class SelectE2EHostComponent {
-  readonly statusControl = new FormControl<string | null>(null);
+  readonly statusOutsideControl = new FormControl<string | null>(null);
+  readonly statusInsideDialogControl = new FormControl<string | null>(null);
   readonly labelsControl = new FormControl<string[]>([], { nonNullable: true });
 
   readonly statusOptions: SelectOption[] = [
