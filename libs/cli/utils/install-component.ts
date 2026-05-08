@@ -148,7 +148,7 @@ export function installComponent(projectName: string, component: InstallComponen
       componentDeps.push('select');
       break;
     case 'datatable':
-      componentDeps.push('filter', 'button', 'table', 'pagination');
+      componentDeps.push('filter', 'button', 'table', 'pagination', 'skeleton');
       baseDeps.push('list');
       break;
   }

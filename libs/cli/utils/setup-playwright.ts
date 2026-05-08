@@ -32,7 +32,7 @@ export default defineConfig({
 });
 `;
 
-function ensurePlaywrightDependency(projectName: string, verbose = false) {
+async function ensurePlaywrightDependency(projectName: string, verbose = false) {
   const projectPath = getProjectPath(projectName);
   const packageJsonPath = `${projectPath}/package.json`;
   const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8')) as {
@@ -48,8 +48,9 @@ function ensurePlaywrightDependency(projectName: string, verbose = false) {
   }
 
   const pm = getPmCommands(detectPackageManager(projectName));
-  runCommand(`${pm.installDev} @playwright/test`, {
+  await runCommand(`${pm.installDev} @playwright/test`, {
     cwd: projectPath,
+    loaderText: 'Installing Playwright',
     verbose,
   });
 }
@@ -80,8 +81,8 @@ function ensurePlaywrightConfig(projectName: string) {
   writeFileSync(configPath, PLAYWRIGHT_CONFIG);
 }
 
-export function setupPlaywright(projectName: string, verbose = false) {
-  ensurePlaywrightDependency(projectName, verbose);
+export async function setupPlaywright(projectName: string, verbose = false) {
+  await ensurePlaywrightDependency(projectName, verbose);
   ensurePlaywrightScripts(projectName);
   ensurePlaywrightConfig(projectName);
 }

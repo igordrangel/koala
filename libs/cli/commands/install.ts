@@ -1,4 +1,4 @@
-import { logHeader, logList, logStep, logSuccess, logWarning } from '../utils/cli-ui';
+import { logHeader, logInstallSummary, logSuccess, logWarning } from '../utils/cli-ui';
 import { install } from '../utils/install';
 import { InstallComponentFlags, InstallComponentFlagsList } from '../utils/install-component';
 
@@ -31,8 +31,6 @@ export async function runInstallCommand(args: InstallArgs): Promise<void> {
   );
 
   for (const componentName of flagOptions) {
-    logStep(logger, `Installing ${componentName}`);
-
     const result = await install(projectName, componentName, verbose);
 
     if (result.missingLibs.length > 0) {
@@ -42,12 +40,7 @@ export async function runInstallCommand(args: InstallArgs): Promise<void> {
       );
     }
 
-    logList(logger, 'libs', result.libs);
-    logList(logger, 'directives', result.directives);
-    logList(logger, 'validators', result.validators);
-    logList(logger, 'utils', result.utils);
-    logList(logger, 'base', result.base);
-    logList(logger, 'dependent components', result.components);
+    logInstallSummary(logger, componentName, result);
 
     logSuccess(logger, `${componentName} installed`);
   }

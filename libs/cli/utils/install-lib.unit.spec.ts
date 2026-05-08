@@ -34,6 +34,7 @@ describe('installLib', () => {
     expect(result).toBe(true);
     expect(runCommand).toHaveBeenCalledWith('bun add @angular/aria', {
       cwd: '/tmp/project',
+      loaderText: 'Installing @angular/aria',
       verbose: false,
     });
   });
