@@ -9,13 +9,16 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ComboboxOption } from '../combobox/combobox';
+import { Dropdown } from '../dropdown';
 import { FilterEntryComponent } from './filter-entry/filter-entry';
 import { FilterPicker } from './filter-picker/filter-picker';
 import {
+  DEFAULT_FILTER_SHORTCUTS_I18N,
   DEFAULT_FILTER_I18N,
   FilterDefinition,
   FilterEntry,
   FilterI18n,
+  FilterShortcutsI18n,
   FilterSize,
   FilterValue,
   FilterVariant,
@@ -25,11 +28,7 @@ import {
   setupHydrationEffect,
   setupSyncRouterEffect,
 } from './effects';
-import {
-  buildFilterDefinitionMap,
-  buildFilterPickerOptions,
-  createFilterEntry,
-} from './helpers';
+import { buildFilterDefinitionMap, buildFilterPickerOptions, createFilterEntry } from './helpers';
 
 function hasFilterValue(value: unknown): boolean {
   if (Array.isArray(value)) {
@@ -43,7 +42,7 @@ function hasFilterValue(value: unknown): boolean {
   selector: 'app-filter',
   templateUrl: './filter.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FilterEntryComponent, FilterPicker],
+  imports: [FilterEntryComponent, FilterPicker, Dropdown],
   host: { class: 'block' },
 })
 export class Filter {
@@ -71,6 +70,13 @@ export class Filter {
   });
 
   readonly hasAvailableFilters = computed(() => this.pickerOptions().length > 0);
+
+  readonly shortcutsI18n = computed<FilterShortcutsI18n>(() => {
+    return {
+      ...DEFAULT_FILTER_SHORTCUTS_I18N,
+      ...(this.i18n().shortcuts ?? {}),
+    };
+  });
 
   readonly resolvedValues = computed<FilterValue[]>(() => {
     const map = this.definitionMap();
@@ -132,6 +138,25 @@ export class Filter {
     if (id) this.pendingOpenId.set(id);
   }
 
+  editLastFilter() {
+    const entries = this.entries();
+    const lastEntry = entries[entries.length - 1];
+
+    if (!lastEntry) {
+      return;
+    }
+
+    const id = lastEntry.id;
+
+    if (this.pendingOpenId() === id) {
+      this.pendingOpenId.set(null);
+      queueMicrotask(() => this.pendingOpenId.set(id));
+      return;
+    }
+
+    this.pendingOpenId.set(id);
+  }
+
   removeLastFilter() {
     const entries = this.entries();
     if (!entries.length) return;
@@ -140,6 +165,12 @@ export class Filter {
 
   removeFilter(entryId: string) {
     this.entries.update((entries) => entries.filter((e) => e.id !== entryId));
+  }
+
+  onEntryEditModeChange(event: { entryId: string }) {
+    if (this.pendingOpenId() === event.entryId) {
+      this.pendingOpenId.set(null);
+    }
   }
 
   getDefinition(key: string) {

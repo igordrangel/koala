@@ -1,16 +1,17 @@
 <div
   #dropdown
   class="dropdown dropdown-close"
-  [class.dropdown-top]="direction() === 'top'"
-  [class.dropdown-bottom]="direction() === 'bottom'"
-  [class.dropdown-left]="direction() === 'left'"
-  [class.dropdown-right]="direction() === 'right'"
+  [class.dropdown-top]="resolvedDirection() === 'top'"
+  [class.dropdown-bottom]="resolvedDirection() === 'bottom'"
+  [class.dropdown-end]="alignEnd()"
 >
-  <div tabindex="0" role="button">
+  <div #trigger tabindex="0" role="button">
     <ng-content select="[trigger]" />
   </div>
   <ul
+    #options
     tabindex="-1"
+    [style.max-width.px]="panelMaxWidth()"
     class="dropdown-content menu bg-base-100 rounded-box z-1 p-0 shadow-sm border-4 border-neutral-800"
   >
     <ng-content select="[options]" />

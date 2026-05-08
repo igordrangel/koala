@@ -39,10 +39,11 @@ describe('filter-entry.handlers', () => {
     expect(getChipKeyAction(createKeyboardEvent('Tab'))).toBeNull();
   });
 
-  it('getFieldKeyAction should map escape and tab actions', () => {
+  it('getFieldKeyAction should map escape and enter actions', () => {
     expect(getFieldKeyAction(createKeyboardEvent('Escape'), 'value')).toBe('cancel');
     expect(getFieldKeyAction(createKeyboardEvent('Escape'), null)).toBe('remove');
-    expect(getFieldKeyAction(createKeyboardEvent('Tab'), 'value')).toBe('tab');
+    expect(getFieldKeyAction(createKeyboardEvent('Enter'), 'value')).toBe('tab');
+    expect(getFieldKeyAction(createKeyboardEvent('Tab'), 'value')).toBeNull();
     expect(getFieldKeyAction(createKeyboardEvent('Tab', true), 'value')).toBeNull();
   });
 });
