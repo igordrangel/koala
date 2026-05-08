@@ -1,11 +1,11 @@
-import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { Component, signal } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Button } from '../../../shared/components/button/button';
-import { GithubStars } from '../github-starts/github-stars';
 import { Tooltip } from '../../../shared/components/tooltip/tooltip';
-import { NavMenu } from '../nav-menu/nav-menu';
 import { APP_VERSION } from '../../constants/app-version';
+import { GithubStars } from '../github-starts/github-stars';
+import { NavMenu } from '../nav-menu/nav-menu';
 
 @Component({
   selector: 'app-header',
@@ -18,10 +18,8 @@ export class Header {
   readonly mobileMenuVisible = signal(false);
   readonly mobileMenuOpen = signal(false);
 
-  constructor(private router: Router) {}
-
   copyLlmsUrl() {
-    const url = `${window.location.origin}/llms.txt`;
+    const url = `${location.origin}/llms.txt`;
     navigator.clipboard.writeText(url).then(() => {
       this.copied.set(true);
       setTimeout(() => this.copied.set(false), 2000);

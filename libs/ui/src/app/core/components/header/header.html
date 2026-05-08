@@ -1,199 +1,15 @@
-<div class="flex items-center justify-between py-2 w-full bg-base-100 min-w-0">
-  <!-- Mobile: Menu Button (left side) -->
-  <button
-    class="lg:hidden flex items-center gap-2 rounded-lg border border-base-300 bg-base-100 px-3 py-1.5 text-sm font-medium shrink-0"
-    (click)="toggleMobileMenu()"
-    aria-label="Toggle navigation menu"
-    type="button"
-  >
-    <i class="fa-solid fa-bars"></i>
-    Menu
-  </button>
-
-  <!-- Desktop: Logo + Desktop Navigation -->
-  <div class="hidden lg:flex items-center shrink-0">
-    <span class="flex items-center gap-3 mr-6">
-      <i class="app-icon kl-logotype size-6!"></i>
-      <span class="badge badge-sm badge-soft bg-neutral-800 font-semibold hidden sm:inline-flex">{{
-        version
-      }}</span>
+<ng-template #logotype>
+  <span class="flex items-center gap-3 mr-6">
+    <i class="app-icon kl-logotype size-6!"></i>
+    <span class="badge badge-sm badge-soft bg-neutral-800 font-semibold sm:inline-flex">
+      {{ version }}
     </span>
+  </span>
+</ng-template>
 
-    <ng-container *ngTemplateOutlet="navButtons"></ng-container>
-  </div>
-
-  <!-- Right Section: Links + Buttons -->
-  <div class="flex items-center min-w-0 gap-1 ml-auto shrink-0">
-    <!-- Desktop: External Links -->
-    <a
-      href="https://www.npmjs.com/package/koala-utils"
-      target="_blank"
-      class="relative hidden lg:inline-flex"
-      appButton
-      btnSize="sm"
-      btnVariant="ghost"
-    >
-      @koalarx/utils
-      <i class="fa-solid fa-arrow-up-long opacity-50 rotate-45 text-[0.6rem]"></i>
-    </a>
-    <a
-      href="https://nest.koalarx.com"
-      target="_blank"
-      class="relative hidden lg:inline-flex"
-      appButton
-      btnSize="sm"
-      btnVariant="ghost"
-    >
-      @koalarx/nest
-      <i class="fa-solid fa-arrow-up-long opacity-50 rotate-45 text-[0.6rem]"></i>
-    </a>
-    <span class="ml-2 mr-1 opacity-20 hidden lg:inline">|</span>
-
-    <!-- AI Docs Copy Button -->
-    <button
-      appButton
-      btnSize="sm"
-      btnVariant="ghost"
-      (click)="copyLlmsUrl()"
-      appTooltip="Copy docs index URL (llms.txt) to use with AI"
-      tooltipPosition="bottom"
-      class="relative transition-colors whitespace-nowrap"
-    >
-      @if (copied()) {
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2.5"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <polyline points="20 6 9 17 4 12" />
-        </svg>
-        <span class="text-success">Copied!</span>
-      } @else {
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
-          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-        </svg>
-        <span class="sm:hidden">Copy AI</span>
-        <span class="hidden sm:inline">Copy AI docs index</span>
-      }
-    </button>
-
-    <!-- Github Stars -->
-    <app-github-stars class="w-auto" />
-  </div>
-</div>
-
-<!-- Mobile Menu Drawer -->
-@if (mobileMenuVisible()) {
-  <button
-    class="fixed inset-0 z-30 bg-black/40 transition-opacity duration-200 ease-out lg:hidden"
-    [class.opacity-100]="mobileMenuOpen()"
-    [class.opacity-0]="!mobileMenuOpen()"
-    (click)="closeMobileMenu()"
-    aria-label="Close navigation menu"
-    type="button"
-  ></button>
-
-  <aside
-    class="fixed left-0 top-0 z-40 h-full w-72 max-w-[85vw] bg-base-100 border-r border-base-300 shadow-xl transition-transform duration-200 ease-out lg:hidden flex flex-col"
-    [class.translate-x-0]="mobileMenuOpen()"
-    [class.-translate-x-full]="!mobileMenuOpen()"
-  >
-    <!-- Mobile Menu Header: Logo + Version (fixed top) -->
-    <div
-      class="px-4 py-4 border-b border-base-300 flex items-center justify-between gap-3 shrink-0"
-    >
-      <div class="flex items-center gap-2 shrink-0">
-        <i class="app-icon kl-logotype size-6!"></i>
-        <span class="badge badge-sm badge-soft bg-neutral-800 font-semibold">{{ version }}</span>
-      </div>
-
-      <div class="flex flex-col items-center gap-3 text-xs">
-        <a
-          href="https://www.npmjs.com/package/koala-utils"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-1 px-1 py-0.5 opacity-80 hover:opacity-100 whitespace-nowrap"
-        >
-          @koalarx/utils
-          <i class="fa-solid fa-arrow-up-long rotate-45 text-[0.6rem]"></i>
-        </a>
-
-        <a
-          href="https://nest.koalarx.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-1 px-1 py-0.5 opacity-80 hover:opacity-100 whitespace-nowrap"
-        >
-          @koalarx/nest
-          <i class="fa-solid fa-arrow-up-long rotate-45 text-[0.6rem]"></i>
-        </a>
-      </div>
-    </div>
-
-    <!-- Mobile Menu Navigation Buttons (fixed below header) -->
-    <div class="px-3 py-3 border-b border-base-300 shrink-0">
-      <div class="grid grid-cols-1 gap-2">
-        <a
-          appButton
-          btnSize="sm"
-          btnVariant="ghost"
-          class="opacity-70 w-full justify-start whitespace-nowrap"
-          href="#/get-started"
-          (click)="closeMobileMenu()"
-        >
-          Get Started
-        </a>
-        <a
-          appButton
-          btnSize="sm"
-          btnVariant="ghost"
-          class="opacity-70 w-full justify-start whitespace-nowrap"
-          href="#/components"
-          (click)="closeMobileMenu()"
-        >
-          Components
-        </a>
-        <a
-          appButton
-          btnSize="sm"
-          btnVariant="ghost"
-          class="opacity-70 w-full justify-start whitespace-nowrap"
-          href="#/blocks"
-          (click)="closeMobileMenu()"
-        >
-          Blocks
-        </a>
-      </div>
-    </div>
-
-    <!-- Mobile Menu Navigation (scrollable) -->
-    <app-nav-menu class="block flex-1 overflow-y-auto"></app-nav-menu>
-  </aside>
-}
-
-<!-- Navigation Buttons Template (reused in header and mobile menu) -->
 <ng-template #navButtons>
   <a
-    class="opacity-60 hidden! md:inline-flex"
+    class="opacity-60 justify-start lg:justify-center md:inline-flex"
     appButton
     btnSize="sm"
     btnVariant="ghost"
@@ -204,7 +20,7 @@
   </a>
 
   <a
-    class="opacity-60 hidden! md:inline-flex"
+    class="opacity-60 justify-start lg:justify-center md:inline-flex"
     appButton
     btnSize="sm"
     btnVariant="ghost"
@@ -215,7 +31,7 @@
   </a>
 
   <a
-    class="opacity-60 hidden! md:inline-flex"
+    class="opacity-60 justify-start lg:justify-center md:inline-flex"
     appButton
     btnSize="sm"
     btnVariant="ghost"
@@ -225,3 +41,104 @@
     Blocks
   </a>
 </ng-template>
+
+<ng-template #externalLinks>
+  <a
+    href="https://www.npmjs.com/package/koala-utils"
+    target="_blank"
+    appButton
+    class="justify-start lg:justify-center md:inline-flex"
+    btnSize="sm"
+    btnVariant="ghost"
+  >
+    @koalarx/utils
+    <i class="fa-solid fa-arrow-up-long opacity-50 rotate-45 text-[0.6rem]"></i>
+  </a>
+  <a
+    href="https://nest.koalarx.com"
+    target="_blank"
+    appButton
+    class="justify-start lg:justify-center md:inline-flex"
+    btnSize="sm"
+    btnVariant="ghost"
+  >
+    @koalarx/nest
+    <i class="fa-solid fa-arrow-up-long opacity-50 rotate-45 text-[0.6rem]"></i>
+  </a>
+</ng-template>
+
+@if (mobileMenuVisible()) {
+  <button
+    class="fixed inset-0 z-30 bg-black/40 transition-opacity duration-200 ease-out lg:hidden"
+    [class.opacity-100]="mobileMenuOpen()"
+    [class.opacity-0]="!mobileMenuOpen()"
+    (click)="closeMobileMenu()"
+    aria-label="Close navigation menu"
+    type="button"
+  ></button>
+}
+
+<aside
+  class="fixed left-0 top-0 z-40 h-full w-72 max-w-[85vw] bg-base-100 border-r border-base-300 shadow-xl transition-transform duration-200 ease-out lg:hidden flex flex-col"
+  [class.translate-x-0]="mobileMenuOpen()"
+  [class.-translate-x-full]="!mobileMenuOpen()"
+>
+  <div class="px-4 py-4 border-b border-base-300 flex items-center justify-between gap-3 shrink-0">
+    <ng-container *ngTemplateOutlet="logotype" />
+  </div>
+
+  <div class="px-3 py-3 border-b border-base-300 shrink-0">
+    <div class="grid grid-cols-1 gap-2">
+      <ng-container *ngTemplateOutlet="externalLinks" />
+      <ng-container *ngTemplateOutlet="navButtons" />
+    </div>
+  </div>
+
+  <app-nav-menu class="block flex-1 overflow-y-auto"></app-nav-menu>
+</aside>
+
+<div class="flex items-center justify-between py-2 w-full bg-base-100 min-w-0">
+  <button
+    class="lg:hidden flex items-center gap-2 rounded-lg border border-base-300 bg-base-100 px-3 py-1.5 text-sm font-medium shrink-0"
+    (click)="toggleMobileMenu()"
+    aria-label="Toggle navigation menu"
+    type="button"
+  >
+    <i class="fa-solid fa-bars"></i>
+    Menu
+  </button>
+
+  <div class="hidden lg:flex items-center shrink-0">
+    <ng-container *ngTemplateOutlet="logotype" />
+    <ng-container *ngTemplateOutlet="navButtons" />
+  </div>
+
+  <div class="flex items-center min-w-0 gap-1 ml-auto shrink-0">
+    <div class="hidden md:flex items-center gap-1">
+      <ng-container *ngTemplateOutlet="externalLinks" />
+    </div>
+
+    <span class="ml-2 mr-1 opacity-20 hidden lg:inline">|</span>
+
+    <button
+      appButton
+      btnSize="sm"
+      btnVariant="ghost"
+      (click)="copyLlmsUrl()"
+      appTooltip="Copy docs index URL (llms.txt) to use with AI"
+      tooltipPosition="bottom"
+      class="relative transition-colors whitespace-nowrap"
+    >
+      @if (copied()) {
+        <i class="fa-solid fa-check text-success"></i>
+        <span class="text-success">Copied!</span>
+      } @else {
+        <i class="fa-regular fa-clipboard"></i>
+        <span class="sm:hidden">Copy AI</span>
+        <span class="hidden sm:inline">Copy AI docs index</span>
+      }
+    </button>
+
+    <app-github-stars class="w-auto" />
+  </div>
+</div>
