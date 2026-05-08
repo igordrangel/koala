@@ -1,3 +1,3 @@
 ```bash
-kl resource -n auth,handle-error
+kl init --project my-angular-app
 ```

@@ -1,3 +1,3 @@
 ```bash
-kl install -n modal
+kl install modal
 ```

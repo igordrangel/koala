@@ -1,3 +1,6 @@
 ```bash
-kl install -n button,dropdown,modal
+kl install button,dropdown,modal
+
+# target a specific project
+kl install modal --project my-angular-app
 ```

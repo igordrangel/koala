@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-kl install -n tooltip
+kl install tooltip
 ```
 
 ### Positions

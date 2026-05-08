@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-kl install -n pagination
+kl install pagination
 ```
 
 ### HTML

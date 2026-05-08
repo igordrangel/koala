@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-kl install -n skeleton
+kl install skeleton
 ```
 
 ### Circle

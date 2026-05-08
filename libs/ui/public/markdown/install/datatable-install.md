@@ -1,3 +1,3 @@
 ```bash
-kl install -n datatable
+kl install datatable
 ```

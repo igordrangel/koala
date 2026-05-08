@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-kl install -n input-cpf
+kl install input-cpf
 ```
 
 ### HTML

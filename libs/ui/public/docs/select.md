@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-kl install -n select
+kl install select
 ```
 
 ### Disabled

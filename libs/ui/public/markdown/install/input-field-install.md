@@ -1,3 +1,3 @@
 ```bash
-kl install -n input-field
+kl install input-field
 ```

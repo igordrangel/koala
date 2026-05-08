@@ -1,3 +1,3 @@
 ```bash
-kl install -n input-cnpj
+kl install input-cnpj
 ```

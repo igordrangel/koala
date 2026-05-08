@@ -1,3 +1,3 @@
 ```bash
-kl install -n table
+kl install table
 ```

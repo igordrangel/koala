@@ -1,6 +1,6 @@
 {
   "name": "@koalarx/ui-cli",
-  "version": "0.18.0",
+  "version": "0.18.1",
   "scripts": {
     "build": "bun scripts/build",
     "build:doc": "cd libs/ui && bun run build:prod",
@@ -8,7 +8,7 @@
     "ui:start": "cd libs/ui && bun start",
     "generate:command": "bun scripts/generate-command",
     "generate:llms": "node scripts/generate-llms.js",
-    "version": "git add -A libs",
+    "version": "node scripts/sync-ui-version.js && git add -A libs",
     "postversion": "git push && git push --tags",
     "prepare:hotfix": "npm version patch",
     "prepare:feature": "npm version minor",

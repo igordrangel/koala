@@ -1,3 +1,3 @@
 ```bash
-kl install -n alert
+kl install alert
 ```

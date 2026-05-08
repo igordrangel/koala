@@ -1,3 +1,3 @@
 ```bash
-kl install -n calendar
+kl install calendar
 ```

@@ -2,7 +2,7 @@ import { Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { KlArray } from '@koalarx/utils/KlArray';
-import { filter, map } from 'rxjs';
+import { filter, map, startWith } from 'rxjs';
 
 interface MenuOption {
   name: string;
@@ -23,10 +23,13 @@ type ModulePage = 'get-started' | 'components' | 'blocks';
   imports: [RouterLink, RouterLinkActive],
 })
 export class NavMenu {
+  private readonly router = inject(Router);
+
   private readonly currentPage = toSignal(
-    inject(Router).events.pipe(
+    this.router.events.pipe(
       filter((event) => event instanceof NavigationEnd),
       map(() => location.hash.split('/').slice(1)),
+      startWith(this.router.url.split('/').filter(Boolean)),
     ),
   );
   readonly currentModulePage = computed<ModulePage | null>(() => {

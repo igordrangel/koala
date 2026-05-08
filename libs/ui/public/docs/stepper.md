@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-kl install -n stepper
+kl install stepper
 ```
 
 ### HTML

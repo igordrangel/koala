@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-kl install -n breadcrumb
+kl install breadcrumb
 ```
 
 ### HTML

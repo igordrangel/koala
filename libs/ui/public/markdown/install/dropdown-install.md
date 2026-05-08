@@ -1,3 +1,3 @@
 ```bash
-kl install -n dropdown
+kl install dropdown
 ```

@@ -3,6 +3,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Button } from '../../../shared/components/button/button';
 import { GithubStars } from '../github-starts/github-stars';
 import { Tooltip } from '../../../shared/components/tooltip/tooltip';
+import { APP_VERSION } from '../../constants/app-version';
 
 @Component({
   selector: 'app-header',
@@ -11,6 +12,7 @@ import { Tooltip } from '../../../shared/components/tooltip/tooltip';
 })
 export class Header {
   readonly copied = signal(false);
+  readonly version = `v${APP_VERSION}`;
 
   copyLlmsUrl() {
     const url = `${window.location.origin}/llms.txt`;

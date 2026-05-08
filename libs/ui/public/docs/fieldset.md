@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-kl install -n fieldset
+kl install fieldset
 ```
 
 ### HTML
