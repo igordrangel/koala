@@ -7,7 +7,7 @@
     type="text"
     placeholder="Type here"
     [formControl]="currencyControl"
-    appMask="000.000.000-00"
+    appCurrency
   />
   @if (currencyControl.hasError('required')) {
     <span appValidatorHint>Currency is required</span>

@@ -80,6 +80,7 @@ export class Select implements ControlValueAccessor, OnDestroy {
   readonly dropdownStyle = signal('');
 
   private readonly buttonRef = viewChild<ElementRef<HTMLButtonElement>>('triggerBtn');
+  private readonly dropdownPopover = viewChild<ElementRef<HTMLElement>>('dropdownPopover');
   private _positionCleanup: (() => void)[] = [];
 
   readonly isDisabled = computed(() => this.disabled() || this.formDisabled);
@@ -215,7 +216,12 @@ export class Select implements ControlValueAccessor, OnDestroy {
   }
 
   handleDocumentPointerDown(event: PointerEvent) {
-    if (!this.elementRef.nativeElement.contains(event.target as Node)) {
+    const target = event.target as Node;
+    const popoverEl = this.dropdownPopover()?.nativeElement;
+    const insideHost = this.elementRef.nativeElement.contains(target);
+    const insidePopover = popoverEl?.contains(target) ?? false;
+
+    if (!insideHost && !insidePopover) {
       if (this.isOpen()) {
         this.closeDropdown();
         this.onTouched();
@@ -279,7 +285,12 @@ export class Select implements ControlValueAccessor, OnDestroy {
     const rect = btnEl.getBoundingClientRect();
     const DROPDOWN_MAX_HEIGHT = 296; // max-h-72 (288px) + border/padding
     const viewportPadding = 8;
-    const style: Record<string, string> = {};
+    const style: Record<string, string> = {
+      right: 'auto',
+      bottom: 'auto',
+      margin: '0',
+      position: 'fixed',
+    };
     const maxDropdownWidth = Math.max(220, window.innerWidth - viewportPadding * 2);
     const measuredWidth = this.measureOptionsWidth(btnEl);
 
@@ -314,6 +325,7 @@ export class Select implements ControlValueAccessor, OnDestroy {
 
   private openDropdown() {
     this.computeDropdownPosition();
+    this.dropdownPopover()?.nativeElement.showPopover();
     this.isOpen.set(true);
 
     const reposition = () => this.computeDropdownPosition();
@@ -339,6 +351,7 @@ export class Select implements ControlValueAccessor, OnDestroy {
   }
 
   private closeDropdown() {
+    this.dropdownPopover()?.nativeElement.hidePopover();
     this.isOpen.set(false);
     this.activeIndex.set(-1);
     this._positionCleanup.forEach((fn) => fn());
@@ -346,6 +359,9 @@ export class Select implements ControlValueAccessor, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (this.isOpen()) {
+      this.dropdownPopover()?.nativeElement.hidePopover();
+    }
     this._positionCleanup.forEach((fn) => fn());
   }
 

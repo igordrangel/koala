@@ -1,5 +1,24 @@
 <div class="mx-auto flex max-w-5xl flex-col gap-6 p-6">
-  <app-select placeholder="Pick status" [options]="statusOptions" [formControl]="statusControl" />
+  <section class="space-y-2">
+    <h2 class="text-sm font-semibold">Outside dialog</h2>
+    <app-select
+      placeholder="Pick status"
+      [options]="statusOptions"
+      [formControl]="statusOutsideControl"
+    />
+  </section>
+
+  <section class="space-y-2">
+    <h2 class="text-sm font-semibold">Inside dialog</h2>
+    <dialog #hostDialog open class="m-0 max-w-md rounded-xl border border-base-300 p-4">
+      <div class="mb-4 text-sm text-base-content/70">Dialog select test host</div>
+      <app-select
+        placeholder="Pick status in dialog"
+        [options]="statusOptions"
+        [formControl]="statusInsideDialogControl"
+      />
+    </dialog>
+  </section>
 
   <app-select
     placeholder="Pick labels"
@@ -13,7 +32,11 @@
     class="rounded-lg border border-base-300 bg-base-100 p-4 text-sm"
   >
     <pre class="overflow-x-auto text-xs leading-6">{{
-      { status: statusControl.value, labels: labelsControl.value } | json
+      {
+        statusOutside: statusOutsideControl.value,
+        statusInsideDialog: statusInsideDialogControl.value,
+        labels: labelsControl.value,
+      } | json
     }}</pre>
   </section>
 </div>
