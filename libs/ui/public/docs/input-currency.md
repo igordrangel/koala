@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-kl install input-currency
+kl install currency
 ```
 
 ### HTML
@@ -20,7 +20,7 @@ kl install input-currency
     appMask="000.000.000-00"
   />
   @if (currencyControl.hasError('required')) {
-    <span appValidatorHint>Currency is required</span>
+  <span appValidatorHint>Currency is required</span>
   }
 </app-fieldset>
 ```
