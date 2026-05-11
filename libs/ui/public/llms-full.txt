@@ -14,55 +14,55 @@ bun add -g @koalarx/ui-cli
 ## 2. Create a new project
 
 ```bash
-kl new -n example
+kl new example
 ```
 
 ## 3. Add components
 
 ```bash
-kl install -n button,dropdown,modal
+kl install button,dropdown,modal
 ```
 
 ## 4. Add resources (optional)
 
 ```bash
-kl resource -n auth,handle-error
+kl resource auth,handle-error
 ```
 
 ## Available components
 
-- **Alert** – `kl install -n alert`
-- **Breadcrumb** – `kl install -n breadcrumb`
-- **Button** – `kl install -n button`
-- **Calendar** – `kl install -n calendar`
-- **Checkbox** – `kl install -n checkbox`
-- **Collapse** – `kl install -n collapse`
-- **Combobox** – `kl install -n combobox`
-- **Confirm** – `kl install -n confirm`
-- **Data Table** – `kl install -n datatable`
-- **Dropdown** – `kl install -n dropdown`
-- **Fieldset** – `kl install -n fieldset`
-- **Filter** – `kl install -n filter`
-- **Input CNPJ** – `kl install -n input-cnpj`
-- **Input CPF** – `kl install -n input-cpf`
-- **Input Currency** – `kl install -n input-currency`
-- **Input Field** – `kl install -n input-field`
-- **Loading** – `kl install -n loading`
-- **Modal** – `kl install -n modal`
-- **Pagination** – `kl install -n pagination`
-- **Radio** – `kl install -n radio`
-- **Range** – `kl install -n range`
-- **Select** – `kl install -n select`
-- **Side Window** – `kl install -n side-window`
-- **Skeleton** – `kl install -n skeleton`
-- **Stepper** – `kl install -n stepper`
-- **Table** – `kl install -n table`
-- **Tabs** – `kl install -n tabs`
-- **Textarea** – `kl install -n textarea`
-- **Toast** – `kl install -n toast`
-- **Toggle** – `kl install -n toggle`
-- **Tooltip** – `kl install -n tooltip`
-- **Validator** – `kl install -n validator`
+- **Alert** – `kl install alert`
+- **Breadcrumb** – `kl install breadcrumb`
+- **Button** – `kl install button`
+- **Calendar** – `kl install calendar`
+- **Checkbox** – `kl install checkbox`
+- **Collapse** – `kl install collapse`
+- **Combobox** – `kl install combobox`
+- **Confirm** – `kl install confirm`
+- **Data Table** – `kl install datatable`
+- **Dropdown** – `kl install dropdown`
+- **Fieldset** – `kl install fieldset`
+- **Filter** – `kl install filter`
+- **Input CNPJ** – `kl install input-cnpj`
+- **Input CPF** – `kl install input-cpf`
+- **Input Currency** – `kl install input-currency`
+- **Input Field** – `kl install input-field`
+- **Loading** – `kl install loading`
+- **Modal** – `kl install modal`
+- **Pagination** – `kl install pagination`
+- **Radio** – `kl install radio`
+- **Range** – `kl install range`
+- **Select** – `kl install select`
+- **Side Window** – `kl install side-window`
+- **Skeleton** – `kl install skeleton`
+- **Stepper** – `kl install stepper`
+- **Table** – `kl install table`
+- **Tabs** – `kl install tabs`
+- **Textarea** – `kl install textarea`
+- **Toast** – `kl install toast`
+- **Toggle** – `kl install toggle`
+- **Tooltip** – `kl install tooltip`
+- **Validator** – `kl install validator`
 
 ---
 
@@ -71,7 +71,7 @@ kl resource -n auth,handle-error
 ## Installation
 
 ```bash
-kl install -n alert
+kl install alert
 ```
 
 ### HTML
@@ -156,7 +156,7 @@ export class AlertSample {
 ## Installation
 
 ```bash
-kl install -n breadcrumb
+kl install breadcrumb
 ```
 
 ### HTML
@@ -202,7 +202,7 @@ export class BreadcrumbSample {}
 ## Installation
 
 ```bash
-kl install -n button
+kl install button
 ```
 
 ### Circle
@@ -384,7 +384,7 @@ export class ButtonSample {}
 ## Installation
 
 ```bash
-kl install -n calendar
+kl install calendar
 ```
 
 ### HTML
@@ -473,7 +473,7 @@ export class CalendarSample {}
 ## Installation
 
 ```bash
-kl install -n checkbox
+kl install checkbox
 ```
 
 ### Disabled
@@ -574,7 +574,7 @@ export class CheckboxSample {
 ## Installation
 
 ```bash
-kl install -n collapse
+kl install collapse
 ```
 
 ### Accordion
@@ -654,7 +654,7 @@ export class CollapseSample {}
 ## Installation
 
 ```bash
-kl install -n combobox
+kl install combobox
 ```
 
 ### Local
@@ -805,7 +805,7 @@ export class ComboboxRemoteSample {
 ## Installation
 
 ```bash
-kl install -n confirm
+kl install confirm
 ```
 
 ### HTML
@@ -881,7 +881,7 @@ export class ConfirmSample {
 ## Installation
 
 ```bash
-kl install -n datatable
+kl install datatable
 ```
 
 ### HTML
@@ -1179,7 +1179,7 @@ export class DatatableSample extends ListBase<User> {
 ## Installation
 
 ```bash
-kl install -n dropdown
+kl install dropdown
 ```
 
 ### Directions
@@ -1363,7 +1363,7 @@ export class DropdownSample {}
 ## Installation
 
 ```bash
-kl install -n fieldset
+kl install fieldset
 ```
 
 ### HTML
@@ -1516,7 +1516,7 @@ export class FieldsetSample {
 ## Installation
 
 ```bash
-kl install -n filter
+kl install filter
 ```
 
 ### Builder
@@ -1804,7 +1804,7 @@ export class FilterSample {
 ## Installation
 
 ```bash
-kl install -n input-cnpj
+kl install input-cnpj
 ```
 
 ### HTML
@@ -1877,7 +1877,7 @@ export class InputCnpjSample {
 ## Installation
 
 ```bash
-kl install -n input-cpf
+kl install input-cpf
 ```
 
 ### HTML
@@ -1950,7 +1950,7 @@ export class InputCpfSample {
 ## Installation
 
 ```bash
-kl install -n input-currency
+kl install input-currency
 ```
 
 ### HTML
@@ -2017,7 +2017,7 @@ export class InputCurrencySample {
 ## Installation
 
 ```bash
-kl install -n input-field
+kl install input-field
 ```
 
 ### Sizes
@@ -2063,7 +2063,7 @@ export class InputFieldSample {}
 ## Installation
 
 ```bash
-kl install -n loading
+kl install loading
 ```
 
 ### Ball
@@ -2219,7 +2219,7 @@ export class LoadingSample {}
 ## Installation
 
 ```bash
-kl install -n modal
+kl install modal
 ```
 
 ### Dialog Alert
@@ -2452,7 +2452,7 @@ export class ModalTriggerDialogSample {
 ## Installation
 
 ```bash
-kl install -n pagination
+kl install pagination
 ```
 
 ### HTML
@@ -2498,7 +2498,7 @@ export class PaginationSample {}
 ## Installation
 
 ```bash
-kl install -n radio
+kl install radio
 ```
 
 ### Disabled
@@ -2635,7 +2635,7 @@ export class RadioSample {
 ## Installation
 
 ```bash
-kl install -n range
+kl install range
 ```
 
 ### Disabled
@@ -2736,7 +2736,7 @@ export class RangeSample {
 ## Installation
 
 ```bash
-kl install -n select
+kl install select
 ```
 
 ### Disabled
@@ -2917,7 +2917,7 @@ export class SelectSample {
 ## Installation
 
 ```bash
-kl install -n side-window
+kl install side-window
 ```
 
 ### Close Corner
@@ -3041,7 +3041,7 @@ export class SideWindowTriggerCloseCornerSample {
 ## Installation
 
 ```bash
-kl install -n skeleton
+kl install skeleton
 ```
 
 ### Circle
@@ -3153,7 +3153,7 @@ export class SkeletonSample {}
 ## Installation
 
 ```bash
-kl install -n stepper
+kl install stepper
 ```
 
 ### HTML
@@ -3242,7 +3242,7 @@ export class StepperSample {}
 ## Installation
 
 ```bash
-kl install -n table
+kl install table
 ```
 
 ### Ordered
@@ -3660,7 +3660,7 @@ export class TableSample {}
 ## Installation
 
 ```bash
-kl install -n tabs
+kl install tabs
 ```
 
 ### HTML
@@ -3718,7 +3718,7 @@ export class TabsSample {}
 ## Installation
 
 ```bash
-kl install -n textarea
+kl install textarea
 ```
 
 ### Sizes
@@ -3764,7 +3764,7 @@ export class TextareaSample {}
 ## Installation
 
 ```bash
-kl install -n toast
+kl install toast
 ```
 
 ### HTML
@@ -3849,7 +3849,7 @@ export class ToastSample {
 ## Installation
 
 ```bash
-kl install -n toggle
+kl install toggle
 ```
 
 ### Disabled
@@ -3950,7 +3950,7 @@ export class ToggleSample {
 ## Installation
 
 ```bash
-kl install -n tooltip
+kl install tooltip
 ```
 
 ### Positions
@@ -4032,7 +4032,7 @@ export class TooltipSample {}
 ## Installation
 
 ```bash
-kl install -n validator
+kl install validator
 ```
 
 ### HTML
