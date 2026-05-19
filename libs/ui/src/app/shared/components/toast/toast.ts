@@ -53,7 +53,7 @@ export class Toast {
     if (body) {
       if (!document.querySelector(`.toast`)) {
         const toastContainer = document.createElement('div');
-        toastContainer.classList.add('toast', 'toast-top', 'toast-end', 'z-10000');
+        toastContainer.classList.add('toast', 'toast-top', 'toast-center', 'z-10000');
         body.appendChild(toastContainer);
       }
 

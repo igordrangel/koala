@@ -42,12 +42,24 @@ export class CurrencyMask implements ControlValueAccessor, OnDestroy {
     this.rawDecimalDigits = '';
     this.onTouched();
   };
+  private readonly onPaste = (event: ClipboardEvent) => {
+    event.preventDefault();
+    const pasteData = event.clipboardData?.getData('text') || '';
+    const sep = this.getSep();
+    const normalized = pasteData.replace(sep, '.').replace(/[^0-9.]/g, '');
+    const num = parseFloat(normalized);
+    if (!isNaN(num)) {
+      this.writeValue(num);
+      this.emitNumericValue(num.toString());
+    }
+  };
 
   constructor() {
     const el = this.elementRef.nativeElement;
     el.addEventListener('keydown', this.onKeyDown);
     el.addEventListener('click', this.onClick);
     el.addEventListener('blur', this.onBlur);
+    el.addEventListener('paste', this.onPaste);
 
     effect(() => {
       this.render(this.elementRef.nativeElement.value);
@@ -217,5 +229,6 @@ export class CurrencyMask implements ControlValueAccessor, OnDestroy {
     el.removeEventListener('keydown', this.onKeyDown);
     el.removeEventListener('click', this.onClick);
     el.removeEventListener('blur', this.onBlur);
+    el.removeEventListener('paste', this.onPaste);
   }
 }

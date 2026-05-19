@@ -9,6 +9,6 @@ export function buildFilterPickerOptions(
 
   return definitions
     .filter((definition) => definition.allowMultiple || !activeKeys.has(definition.key))
-    .map((definition) => ({ value: definition.key, label: definition.label }))
+    .map((definition) => ({ value: definition.key, label: definition.label, data: undefined }))
     .sort((left, right) => left.label.localeCompare(right.label, 'pt-BR', { sensitivity: 'base' }));
 }

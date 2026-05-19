@@ -21,12 +21,17 @@ interface User {
   eyeColor: string;
 }
 
+interface UserFilter {
+  name?: string;
+  email?: string;
+}
+
 @Component({
   selector: 'app-datatable-sample',
   templateUrl: './datatable-sample.html',
   imports: [Filter, Table, Pagination, Skeleton, Button, Loading],
 })
-export class DatatableSample extends ListBase<User> {
+export class DatatableSample extends ListBase<User, UserFilter> {
   constructor() {
     super([
       FilterDef.text('name', 'Name').build(),
@@ -37,13 +42,7 @@ export class DatatableSample extends ListBase<User> {
   }
 
   protected override datalist = resource({
-    params: () => ({
-      filter: this.filter(),
-      page: this.currentPage(),
-      pageSize: this.pageSize(),
-      sortBy: this.orderedBy()?.field,
-      order: this.orderedBy()?.direction,
-    }),
+    params: () => this.filterParams,
     defaultValue: this.defaultList,
     loader: async ({ params, abortSignal }) => {
       const page = params.page ?? 1;
@@ -55,26 +54,22 @@ export class DatatableSample extends ListBase<User> {
       const response = await fetch(endpoint, { signal: abortSignal });
       const data: { users: User[]; total: number } = await response.json();
 
-      function getFilter(key: string) {
-        return params.filter?.find((f) => f.key === key);
-      }
-
       const users = new KlArray<User>(
         data.users.filter((item) => {
-          const nameFilter = getFilter('name');
-          const emailFilter = getFilter('email');
+          const nameFilter = params.filter.name;
+          const emailFilter = params.filter.email;
 
           return (
             (!nameFilter ||
-              item.firstName.includes(nameFilter.value as string) ||
-              item.lastName.includes(nameFilter.value as string)) &&
-            (!emailFilter || item.email === (emailFilter.value as string))
+              item.firstName.toLowerCase().includes(nameFilter.toLowerCase()) ||
+              item.lastName.toLowerCase().includes(nameFilter.toLowerCase())) &&
+            (!emailFilter || item.email.toLowerCase() === emailFilter.toLowerCase())
           );
         }),
       );
 
       const totalItems = users.length;
-      const limitedItems = users.split(params.pageSize ?? 10)[page - 1];
+      const limitedItems = users.split(params.pageSize)[page - 1];
 
       this.totalItems.set(totalItems);
 

@@ -15,7 +15,7 @@ interface MenuOptions {
   items: MenuOption[];
 }
 
-type ModulePage = 'get-started' | 'components' | 'blocks';
+type ModulePage = 'get-started' | 'components' | 'blocks' | 'resources';
 
 @Component({
   selector: 'app-nav-menu',
@@ -34,7 +34,7 @@ export class NavMenu {
   );
   readonly currentModulePage = computed<ModulePage | null>(() => {
     const url = this.currentPage()?.[0];
-    if (url === 'get-started' || url === 'components' || url === 'blocks') {
+    if (url === 'get-started' || url === 'components' || url === 'blocks' || url === 'resources') {
       return url;
     }
     return null;
@@ -106,6 +106,7 @@ export class NavMenu {
 
   readonly blocks = new KlArray<MenuOption>([
     { name: 'Datatable', routerLink: 'blocks/datatable' },
+    { name: 'Login', routerLink: 'blocks/login' },
   ]).orderBy('name');
 
   readonly resources = new KlArray<MenuOptions>([
@@ -114,7 +115,6 @@ export class NavMenu {
       items: new KlArray<MenuOption>([
         { name: 'HttpBase', routerLink: 'resources/http-base', commingSoon: true },
         { name: 'ListBase', routerLink: 'resources/list-base' },
-        { name: 'FormBase', routerLink: 'resources/form-base', commingSoon: true },
         { name: 'PageBase', routerLink: 'resources/page-base', commingSoon: true },
       ]).orderBy('name'),
     },
@@ -127,9 +127,8 @@ export class NavMenu {
     {
       name: 'Security & Policies',
       items: new KlArray<MenuOption>([
-        { name: 'Auth', routerLink: 'resources/auth', commingSoon: true },
+        { name: 'Auth', routerLink: 'resources/auth' },
         { name: 'Rules', routerLink: 'resources/rules', commingSoon: true },
-        { name: 'Global Errors', routerLink: 'resources/global-errors', commingSoon: true },
       ]).orderBy('name'),
     },
   ]).orderBy('name');

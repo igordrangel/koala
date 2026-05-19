@@ -5,4 +5,8 @@ export const ROUTES: Routes = [
     path: 'datatable',
     loadComponent: () => import('./datatable/datatable.page').then((m) => m.DatatablePage),
   },
+  {
+    path: 'login',
+    loadComponent: () => import('./login/login.page').then((m) => m.LoginPage),
+  },
 ];

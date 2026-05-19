@@ -1,7 +1,10 @@
 @theme {
-  --animate-slide-in-left: slide-in-left 0.1s ease-in-out;
-  --animate-slide-out-right: slide-out-right 0.1s ease-in-out;
-  --animate-zoom-out: animate-zoom-out 0.1s ease-in-out;
+  --animate-slide-in-left: slide-in-left 0.2s ease-in-out;
+  --animate-slide-out-right: slide-out-right 0.2s ease-in-out;
+  --animate-zoom-out: animate-zoom-out 0.2s ease-in-out;
+  --animate-zoom-in: animate-zoom-in 0.2s ease-in-out;
+  --animate-fade-out: animate-fade-out 0.2s ease-in-out;
+  --animate-fade-in: animate-fade-in 0.2s ease-in-out;
 
   @keyframes slide-in-left {
     0% {
@@ -33,6 +36,17 @@
     }
   }
 
+  @keyframes animate-zoom-in {
+    from {
+      transform: scale(0);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
   @keyframes animate-zoom-out {
     from {
       transform: scale(1);
@@ -41,6 +55,31 @@
     to {
       transform: scale(0);
       opacity: 0;
+    }
+  }
+
+  @keyframes animate-fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes animate-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes show-border-scroll {
+    from,
+    to {
+      --border-scroll-color: var(--color-base-300);
     }
   }
 }

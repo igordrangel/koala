@@ -1,6 +1,9 @@
 import { logHeader, logInstallSummary, logSuccess, logWarning } from '../utils/cli-ui';
 import { install } from '../utils/install';
 import { InstallComponentFlags, InstallComponentFlagsList } from '../utils/install-component';
+import { detectPackageManager, getProjectExecCommand } from '../utils/package-manager';
+import { getProjectPath } from '../utils/project-path';
+import { runCommand } from '../utils/run-command';
 
 export interface InstallArgs {
   name: string;
@@ -14,7 +17,7 @@ export async function runInstallCommand(args: InstallArgs): Promise<void> {
   const verbose = args.verbose ?? false;
 
   if (!args.name) {
-    throw new Error('Please provide components (e.g. "kl install datatable") or use --name/-n');
+    throw new Error('Please provide components (e.g. "kl install button") or use --name/-n');
   }
 
   const flagOptions = args.name.split(',').map((name) => name.trim()) as InstallComponentFlags[];
@@ -44,4 +47,12 @@ export async function runInstallCommand(args: InstallArgs): Promise<void> {
 
     logSuccess(logger, `${componentName} installed`);
   }
+
+  const pm = detectPackageManager(projectName);
+
+  await runCommand(getProjectExecCommand(pm, 'eslint . --fix'), {
+    cwd: getProjectPath(projectName),
+    verbose,
+    loaderText: 'Linting project',
+  });
 }

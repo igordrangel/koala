@@ -1,5 +1,5 @@
 <div class="flex justify-between items-center gap-10">
-  <div class="flex items-center gap-4 dark:text-neutral-500">
+  <div class="flex items-center gap-2 dark:text-neutral-500">
     <span class="whitespace-nowrap font-light" [class]="textSizeClass()">
       Items per page limit
     </span>
@@ -17,6 +17,7 @@
 
   <div class="join">
     <button
+      type="button"
       class="join-item btn"
       [class]="sizeClass()"
       [disabled]="currentPage() <= 1"
@@ -25,6 +26,7 @@
       <i class="fa-solid fa-angles-left"></i>
     </button>
     <button
+      type="button"
       class="join-item btn"
       [class]="sizeClass()"
       [disabled]="currentPage() <= 1"
@@ -35,6 +37,7 @@
 
     @for (page of pages(); track $index) {
       <button
+        type="button"
         class="join-item btn"
         [class]="sizeClass()"
         [class.btn-active]="page === currentPage()"
@@ -46,6 +49,7 @@
     }
 
     <button
+      type="button"
       class="join-item btn"
       [class]="sizeClass()"
       [disabled]="currentPage() >= totalPages()"
@@ -54,6 +58,7 @@
       <i class="fa-solid fa-angle-right"></i>
     </button>
     <button
+      type="button"
       class="join-item btn"
       [class]="sizeClass()"
       [disabled]="currentPage() >= totalPages()"

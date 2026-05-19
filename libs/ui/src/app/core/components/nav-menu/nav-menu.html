@@ -5,7 +5,6 @@
     <li>
       @switch (currentModulePage()) {
         @case ('get-started') {
-          <h2 class="menu-title">Get Started</h2>
           <ul>
             @for (item of getStarted; track $index) {
               <li>
@@ -25,40 +24,34 @@
           </ul>
         }
         @case ('components') {
-          <h2 class="menu-title">Components</h2>
           @for (item of components; track $index) {
+            <h2 class="menu-title">{{ item.name }}</h2>
             <ul>
-              <li>
-                <a>{{ item.name }}</a>
-                <ul>
-                  @for (subItem of item.items; track $index) {
-                    <li>
-                      <a
-                        class="opacity-60"
-                        [routerLink]="subItem.routerLink"
-                        routerLinkActive="opacity-100"
-                      >
-                        <span class="flex items-center gap-2">
-                          {{ subItem.name }}
+              @for (subItem of item.items; track $index) {
+                <li>
+                  <a
+                    class="opacity-60"
+                    [routerLink]="subItem.routerLink"
+                    routerLinkActive="opacity-100"
+                  >
+                    <span class="flex items-center gap-2">
+                      {{ subItem.name }}
 
-                          @if (subItem.commingSoon) {
-                            <span class="badge badge-xs badge-soft bg-neutral-700 text-white">
-                              soon
-                            </span>
-                          }
+                      @if (subItem.commingSoon) {
+                        <span class="badge badge-xs badge-soft bg-neutral-700 text-white">
+                          soon
                         </span>
-                      </a>
-                    </li>
-                  }
-                </ul>
-              </li>
+                      }
+                    </span>
+                  </a>
+                </li>
+              }
             </ul>
           }
         }
         @case ('blocks') {
-          <h2 class="menu-title">Blocks</h2>
-          @for (item of blocks; track $index) {
-            <ul>
+          <ul>
+            @for (item of blocks; track $index) {
               <li>
                 <a class="opacity-60" [routerLink]="item.routerLink" routerLinkActive="opacity-100">
                   <span class="flex items-center gap-2">
@@ -72,36 +65,32 @@
                   </span>
                 </a>
               </li>
-            </ul>
-          }
-
-          <h2 class="menu-title">Resources</h2>
+            }
+          </ul>
+        }
+        @case ('resources') {
           @for (item of resources; track $index) {
+            <h2 class="menu-title">{{ item.name }}</h2>
             <ul>
-              <li>
-                <a>{{ item.name }}</a>
-                <ul>
-                  @for (subItem of item.items; track $index) {
-                    <li>
-                      <a
-                        class="opacity-60"
-                        [routerLink]="subItem.routerLink"
-                        routerLinkActive="opacity-100"
-                      >
-                        <span class="flex items-center gap-2">
-                          {{ subItem.name }}
+              @for (subItem of item.items; track $index) {
+                <li>
+                  <a
+                    class="opacity-60"
+                    [routerLink]="subItem.routerLink"
+                    routerLinkActive="opacity-100"
+                  >
+                    <span class="flex items-center gap-2">
+                      {{ subItem.name }}
 
-                          @if (subItem.commingSoon) {
-                            <span class="badge badge-xs badge-soft bg-neutral-700 text-white">
-                              soon
-                            </span>
-                          }
+                      @if (subItem.commingSoon) {
+                        <span class="badge badge-xs badge-soft bg-neutral-700 text-white">
+                          soon
                         </span>
-                      </a>
-                    </li>
-                  }
-                </ul>
-              </li>
+                      }
+                    </span>
+                  </a>
+                </li>
+              }
             </ul>
           }
         }

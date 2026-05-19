@@ -40,7 +40,7 @@ export class FilterEntryResourceState {
 
     if (value == null || value === '' || !cachedLabel) return options;
     if (options.some((option) => `${option.value}` === `${value}`)) return options;
-    return [{ value, label: cachedLabel }, ...options];
+    return [{ value, label: cachedLabel, data: undefined }, ...options];
   });
 
   readonly comboboxResourceFactory = computed<ComboboxResourceFactory<unknown> | undefined>(() => {
