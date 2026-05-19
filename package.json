@@ -63,6 +63,15 @@
   "bin": {
     "kl": "./bin/run.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/igordrangel/koala.git"
+  },
+  "author": "Igor D. Rangel",
+  "bugs": {
+    "url": "https://github.com/igordrangel/koala/issues"
+  },
+  "homepage": "https://github.com/igordrangel/koala#readme",
   "keywords": [
     "koalarx",
     "ui",
