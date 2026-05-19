@@ -7,6 +7,7 @@
 
 - [Get Started](https://koalarx.com/docs/get-started.md): Installation and setup
 - [Alert](https://koalarx.com/docs/alert.md): Alert component
+- [Auth](https://koalarx.com/docs/auth.md): Auth resource
 - [Breadcrumb](https://koalarx.com/docs/breadcrumb.md): Breadcrumb component
 - [Button](https://koalarx.com/docs/button.md): Button component
 - [Calendar](https://koalarx.com/docs/calendar.md): Calendar component
@@ -22,7 +23,9 @@
 - [Input CPF](https://koalarx.com/docs/input-cpf.md): Input CPF component
 - [Input Currency](https://koalarx.com/docs/input-currency.md): Input Currency component
 - [Input Field](https://koalarx.com/docs/input-field.md): Input Field component
+- [ListBase](https://koalarx.com/docs/list-base.md): ListBase resource
 - [Loading](https://koalarx.com/docs/loading.md): Loading component
+- [Login](https://koalarx.com/docs/login.md): Login block
 - [Modal](https://koalarx.com/docs/modal.md): Modal component
 - [Pagination](https://koalarx.com/docs/pagination.md): Pagination component
 - [Radio](https://koalarx.com/docs/radio.md): Radio component
@@ -46,8 +49,8 @@
 bun add -g @koalarx/ui-cli
 
 # Create project
-kl new -n my-app
+kl new my-app
 
 # Add components
-kl install -n button,modal,dropdown
+kl install button,modal,dropdown
 ```

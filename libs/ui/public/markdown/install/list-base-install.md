@@ -1,3 +1,3 @@
 ```bash
-kl install list
+kl install list-base
 ```

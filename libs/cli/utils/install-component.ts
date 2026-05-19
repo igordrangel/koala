@@ -155,6 +155,7 @@ export function installComponent(projectName: string, component: InstallComponen
       break;
     case 'list-base':
       baseDeps.push('list');
+      componentDeps.push('filter', 'table');
       break;
     case 'auth':
       libDeps.push('jwt-decode');
