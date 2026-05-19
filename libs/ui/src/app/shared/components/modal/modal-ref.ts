@@ -22,11 +22,20 @@ export class ModalRef {
   private readonly afterCloseTrigger = inject<ModalAfterCloseTriggerFn>(MODAL_AFTER_CLOSE_TRIGGER);
 
   dismiss(afterCloseTrigger?: ModalAfterCloseTrigger) {
-    this.componentRef().destroy();
-    this.appRef.detachView(this.componentRef().hostView);
+    this.componentRef()
+      .location.nativeElement.querySelector('.modal')
+      .classList.add('animate-fade-out');
+    this.componentRef()
+      .location.nativeElement.querySelector('.modal-box')
+      .classList.add('animate-zoom-out');
 
-    if (afterCloseTrigger) {
-      this.afterCloseTrigger(afterCloseTrigger);
-    }
+    setTimeout(() => {
+      this.componentRef().destroy();
+      this.appRef.detachView(this.componentRef().hostView);
+
+      if (afterCloseTrigger) {
+        this.afterCloseTrigger(afterCloseTrigger);
+      }
+    }, 200);
   }
 }

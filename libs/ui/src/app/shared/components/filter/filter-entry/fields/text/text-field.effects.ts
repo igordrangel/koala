@@ -24,9 +24,7 @@ export function setupTextFieldEffects(config: {
   // Handle text value changes from user input
   config.validationControl.valueChanges
     .pipe(takeUntilDestroyed(config.destroyRef))
-    .subscribe((value) => {
-      config.updateInvalidState();
-    });
+    .subscribe(() => config.updateInvalidState());
 
   // Initialize validation control when entry changes (new filter selected)
   effect(() => {

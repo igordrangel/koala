@@ -1,3 +1,3 @@
 ```bash
-kl install datatable
+kl install filter,table,pagination,skeleton,button,loading,list
 ```

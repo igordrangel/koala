@@ -19,17 +19,17 @@ export class ComboboxPage {
   readonly remoteComboboxControl = new FormControl<number | null>(15);
 
   readonly localOptions: ComboboxOption<string>[] = [
-    { value: 'sp', label: 'Sao Paulo' },
-    { value: 'rj', label: 'Rio de Janeiro' },
-    { value: 'mg', label: 'Minas Gerais' },
-    { value: 'ba', label: 'Bahia' },
-    { value: 'pr', label: 'Parana' },
-    { value: 'sc', label: 'Santa Catarina' },
-    { value: 'rs', label: 'Rio Grande do Sul' },
-    { value: 'pe', label: 'Pernambuco' },
+    { value: 'sp', label: 'Sao Paulo', data: undefined },
+    { value: 'rj', label: 'Rio de Janeiro', data: undefined },
+    { value: 'mg', label: 'Minas Gerais', data: undefined },
+    { value: 'ba', label: 'Bahia', data: undefined },
+    { value: 'pr', label: 'Parana', data: undefined },
+    { value: 'sc', label: 'Santa Catarina', data: undefined },
+    { value: 'rs', label: 'Rio Grande do Sul', data: undefined },
+    { value: 'pe', label: 'Pernambuco', data: undefined },
   ];
 
-  readonly usersResourceFactory: ComboboxResourceFactory<unknown> = (
+  readonly usersResourceFactory: ComboboxResourceFactory<unknown, any> = (
     filter: Signal<string>,
     selectedValues: Signal<unknown[]>,
   ) =>
@@ -77,7 +77,7 @@ export class ComboboxPage {
                       label: `${user.firstName} ${user.lastName}`,
                       value: user.id,
                       data: user,
-                    } as ComboboxOption<number>)
+                    } as ComboboxOption<number, any>)
                   : null,
               ),
           ),

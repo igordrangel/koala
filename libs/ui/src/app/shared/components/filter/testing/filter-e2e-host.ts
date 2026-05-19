@@ -16,8 +16,8 @@ export class FilterE2EHostComponent {
     id: number;
     firstName: string;
     lastName: string;
-  }): ComboboxOption<number> {
-    const option: ComboboxOption<number> = {
+  }): ComboboxOption<number, any> {
+    const option: ComboboxOption<number, any> = {
       label: `${user.firstName} ${user.lastName}`,
       value: user.id,
       data: user,
@@ -49,23 +49,23 @@ export class FilterE2EHostComponent {
   }
 
   private readonly statusOptions: ComboboxOption<string>[] = [
-    { value: 'open', label: 'Open' },
-    { value: 'closed', label: 'Closed' },
-    { value: 'draft', label: 'Draft' },
+    { value: 'open', label: 'Open', data: undefined },
+    { value: 'closed', label: 'Closed', data: undefined },
+    { value: 'draft', label: 'Draft', data: undefined },
   ];
 
   private readonly labelOptions: ComboboxOption<string>[] = [
-    { value: 'frontend', label: 'Frontend' },
-    { value: 'backend', label: 'Backend' },
-    { value: 'docs', label: 'Documentation' },
-    { value: 'design-system', label: 'Design System' },
+    { value: 'frontend', label: 'Frontend', data: undefined },
+    { value: 'backend', label: 'Backend', data: undefined },
+    { value: 'docs', label: 'Documentation', data: undefined },
+    { value: 'design-system', label: 'Design System', data: undefined },
   ];
 
   private readonly typeOptions: ComboboxOption<string>[] = [
-    { value: 'feat', label: 'Feature' },
-    { value: 'fix', label: 'Fix' },
-    { value: 'docs', label: 'Docs' },
-    { value: 'refactor', label: 'Refactor' },
+    { value: 'feat', label: 'Feature', data: undefined },
+    { value: 'fix', label: 'Fix', data: undefined },
+    { value: 'docs', label: 'Docs', data: undefined },
+    { value: 'refactor', label: 'Refactor', data: undefined },
   ];
 
   private readonly usersResourceFactory = (values: Signal<unknown[]>, filter?: Signal<string>) =>

@@ -1,14 +1,22 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter, withHashLocation } from '@angular/router';
 
-import { HttpClient } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  HttpClient,
+  provideHttpClient,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
 import { MARKED_OPTIONS, provideMarkdown } from 'ngx-markdown';
 import { routes } from './app.routes';
+import { FeedbackRequestInterceptor } from './core/interceptors/feedback-request-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withHashLocation()),
+    provideHttpClient(withInterceptorsFromDi()),
+    { provide: HTTP_INTERCEPTORS, useClass: FeedbackRequestInterceptor, multi: true },
     provideMarkdown({
       loader: HttpClient,
       markedOptions: {

@@ -1,34 +1,6 @@
-i.app-icon {
-  display: inline-block;
-  width: var(--text-base);
-  height: var(--text-base);
-}
-
-i.app-icon:after {
-  content: '';
-  display: inline-block;
-  width: 100%;
-  height: 100%;
-
-  background-color: var(--color-neutral-700);
-
-  mask-size: contain;
-  mask-repeat: no-repeat;
-  mask-position: center;
-}
-
-html.dark i.app-icon:after {
-  background-color: var(--color-white);
-}
-
-html.dark button i.app-icon:after {
-  background-color: var(--btn-fg, var(--color-white));
-}
-
-button i.app-icon:after {
-  background-color: var(--btn-fg, var(--color-neutral-900));
-}
-
-i.app-icon.kl-logotype:after {
-  mask-image: url('../../public/assets/icons/kl-logotype.svg');
+@utility kl-logotype {
+  &::after {
+    -webkit-mask-image: url('/assets/icons/kl-logotype.svg');
+    mask-image: url('/assets/icons/kl-logotype.svg');
+  }
 }

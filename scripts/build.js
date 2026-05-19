@@ -4,6 +4,16 @@ import { cpSync, rmSync, readFileSync, writeFileSync } from 'node:fs';
 rmSync('dist', { recursive: true, force: true });
 spawnSync('tsc', ['-p', 'libs/cli/tsconfig.json'], { stdio: 'inherit' });
 cpSync('libs/ui/.vscode/settings.json', 'dist/ui/.vscode/settings.json');
+cpSync(
+  'libs/ui/src/app/core/constants/security-storage-keys.ts',
+  'dist/ui/core/constants/security-storage-keys.ts',
+);
+cpSync('libs/ui/src/app/core/guards', 'dist/ui/core/guards', { recursive: true });
+cpSync('libs/ui/src/app/core/interceptors', 'dist/ui/core/interceptors', { recursive: true });
+cpSync('libs/ui/src/app/core/middlewares', 'dist/ui/core/middlewares', { recursive: true });
+cpSync('libs/ui/src/app/core/models', 'dist/ui/core/models', { recursive: true });
+cpSync('libs/ui/src/app/core/security', 'dist/ui/core/security', { recursive: true });
+cpSync('libs/ui/src/app/core/utils', 'dist/ui/core/utils', { recursive: true });
 cpSync('libs/ui/src/app/shared/components', 'dist/ui/components', { recursive: true });
 cpSync('libs/ui/src/app/shared/validators', 'dist/ui/validators', { recursive: true });
 cpSync('libs/ui/src/app/shared/directives', 'dist/ui/directives', { recursive: true });

@@ -40,9 +40,31 @@
   >
     Blocks
   </a>
+
+  <a
+    class="opacity-60 justify-start lg:justify-center md:inline-flex"
+    appButton
+    btnSize="sm"
+    btnVariant="ghost"
+    routerLink="resources"
+    routerLinkActive="opacity-100"
+  >
+    Resources
+  </a>
 </ng-template>
 
 <ng-template #externalLinks>
+  <a
+    href="https://www.npmjs.com/package/@koalarx/ui-cli"
+    target="_blank"
+    appButton
+    class="justify-start lg:justify-center md:inline-flex"
+    btnSize="sm"
+    btnVariant="ghost"
+  >
+    @koalarx/ui-cli
+    <i class="fa-solid fa-arrow-up-long opacity-50 rotate-45 text-[0.6rem]"></i>
+  </a>
   <a
     href="https://www.npmjs.com/package/koala-utils"
     target="_blank"

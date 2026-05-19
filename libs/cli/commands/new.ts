@@ -1,5 +1,6 @@
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { logHeader, logSuccess } from '../utils/cli-ui';
 import {
   askPackageManager,
   getAngularCreateCommand,
@@ -8,7 +9,6 @@ import {
   PackageManager,
   PmCommands,
 } from '../utils/package-manager';
-import { logHeader, logStep, logSuccess } from '../utils/cli-ui';
 import { runCommand } from '../utils/run-command';
 import { setupGlobalTests } from '../utils/setup-global-tests';
 
@@ -36,7 +36,7 @@ async function createAngularProject(
     loaderText: 'Installing base dependencies',
   });
   await runCommand(
-    `${pm.installDev} angular-eslint @vitest/eslint-plugin eslint-plugin-prettier typescript-eslint daisyui`,
+    `${pm.installDev} angular-eslint @vitest/eslint-plugin eslint-plugin-prettier typescript-eslint daisyui @types/node`,
     {
       cwd: name,
       verbose,
@@ -83,6 +83,7 @@ function createFolderStructure(name: string) {
     readFileSync(`${name}/tsconfig.app.json`, 'utf-8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, ''),
   );
   tsConfigApp.compilerOptions.rootDir = './src';
+  tsConfigApp.compilerOptions.types = ['node'];
   tsConfigApp.include = ['src/**/*.ts'];
   tsConfigApp.exclude = ['src/**/*.spec.ts'];
   writeFileSync(`${name}/tsconfig.app.json`, JSON.stringify(tsConfigApp, null, 2));
@@ -91,6 +92,7 @@ function createFolderStructure(name: string) {
     readFileSync(`${name}/tsconfig.spec.json`, 'utf-8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, ''),
   );
   tsConfigSpec.compilerOptions.rootDir = './src';
+  tsConfigSpec.compilerOptions.types = ['node'];
   tsConfigSpec.include = ['src/**/*.d.ts', 'src/**/*.spec.ts'];
   writeFileSync(`${name}/tsconfig.spec.json`, JSON.stringify(tsConfigSpec, null, 2));
 

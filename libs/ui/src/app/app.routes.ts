@@ -43,6 +43,11 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
+    path: 'resources',
+    redirectTo: 'resources/list-base',
+    pathMatch: 'full',
+  },
+  {
     path: 'get-started',
     loadChildren: () => import('./features/get-started/routes').then((m) => m.ROUTES),
   },
@@ -53,5 +58,9 @@ export const routes: Routes = [
   {
     path: 'blocks',
     loadChildren: () => import('./features/blocks/routes').then((m) => m.ROUTES),
+  },
+  {
+    path: 'resources',
+    loadChildren: () => import('./features/resources/routes').then((m) => m.ROUTES),
   },
 ];

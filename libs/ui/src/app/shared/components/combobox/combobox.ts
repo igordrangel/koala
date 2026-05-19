@@ -27,18 +27,19 @@ import {
 import { setupComboboxKeyboardHandling } from './combobox.keyboard-handlers';
 import { ComboboxInputHandlers } from './combobox.input-handlers';
 
-export interface ComboboxOption<TValue = unknown, TData = unknown> {
+export interface ComboboxOption<TValue = unknown, TData = undefined> {
   value: TValue;
   label: string;
-  data?: TData;
+  description?: string;
+  data: TData;
   disabled?: boolean;
 }
 
-export type ComboboxResourceResult<TValue = unknown, TData = unknown> =
+export type ComboboxResourceResult<TValue = unknown, TData = undefined> =
   | Resource<ComboboxOption<TValue, TData>[] | undefined>
   | ResourceRef<ComboboxOption<TValue, TData>[] | undefined>;
 
-export type ComboboxResourceFactory<TValue = unknown, TData = unknown> = (
+export type ComboboxResourceFactory<TValue = unknown, TData = undefined> = (
   filter: Signal<string>,
   selectedValues: Signal<TValue[]>,
 ) => ComboboxResourceResult<TValue, TData>;

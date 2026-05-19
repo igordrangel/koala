@@ -1,5 +1,8 @@
-import { Component, computed, effect, input, linkedSignal, output } from '@angular/core';
+import { Component, computed, effect, inject, input, linkedSignal, output } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { map } from 'rxjs/internal/operators/map';
 import { Select, SelectOption } from '../select/select';
 
 export type PaginationSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -11,13 +14,29 @@ export type PaginationSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 })
 export class Pagination {
   private firstLoad = true;
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly paginationParams = toSignal(
+    this.activatedRoute.queryParamMap.pipe(
+      map((params) => {
+        const page = params.get('page');
+        const pageSize = params.get('pageSize');
+
+        return {
+          page: page ? Number(page) : 1,
+          pageSize: pageSize ? Number(pageSize) : 10,
+        };
+      }),
+    ),
+    { initialValue: { page: 1, pageSize: 10 } },
+  );
 
   readonly pageSizeOptions: SelectOption<number>[] = [
-    { label: '10', value: 10 },
-    { label: '20', value: 20 },
-    { label: '30', value: 30 },
-    { label: '50', value: 50 },
-    { label: '100', value: 100 },
+    { label: '10', value: 10, data: undefined },
+    { label: '20', value: 20, data: undefined },
+    { label: '30', value: 30, data: undefined },
+    { label: '50', value: 50, data: undefined },
+    { label: '100', value: 100, data: undefined },
   ];
   readonly pageChange = output<number>();
   readonly pageSizeChange = output<number>();
@@ -89,7 +108,13 @@ export class Pagination {
 
   constructor() {
     effect(() => {
-      this.pageChange.emit(this.currentPage());
+      const page = this.currentPage();
+
+      this.pageChange.emit(page);
+      this.router.navigate([], {
+        queryParams: { page },
+        queryParamsHandling: 'merge',
+      });
     });
 
     effect(() => {
@@ -103,7 +128,20 @@ export class Pagination {
     });
 
     effect(() => {
-      this.pageSizeChange.emit(this.currentPageSize());
+      const pageSize = this.currentPageSize();
+
+      this.pageSizeChange.emit(pageSize);
+      this.router.navigate([], {
+        queryParams: { pageSize },
+        queryParamsHandling: 'merge',
+      });
+    });
+
+    effect(() => {
+      const { page, pageSize } = this.paginationParams();
+
+      this.currentPage.set(page);
+      this.currentPageSize.set(pageSize);
     });
   }
 

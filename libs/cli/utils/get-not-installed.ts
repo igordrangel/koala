@@ -5,8 +5,16 @@ import { InstallDirectiveFlags } from './install-directive';
 import { InstallUtilFlags } from './install-util';
 import { InstallValidatorFlags } from './install-validator';
 import { getProjectPath } from './project-path';
+import { InstallCoreResourceFlags } from './install-core-resource';
 
-export type PackageType = 'component' | 'validator' | 'directives' | 'utils' | 'lib' | 'base';
+export type PackageType =
+  | 'component'
+  | 'validator'
+  | 'directives'
+  | 'utils'
+  | 'lib'
+  | 'base'
+  | 'core-resource';
 
 export function getNotInstalled(
   projectName: string,
@@ -37,6 +45,12 @@ export function getNotInstalled(
   type: 'base',
   deps: InstallBaseFlags[],
 ): InstallBaseFlags[];
+
+export function getNotInstalled(
+  projectName: string,
+  type: 'core-resource',
+  deps: InstallCoreResourceFlags[],
+): InstallCoreResourceFlags[];
 
 export function getNotInstalled(projectName: string, type: 'lib', deps: string[]): string[];
 
@@ -100,6 +114,16 @@ export function getNotInstalled(projectName: string, type: PackageType, deps: st
 
       for (const dep of deps) {
         if (!existsSync(`${projectFolder}/src/app/shared/base/${dep}`)) {
+          notInstalled.push(dep);
+        }
+      }
+      break;
+    }
+    case 'core-resource': {
+      const projectFolder = getProjectPath(projectName);
+
+      for (const dep of deps) {
+        if (!existsSync(`${projectFolder}/src/app/core/${dep}`)) {
           notInstalled.push(dep);
         }
       }

@@ -70,6 +70,7 @@ const COMPONENTS = [
 
   // components
   { name: 'alert', label: 'Alert' },
+  { name: 'auth', label: 'Auth' },
   { name: 'breadcrumb', label: 'Breadcrumb' },
   { name: 'button', label: 'Button' },
   { name: 'calendar', label: 'Calendar' },
@@ -77,7 +78,7 @@ const COMPONENTS = [
   { name: 'collapse', label: 'Collapse' },
   { name: 'combobox', label: 'Combobox' },
   { name: 'confirm', label: 'Confirm' },
-  { name: 'datatable', label: 'Data Table' },
+  { name: 'datatable', label: 'DataTable' },
   { name: 'dropdown', label: 'Dropdown' },
   { name: 'fieldset', label: 'Fieldset' },
   { name: 'filter', label: 'Filter' },
@@ -85,7 +86,9 @@ const COMPONENTS = [
   { name: 'input-cpf', label: 'Input CPF' },
   { name: 'input-currency', label: 'Input Currency' },
   { name: 'input-field', label: 'Input Field' },
+  { name: 'list-base', label: 'ListBase' },
   { name: 'loading', label: 'Loading' },
+  { name: 'login', label: 'Login' },
   { name: 'modal', label: 'Modal' },
   { name: 'pagination', label: 'Pagination' },
   { name: 'radio', label: 'Radio' },
@@ -251,7 +254,7 @@ for (const component of COMPONENTS) {
 // llms.txt  (https://llmstxt.org/)
 // ---------------------------------------------------------------------------
 
-const BASE_URL = 'https://koalaui.com';
+const BASE_URL = 'https://koalarx.com';
 
 const llmsTxt = `# Koala UI
 
@@ -273,10 +276,10 @@ ${generated
 bun add -g @koalarx/ui-cli
 
 # Create project
-kl new -n my-app
+kl new my-app
 
 # Add components
-kl install -n button,modal,dropdown
+kl install button,modal,dropdown
 \`\`\`
 `;
 

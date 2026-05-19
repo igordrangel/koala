@@ -6,6 +6,7 @@ import { InstallValidatorFlags } from './install-validator';
 import { InstallDirectiveFlags } from './install-directive';
 import { InstallUtilFlags } from './install-util';
 import { InstallBaseFlags } from './install-base';
+import { InstallCoreResourceFlags } from './install-core-resource';
 
 const originPath = path.join(__dirname, '../../');
 
@@ -42,7 +43,8 @@ export const InstallComponentFlagsList = [
   'select',
   'combobox',
   'filter',
-  'datatable',
+  'list-base',
+  'auth',
 ] as const;
 export type InstallComponentFlags = (typeof InstallComponentFlagsList)[number];
 
@@ -86,6 +88,7 @@ export function installComponent(projectName: string, component: InstallComponen
   const directiveDeps: InstallDirectiveFlags[] = [];
   const utilDeps: InstallUtilFlags[] = [];
   const baseDeps: InstallBaseFlags[] = [];
+  const coreResourceDeps: InstallCoreResourceFlags[] = [];
 
   switch (component) {
     case 'confirm':
@@ -150,9 +153,22 @@ export function installComponent(projectName: string, component: InstallComponen
     case 'pagination':
       componentDeps.push('select');
       break;
-    case 'datatable':
-      componentDeps.push('filter', 'button', 'table', 'pagination', 'skeleton');
+    case 'list-base':
       baseDeps.push('list');
+      componentDeps.push('filter', 'table');
+      break;
+    case 'auth':
+      libDeps.push('jwt-decode');
+      coreResourceDeps.push(
+        'constants/security-storage-keys',
+        'guards/route-access.guard',
+        'interceptors/authorization-interceptor',
+        'security/authorization.service',
+        'models/credentials',
+        'models/logged-user',
+        'utils/authentication',
+        'utils/routes-registre',
+      );
       break;
   }
 
@@ -173,5 +189,6 @@ export function installComponent(projectName: string, component: InstallComponen
     directiveDeps,
     utilDeps,
     baseDeps,
+    coreResourceDeps,
   };
 }

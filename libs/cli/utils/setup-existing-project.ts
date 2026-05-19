@@ -1,12 +1,12 @@
-import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { detectTestFramework, hasTestsConfigured } from './detect-test-framework';
-import { validateAngularProject } from './validate-project';
-import { getProjectPath } from './project-path';
-import { detectPackageManager, getPmCommands } from './package-manager';
-import { runCommand } from './run-command';
-import { logStep, logSuccess, logWarning } from './cli-ui';
-import { setupGlobalTests } from './setup-global-tests';
+import { cpSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
+import { logStep, logSuccess, logWarning } from './cli-ui';
+import { detectTestFramework } from './detect-test-framework';
+import { detectPackageManager, getPmCommands } from './package-manager';
+import { getProjectPath } from './project-path';
+import { runCommand } from './run-command';
+import { setupGlobalTests } from './setup-global-tests';
+import { validateAngularProject } from './validate-project';
 
 const originPath = path.join(__dirname, '../../');
 
@@ -58,7 +58,7 @@ export async function setupExistingProject(projectName: string, verbose = false)
       try {
         cpSync(`${originIconsPath}`, `${themeIconsPath}`, { recursive: true });
         logSuccess(logger, 'Ícones copiados');
-      } catch (err) {
+      } catch {
         logWarning(logger, 'Falha ao copiar ícones - continue manualmente se necessário');
       }
     }

@@ -14,14 +14,14 @@ export class SelectE2EHostComponent {
   readonly labelsControl = new FormControl<string[]>([], { nonNullable: true });
 
   readonly statusOptions: SelectOption[] = [
-    { value: 'open', label: 'Open' },
-    { value: 'closed', label: 'Closed' },
-    { value: 'draft', label: 'Draft' },
+    { value: 'open', label: 'Open', data: undefined },
+    { value: 'closed', label: 'Closed', data: undefined },
+    { value: 'draft', label: 'Draft', data: undefined },
   ];
 
   readonly labelOptions: SelectOption[] = [
-    { value: 'frontend', label: 'Frontend' },
-    { value: 'backend', label: 'Backend' },
-    { value: 'docs', label: 'Documentation' },
+    { value: 'frontend', label: 'Frontend', data: undefined },
+    { value: 'backend', label: 'Backend', data: undefined },
+    { value: 'docs', label: 'Documentation', data: undefined },
   ];
 }

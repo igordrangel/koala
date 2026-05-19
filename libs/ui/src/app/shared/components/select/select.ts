@@ -8,6 +8,7 @@ import {
   inject,
   input,
   OnDestroy,
+  output,
   signal,
   viewChild,
 } from '@angular/core';
@@ -20,10 +21,12 @@ import {
   toggleSelectValue,
 } from './select.helpers';
 
-export interface SelectOption<TValue = unknown> {
+export interface SelectOption<TValue = unknown, TData = undefined> {
   value: TValue;
   label: string;
+  description?: string;
   disabled?: boolean;
+  data: TData;
 }
 
 export type SelectSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -74,8 +77,11 @@ export class Select implements ControlValueAccessor, OnDestroy {
   readonly badgeStyle = input<SelectBadgeStyle>('soft');
   readonly badgeSize = input<SelectBadgeSize>('xs');
 
+  readonly selectedChanges = output<any>();
+
   readonly isOpen = signal(false);
   readonly activeIndex = signal(-1);
+  readonly selectedOptions = signal<SelectOption<any, any>[]>([]);
   readonly selectedValues = signal<unknown[]>([]);
   readonly dropdownStyle = signal('');
 
@@ -111,6 +117,159 @@ export class Select implements ControlValueAccessor, OnDestroy {
   readonly checkIconClass = computed(() => {
     return getSelectCheckIconClass(this.badgeVariant());
   });
+
+  private measureOptionsWidth(btnEl: HTMLElement): number {
+    const labels = this.options().map((option) => option.label ?? `${option.value ?? ''}`);
+    if (!labels.length) {
+      return 0;
+    }
+
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    const computedFont = getComputedStyle(btnEl).font;
+
+    if (context && computedFont) {
+      context.font = computedFont;
+      const widest = labels.reduce(
+        (max, label) => Math.max(max, context.measureText(label).width),
+        0,
+      );
+      return Math.ceil(widest + 72);
+    }
+
+    const widestChars = labels.reduce((max, label) => Math.max(max, label.length), 0);
+    return widestChars * 8 + 72;
+  }
+
+  private computeDropdownPosition() {
+    const btnEl = this.buttonRef()?.nativeElement;
+    const dropdownElement = this.dropdownPopover()?.nativeElement;
+
+    if (!btnEl || !dropdownElement) return;
+
+    setTimeout(() => {
+      // getBoundingClientRect() já retorna coordenadas do viewport —
+      // exatamente o que position:fixed precisa.
+      const rect = btnEl.getBoundingClientRect();
+
+      // Limites do espaço disponível para cálculo de colisão.
+      // Quando dentro de um dialog, restringe ao tamanho dele;
+      // caso contrário usa o viewport inteiro.
+      let containerLeft = 0;
+      let containerTop = 0;
+      let containerRight = window.innerWidth;
+      let containerBottom = window.innerHeight;
+
+      const dialog = btnEl.closest('dialog');
+      if (dialog && (dialog as HTMLDialogElement).open) {
+        const dRect = dialog.getBoundingClientRect();
+        containerLeft = dRect.left;
+        containerTop = dRect.top;
+        containerRight = dRect.right;
+        containerBottom = dRect.bottom;
+      }
+
+      const dropdownRect = dropdownElement.getBoundingClientRect();
+
+      const DROPDOWN_MAX_HEIGHT = dropdownRect.height;
+      const viewportPadding = 8;
+      const style: Record<string, string> = {};
+
+      const maxDropdownWidth = Math.max(220, containerRight - containerLeft - viewportPadding * 2);
+      const measuredWidth = this.measureOptionsWidth(btnEl);
+
+      const spaceBelow = containerBottom - rect.bottom;
+      const spaceAbove = rect.top - containerTop;
+
+      // POSICIONAMENTO VERTICAL (coordenadas do viewport)
+      if (spaceBelow >= DROPDOWN_MAX_HEIGHT || spaceBelow >= spaceAbove) {
+        style['top'] = `${rect.bottom + 4}px`;
+      } else {
+        style['top'] = `${rect.top - DROPDOWN_MAX_HEIGHT - 4}px`;
+      }
+
+      const minDropdownWidth = this.inline() ? 96 : rect.width;
+      const desiredWidth = Math.min(maxDropdownWidth, Math.max(minDropdownWidth, measuredWidth));
+
+      const spaceRight = containerRight - rect.left;
+
+      // POSICIONAMENTO HORIZONTAL (coordenadas do viewport)
+      if (spaceRight >= desiredWidth) {
+        style['left'] = `${rect.left}px`;
+      } else {
+        style['left'] = `${rect.right - desiredWidth}px`;
+      }
+
+      style['width'] = `${desiredWidth}px`;
+      style['max-width'] = `${maxDropdownWidth}px`;
+      style['right'] = 'auto';
+      style['bottom'] = 'auto';
+      style['margin'] = '0';
+      style['position'] = 'fixed';
+      style['opacity'] = '1';
+
+      this.dropdownStyle.set(
+        Object.entries(style)
+          .map(([key, value]) => `${key}:${value}`)
+          .join(';'),
+      );
+    });
+  }
+
+  private openDropdown() {
+    this.computeDropdownPosition();
+    this.dropdownPopover()?.nativeElement.showPopover();
+    this.isOpen.set(true);
+
+    const reposition = () => this.computeDropdownPosition();
+    window.addEventListener('scroll', reposition, { passive: true, capture: true });
+    window.addEventListener('resize', reposition, { passive: true });
+    this._positionCleanup = [
+      () => window.removeEventListener('scroll', reposition, { capture: true }),
+      () => window.removeEventListener('resize', reposition),
+    ];
+
+    const selectedValue = this.selectedValues()[0];
+    const selectedIndex = this.options().findIndex((option) =>
+      Object.is(option.value, selectedValue),
+    );
+
+    if (selectedIndex >= 0 && !this.options()[selectedIndex]?.disabled) {
+      this.activeIndex.set(selectedIndex);
+      return;
+    }
+
+    const firstEnabled = this.options().findIndex((option) => !option.disabled);
+    this.activeIndex.set(firstEnabled);
+  }
+
+  private closeDropdown() {
+    this.dropdownPopover()?.nativeElement.hidePopover();
+    this.isOpen.set(false);
+    this.activeIndex.set(-1);
+    this._positionCleanup.forEach((fn) => fn());
+    this._positionCleanup = [];
+  }
+
+  private moveActive(step: 1 | -1) {
+    const options = this.options();
+
+    if (!options.length) {
+      this.activeIndex.set(-1);
+      return;
+    }
+
+    let index = this.activeIndex();
+
+    for (let i = 0; i < options.length; i++) {
+      index = (index + step + options.length) % options.length;
+
+      if (!options[index]?.disabled) {
+        this.activeIndex.set(index);
+        return;
+      }
+    }
+  }
 
   toggleOpen() {
     if (this.isDisabled()) return;
@@ -255,133 +414,10 @@ export class Select implements ControlValueAccessor, OnDestroy {
     this.formDisabled = isDisabled;
   }
 
-  private measureOptionsWidth(btnEl: HTMLElement): number {
-    const labels = this.options().map((option) => option.label ?? `${option.value ?? ''}`);
-    if (!labels.length) {
-      return 0;
-    }
-
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    const computedFont = getComputedStyle(btnEl).font;
-
-    if (context && computedFont) {
-      context.font = computedFont;
-      const widest = labels.reduce(
-        (max, label) => Math.max(max, context.measureText(label).width),
-        0,
-      );
-      return Math.ceil(widest + 72);
-    }
-
-    const widestChars = labels.reduce((max, label) => Math.max(max, label.length), 0);
-    return widestChars * 8 + 72;
-  }
-
-  private computeDropdownPosition() {
-    const btnEl = this.buttonRef()?.nativeElement;
-    if (!btnEl) return;
-
-    const rect = btnEl.getBoundingClientRect();
-    const DROPDOWN_MAX_HEIGHT = 296; // max-h-72 (288px) + border/padding
-    const viewportPadding = 8;
-    const style: Record<string, string> = {
-      right: 'auto',
-      bottom: 'auto',
-      margin: '0',
-      position: 'fixed',
-    };
-    const maxDropdownWidth = Math.max(220, window.innerWidth - viewportPadding * 2);
-    const measuredWidth = this.measureOptionsWidth(btnEl);
-
-    const spaceBelow = window.innerHeight - rect.bottom;
-    const spaceAbove = rect.top;
-
-    if (spaceBelow >= DROPDOWN_MAX_HEIGHT || spaceBelow >= spaceAbove) {
-      style['top'] = `${rect.bottom + 4}px`;
-    } else {
-      style['bottom'] = `${window.innerHeight - rect.top + 4}px`;
-    }
-
-    const minDropdownWidth = this.inline() ? 96 : rect.width;
-    const desiredWidth = Math.min(maxDropdownWidth, Math.max(minDropdownWidth, measuredWidth));
-    const spaceRight = window.innerWidth - rect.left;
-
-    if (spaceRight >= desiredWidth) {
-      style['left'] = `${rect.left}px`;
-    } else {
-      style['right'] = `${window.innerWidth - rect.right}px`;
-    }
-
-    style['width'] = `${desiredWidth}px`;
-    style['max-width'] = `${maxDropdownWidth}px`;
-
-    this.dropdownStyle.set(
-      Object.entries(style)
-        .map(([key, value]) => `${key}:${value}`)
-        .join(';'),
-    );
-  }
-
-  private openDropdown() {
-    this.computeDropdownPosition();
-    this.dropdownPopover()?.nativeElement.showPopover();
-    this.isOpen.set(true);
-
-    const reposition = () => this.computeDropdownPosition();
-    window.addEventListener('scroll', reposition, { passive: true, capture: true });
-    window.addEventListener('resize', reposition, { passive: true });
-    this._positionCleanup = [
-      () => window.removeEventListener('scroll', reposition, { capture: true }),
-      () => window.removeEventListener('resize', reposition),
-    ];
-
-    const selectedValue = this.selectedValues()[0];
-    const selectedIndex = this.options().findIndex((option) =>
-      Object.is(option.value, selectedValue),
-    );
-
-    if (selectedIndex >= 0 && !this.options()[selectedIndex]?.disabled) {
-      this.activeIndex.set(selectedIndex);
-      return;
-    }
-
-    const firstEnabled = this.options().findIndex((option) => !option.disabled);
-    this.activeIndex.set(firstEnabled);
-  }
-
-  private closeDropdown() {
-    this.dropdownPopover()?.nativeElement.hidePopover();
-    this.isOpen.set(false);
-    this.activeIndex.set(-1);
-    this._positionCleanup.forEach((fn) => fn());
-    this._positionCleanup = [];
-  }
-
   ngOnDestroy() {
     if (this.isOpen()) {
       this.dropdownPopover()?.nativeElement.hidePopover();
     }
     this._positionCleanup.forEach((fn) => fn());
-  }
-
-  private moveActive(step: 1 | -1) {
-    const options = this.options();
-
-    if (!options.length) {
-      this.activeIndex.set(-1);
-      return;
-    }
-
-    let index = this.activeIndex();
-
-    for (let i = 0; i < options.length; i++) {
-      index = (index + step + options.length) % options.length;
-
-      if (!options[index]?.disabled) {
-        this.activeIndex.set(index);
-        return;
-      }
-    }
   }
 }

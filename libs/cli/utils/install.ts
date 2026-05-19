@@ -7,6 +7,7 @@ import { installLib } from './install-lib';
 import { setupComponentTests } from './setup-component-tests';
 import { installUtil, InstallUtilFlags } from './install-util';
 import { installValidator, InstallValidatorFlags } from './install-validator';
+import { installCoreResource, InstallCoreResourceFlags } from './install-core-resource';
 
 export async function install(
   projectName: string,
@@ -20,6 +21,7 @@ export async function install(
   const installedDirectiveDeps: InstallDirectiveFlags[] = [];
   const installedUtilDeps: InstallUtilFlags[] = [];
   const installedBaseDeps: InstallBaseFlags[] = [];
+  const installedCoreResourceDeps: InstallCoreResourceFlags[] = [];
 
   const deps = installComponent(projectName, component);
 
@@ -53,6 +55,11 @@ export async function install(
     installedBaseDeps.push(dep);
   }
 
+  for (const dep of getNotInstalled(projectName, 'core-resource', deps.coreResourceDeps)) {
+    installCoreResource(projectName, dep);
+    installedCoreResourceDeps.push(dep);
+  }
+
   for (const component of getNotInstalled(projectName, 'component', deps.componentDeps)) {
     const result = await install(projectName, component, verbose);
     installedComponentDeps.push(...result.components, component);
@@ -61,6 +68,7 @@ export async function install(
     installedValidatorDeps.push(...result.validators);
     installedDirectiveDeps.push(...result.directives);
     installedBaseDeps.push(...result.base);
+    installedCoreResourceDeps.push(...result.coreResources);
     missingLibDeps.push(...result.missingLibs);
   }
 
@@ -73,6 +81,7 @@ export async function install(
     directives: [...new Set(installedDirectiveDeps)],
     utils: [...new Set(installedUtilDeps)],
     base: [...new Set(installedBaseDeps)],
+    coreResources: [...new Set(installedCoreResourceDeps)],
     missingLibs: [...new Set(missingLibDeps)],
   };
 }

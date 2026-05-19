@@ -13,14 +13,14 @@ export class ComboboxE2EHostComponent {
   readonly labelsControl = new FormControl<string[]>([], { nonNullable: true });
 
   readonly assigneeOptions: ComboboxOption<number>[] = [
-    { value: 1, label: 'Emily Johnson' },
-    { value: 2, label: 'Michael Brown' },
-    { value: 3, label: 'Sophia Smith' },
+    { value: 1, label: 'Emily Johnson', data: undefined },
+    { value: 2, label: 'Michael Brown', data: undefined },
+    { value: 3, label: 'Sophia Smith', data: undefined },
   ];
 
   readonly labelOptions: ComboboxOption<string>[] = [
-    { value: 'frontend', label: 'Frontend' },
-    { value: 'backend', label: 'Backend' },
-    { value: 'design-system', label: 'Design System' },
+    { value: 'frontend', label: 'Frontend', data: undefined },
+    { value: 'backend', label: 'Backend', data: undefined },
+    { value: 'design-system', label: 'Design System', data: undefined },
   ];
 }

@@ -8,41 +8,39 @@ export interface DatalistResponse<TDataItem> {
 }
 
 @Directive()
-export abstract class ListBase<TDataItem = any, TQuery = any> {
+export abstract class ListBase<TDataItem = any, TFilterPayload = Record<string, any>> {
   protected readonly currentPage = signal<number | null>(1);
-  protected readonly pageSize = signal<number | null>(10);
+  protected readonly pageSize = signal<number | null>(30);
   protected readonly totalItems = signal<number | null>(0);
-
   protected readonly orderedBy = signal<OrderBy | null>(null);
-
   protected readonly filter = signal<FilterValue[] | null>(null);
 
-  protected readonly skeletonItems = computed(() => Array.from({ length: this.pageSize() || 10 }));
+  protected readonly skeletonItems = computed(() => Array.from({ length: 10 }));
   protected readonly defaultList: DatalistResponse<TDataItem> = { items: [], count: 0 };
 
-  protected abstract readonly datalist: ResourceRef<DatalistResponse<TDataItem>>;
-
-  readonly reload = input<boolean>(false);
-
-  protected get filterPayload(): TQuery {
-    const payload: Partial<TQuery> = {};
+  protected get filterPayload() {
+    const payload: Record<string, any> = {};
 
     this.filter()?.forEach((item) => {
-      payload[item.key as keyof TQuery] = item.value as any;
+      payload[item.key] = item.value;
     });
 
-    return payload as TQuery;
+    return payload as TFilterPayload;
   }
 
   protected get filterParams() {
     return {
-      filter: this.filter(),
-      page: this.currentPage(),
-      pageSize: this.pageSize(),
+      filter: this.filterPayload,
+      page: this.currentPage() ?? 1,
+      pageSize: this.pageSize() ?? 10,
       sortBy: this.orderedBy()?.field,
       order: this.orderedBy()?.direction,
     };
   }
+
+  protected abstract readonly datalist: ResourceRef<DatalistResponse<TDataItem>>;
+
+  readonly reload = input<boolean>(false);
 
   constructor(protected readonly filterDefinitions: FilterDefinition[] = []) {
     effect(() => {
@@ -50,5 +48,9 @@ export abstract class ListBase<TDataItem = any, TQuery = any> {
         this.datalist.reload();
       }
     });
+  }
+
+  reloadList() {
+    this.datalist.reload();
   }
 }
