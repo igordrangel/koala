@@ -33,6 +33,7 @@ writeFileSync(
 
 cpSync('libs/ui/eslint.config.mts', 'dist/ui/eslint.config.mts');
 cpSync('README.md', 'dist/README.md');
+cpSync('LICENSE', 'dist/LICENSE');
 cpSync('package.json', 'dist/package.json');
 
 cpSync('bin', 'dist/bin', { recursive: true });
