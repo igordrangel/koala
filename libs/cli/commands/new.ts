@@ -50,7 +50,10 @@ async function createAngularProject(
   );
   writeFileSync(`${name}/angular.json`, JSON.stringify(angularJson, null, 2));
   cpSync(`${originPath}/ui/theme/icons`, `${name}/src/theme/icons`, { recursive: true });
+  cpSync(`${originPath}/ui/theme/grid.css`, `${name}/src/theme/grid.css`);
   cpSync(`${originPath}/ui/theme/animations.css`, `${name}/src/theme/animations.css`);
+  cpSync(`${originPath}/ui/theme/table.css`, `${name}/src/theme/table.css`);
+  cpSync(`${originPath}/ui/generate-icons.js`, `${name}/generate-icons.js`);
 
   const vscodeSettingsPath = `${originPath}/ui/.vscode/settings.json`;
   if (existsSync(vscodeSettingsPath)) {
@@ -98,7 +101,18 @@ function createFolderStructure(name: string) {
 
   cpSync(`${originPath}/ui/eslint.config.mts`, `${name}/eslint.config.mts`);
 
+  const packageJson = JSON.parse(readFileSync(`${name}/package.json`, 'utf-8'));
+  packageJson.scripts = {
+    ...packageJson.scripts,
+    prestart: 'node generate-icons.js',
+    prebuild: 'node generate-icons.js',
+    'build:dev': 'node generate-icons.js && ng build --configuration development',
+    'build:prod': 'node generate-icons.js && ng build --configuration production',
+  };
+  writeFileSync(`${name}/package.json`, JSON.stringify(packageJson, null, 2));
+
   mkdirSync(`${name}/src/app/shared`, { recursive: true });
+  mkdirSync(`${name}/public/assets/icons`, { recursive: true });
   logSuccess(console.log, `${name}/src/app/shared created`);
 }
 

@@ -1,4 +1,4 @@
-import { cpSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { logStep, logSuccess, logWarning } from './cli-ui';
 import { detectTestFramework } from './detect-test-framework';
@@ -30,14 +30,7 @@ export async function setupExistingProject(projectName: string, verbose = false)
 
   // Criar estrutura de pastas compartilhada
   logStep(logger, 'Criando estrutura de pastas...');
-  const requiredDirs = [
-    'src/app/shared',
-    'src/app/shared/components',
-    'src/app/shared/directives',
-    'src/app/shared/utils',
-    'src/app/shared/base',
-    'src/theme/icons',
-  ];
+  const requiredDirs = ['src/app/shared', 'src/theme/icons'];
 
   for (const dir of requiredDirs) {
     const fullPath = `${projectPath}/${dir}`;
@@ -64,6 +57,18 @@ export async function setupExistingProject(projectName: string, verbose = false)
     }
   }
 
+  const gridPath = `${projectPath}/src/theme/grid.css`;
+  if (!existsSync(gridPath)) {
+    const originGridPath = `${originPath}/ui/theme/grid.css`;
+    if (existsSync(originGridPath)) {
+      try {
+        cpSync(originGridPath, gridPath);
+      } catch {
+        logWarning(logger, 'Falha ao copiar grid.css');
+      }
+    }
+  }
+
   const animationsPath = `${projectPath}/src/theme/animations.css`;
   if (!existsSync(animationsPath)) {
     const originAnimationsPath = `${originPath}/ui/theme/animations.css`;
@@ -72,6 +77,32 @@ export async function setupExistingProject(projectName: string, verbose = false)
         cpSync(originAnimationsPath, animationsPath);
       } catch {
         logWarning(logger, 'Falha ao copiar animations.css');
+      }
+    }
+  }
+
+  const tablePath = `${projectPath}/src/theme/table.css`;
+  if (!existsSync(tablePath)) {
+    const originTablePath = `${originPath}/ui/theme/table.css`;
+    if (existsSync(originTablePath)) {
+      try {
+        cpSync(originTablePath, tablePath);
+      } catch {
+        logWarning(logger, 'Falha ao copiar table.css');
+      }
+    }
+  }
+
+  mkdirSync(`${projectPath}/src/public/assets/icons`, { recursive: true });
+
+  const generateIconsPath = `${projectPath}/generate-icons.js`;
+  if (!existsSync(generateIconsPath)) {
+    const originGenerateIconsPath = `${originPath}/ui/generate-icons.js`;
+    if (existsSync(originGenerateIconsPath)) {
+      try {
+        cpSync(originGenerateIconsPath, generateIconsPath);
+      } catch {
+        logWarning(logger, 'Falha ao copiar generate-icons.js');
       }
     }
   }
@@ -94,9 +125,30 @@ export async function setupExistingProject(projectName: string, verbose = false)
   logStep(logger, 'Verificando dependências...');
   const packageJsonPath = `${projectPath}/package.json`;
   const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8')) as {
+    scripts: Record<string, string>;
     dependencies?: Record<string, string>;
     devDependencies?: Record<string, string>;
   };
+
+  if (!packageJson.scripts.prestart) {
+    packageJson.scripts.prestart = 'node generate-icons.js';
+  }
+
+  if (!packageJson.scripts.prebuild) {
+    packageJson.scripts.prebuild = 'node generate-icons.js';
+  }
+
+  if (!packageJson.scripts['build:dev']) {
+    packageJson.scripts['build:dev'] =
+      'node generate-icons.js && ng build --configuration development';
+  }
+
+  if (!packageJson.scripts['build:prod']) {
+    packageJson.scripts['build:prod'] =
+      'node generate-icons.js && ng build --configuration production';
+  }
+
+  writeFileSync(`${packageJsonPath}`, JSON.stringify(packageJson, null, 2));
 
   const allDeps = {
     ...packageJson.dependencies,
