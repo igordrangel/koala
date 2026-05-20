@@ -39,4 +39,16 @@
   <url><loc>https://ui.koalarx.com/#/docs/auth/configuration</loc></url>
   <url><loc>https://ui.koalarx.com/#/docs/auth/authentication</loc></url>
   <url><loc>https://ui.koalarx.com/#/docs/auth/authorization</loc></url>
+
+  <url><loc>https://nest.koalarx.com</loc></url>
+  <url><loc>https://nest.koalarx.com/guia-instalacao</loc></url>
+  <url><loc>https://nest.koalarx.com/cli-reference</loc></url>
+  <url><loc>https://nest.koalarx.com/configuracao-inicial</loc></url>
+  <url><loc>https://nest.koalarx.com/tratamento-erros</loc></url>
+  <url><loc>https://nest.koalarx.com/features-avancadas</loc></url>
+  <url><loc>https://nest.koalarx.com/decoradores</loc></url>
+  <url><loc>https://nest.koalarx.com/guia-bun</loc></url>
+  <url><loc>https://nest.koalarx.com/prisma-client</loc></url>
+  <url><loc>https://nest.koalarx.com/mcp-vscode-extension</loc></url>
+  <url><loc>https://nest.koalarx.com/exemplo</loc></url>
 </urlset>
