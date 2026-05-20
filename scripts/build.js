@@ -21,6 +21,8 @@ cpSync('libs/ui/src/app/shared/utils', 'dist/ui/utils', { recursive: true });
 cpSync('libs/ui/src/app/shared/base', 'dist/ui/base', { recursive: true });
 cpSync('libs/ui/src/theme', 'dist/ui/theme', { recursive: true });
 cpSync('libs/ui/src/theme/animations.css', 'dist/ui/theme/animations.css');
+cpSync('libs/ui/src/theme/grid.css', 'dist/ui/theme/grid.css');
+cpSync('libs/ui/src/theme/table.css', 'dist/ui/theme/table.css');
 cpSync('libs/ui/src/app/app.ts', 'dist/ui/app.ts');
 cpSync('libs/ui/src/index.html', 'dist/ui/index.html');
 
@@ -32,6 +34,7 @@ writeFileSync(
 );
 
 cpSync('libs/ui/eslint.config.mts', 'dist/ui/eslint.config.mts');
+cpSync('libs/ui/generate-icons.js', 'dist/ui/generate-icons.js');
 cpSync('README.md', 'dist/README.md');
 cpSync('LICENSE', 'dist/LICENSE');
 cpSync('package.json', 'dist/package.json');
