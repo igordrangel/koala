@@ -1,10 +1,8 @@
 import { Component, resource } from '@angular/core';
-import { Validators } from '@angular/forms';
 import { KlArray } from '@koalarx/utils/KlArray';
 import { Section } from '../../../core/components/section';
 import { ListBase } from '../../../shared/base/list.base';
 import { Button } from '../../../shared/components/button/button';
-import { Filter, FilterDef } from '../../../shared/components/filter/filter';
 import { Loading } from '../../../shared/components/loading/loading';
 import { Pagination } from '../../../shared/components/pagination/pagination';
 import { Skeleton } from '../../../shared/components/skeleton/skeleton';
@@ -30,14 +28,11 @@ interface UserFilter {
 @Component({
   selector: 'app-datatable',
   templateUrl: './datatable.page.html',
-  imports: [Section, Tabs, Filter, Table, Pagination, Skeleton, Button, Loading],
+  imports: [Section, Tabs, Table, Pagination, Skeleton, Button, Loading],
 })
 export class DatatablePage extends ListBase<User, UserFilter> {
   constructor() {
-    super([
-      FilterDef.text('name', 'Name').build(),
-      FilterDef.text('email', 'Email').validators(Validators.email).build(),
-    ]);
+    super();
 
     this.orderedBy.set({ field: 'firstName', direction: 'asc' });
   }

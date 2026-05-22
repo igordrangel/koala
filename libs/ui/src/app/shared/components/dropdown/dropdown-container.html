@@ -1,3 +1,5 @@
+@let anchorName = '--anchor-' + id;
+
 <button
   #dropdownTrigger
   type="button"
@@ -5,6 +7,7 @@
   tabindex="0"
   role="button"
   [attr.popovertarget]="id"
+  [style.anchor-name]="anchorName"
   (click)="ajustPosition()"
 >
   <ng-content select="[trigger]" />
@@ -15,7 +18,8 @@
   tabindex="0"
   popover
   [id]="id"
-  class="dropdown menu p-0 bg-base-200 rounded-box mt-3 min-w-52 w-auto max-w-[30vw] max-h-[40vh] shadow-sm border-2 border-neutral-200 dark:border-neutral-800 rounded-md overflow-y-auto"
+  [style.position-anchor]="anchorName"
+  class="dropdown menu p-0 bg-base-100 rounded-box mt-3 w-fit min-w-[calc(100%-1rem)] max-w-[calc(100vw-1rem)] lg:min-w-52 lg:max-w-full max-h-50 shadow-sm border-2 border-base-300 rounded-md overflow-y-auto"
 >
   <ng-content select="[options]" />
 </div>

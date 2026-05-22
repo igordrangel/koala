@@ -1,0 +1,53 @@
+<div class="flex flex-wrap items-center gap-2 border border-base-300 rounded-lg p-2 text-sm">
+  @let editMode = selectedOptions().find((option) => option.editing);
+
+  <div class="flex">
+    @for (item of selectedOptions(); track $index) {
+      @if (item.editing) {
+        <app-input-filter-edit [field]="item" />
+      } @else {
+        <app-input-filter-chip [field]="item" (removeAction)="removeOption(item)" />
+      }
+    }
+  </div>
+
+  @if (!editMode) {
+    <div class="relative flex-1 w-fit" ngCombobox>
+      <input
+        #inputFilter
+        class="relative flex-1 outline-0 w-full z-10"
+        type="search"
+        [attr.list]="inlineFilterElementId"
+        [placeholder]="placeholder()"
+        [(ngModel)]="filter"
+        ngComboboxInput
+      />
+
+      <app-dropdown class="absolute top-0 left-0 z-0">
+        <button #triggerOptions type="button" class="flex-1 h-fit invisible" trigger>
+          Filter Trigger
+        </button>
+        <div
+          #filterOptions
+          ngListbox
+          class="p-1 w-50"
+          (valuesChange)="chooseOption($event)"
+          options
+        >
+          @for (option of filteredOptions(); track $index) {
+            <li
+              ngOption
+              [value]="option"
+              role="option"
+              (mousedown)="chooseOption([option])"
+              class="data-[active=true]:bg-neutral-800 rounded cursor-pointer"
+            >
+              <span>{{ option.label }}</span>
+              <span class="empty:hidden">{{ option.hint }}</span>
+            </li>
+          }
+        </div>
+      </app-dropdown>
+    </div>
+  }
+</div>

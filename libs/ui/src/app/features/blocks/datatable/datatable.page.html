@@ -25,11 +25,6 @@
           class="flex flex-col items-center justify-center gap-2 border border-t-0 p-4 border-base-300 rounded-b-lg"
         >
           <div class="flex items-center gap-1 w-full">
-            <app-filter
-              class="w-full"
-              [definitions]="filterDefinitions"
-              (filtersChange)="filter.set($event)"
-            />
             <button
               appButton
               btnVariant="ghost"

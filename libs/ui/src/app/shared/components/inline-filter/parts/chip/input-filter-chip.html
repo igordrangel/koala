@@ -1,0 +1,13 @@
+@if (field(); as field) {
+  <span class="badge badge-success badge-soft badge-sm">
+    {{ field.label }}: <b>{{ field.templateValue }}</b>
+
+    <button
+      type="button"
+      class="text-neutral-500 opacity-40 hover:opacity-70 transition-opacity duration-100 cursor-pointer"
+      (click)="removeAction.emit()"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </span>
+}

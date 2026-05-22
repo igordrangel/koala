@@ -18,7 +18,7 @@
 - [Data Table](https://koalarx.com/docs/datatable.md): Data Table component
 - [Dropdown](https://koalarx.com/docs/dropdown.md): Dropdown component
 - [Fieldset](https://koalarx.com/docs/fieldset.md): Fieldset component
-- [Filter](https://koalarx.com/docs/filter.md): Filter component
+- [Inline Filter](https://koalarx.com/docs/inline-filter.md): Filter component
 - [Input CNPJ](https://koalarx.com/docs/input-cnpj.md): Input CNPJ component
 - [Input CPF](https://koalarx.com/docs/input-cpf.md): Input CPF component
 - [Input Currency](https://koalarx.com/docs/input-currency.md): Input Currency component

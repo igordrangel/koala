@@ -1,0 +1,117 @@
+import { Combobox, ComboboxInput } from '@angular/aria/combobox';
+import { Listbox, Option } from '@angular/aria/listbox';
+import {
+  Component,
+  computed,
+  DestroyRef,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  model,
+  signal,
+  viewChild,
+} from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Dropdown } from '../../../dropdown';
+import { InlineFilterField } from '../../config';
+import { InputFilterChip } from '../chip/input-filter-chip';
+import { InputFilterEdit } from '../edit/input-filter-edit';
+import { handleAccessibility } from './accessibility/handle-accessibility';
+
+@Component({
+  selector: 'app-input-picker',
+  templateUrl: './input-picker.html',
+  imports: [
+    FormsModule,
+    Dropdown,
+    Listbox,
+    Option,
+    Combobox,
+    ComboboxInput,
+    InputFilterEdit,
+    InputFilterChip,
+  ],
+})
+export class InputPicker {
+  private readonly destroyRef = inject(DestroyRef);
+
+  private readonly inputFilterElement = viewChild<ElementRef<HTMLInputElement>>('inputFilter');
+  private readonly triggerOptionsElement =
+    viewChild<ElementRef<HTMLButtonElement>>('triggerOptions');
+  private readonly filterOptionsElement = viewChild<ElementRef<HTMLDivElement>>('filterOptions');
+
+  readonly inlineFilterElementId = `inline-filter-${Math.random().toString(16).slice(2)}`;
+
+  readonly filterOptions = input.required<InlineFilterField[]>();
+  readonly placeholder = input('Type to filter');
+  readonly filter = model('');
+
+  readonly filteredOptions = computed(() => {
+    const filterOptions = this.filterOptions();
+    const filterValue = this.filter().toLowerCase();
+
+    if (!filterValue) {
+      return filterOptions;
+    }
+
+    return filterOptions
+      .filter((option) => !this.selectedOptions().includes(option))
+      .filter((option) => option.label.toLowerCase().includes(filterValue));
+  });
+
+  readonly selectedOptions = signal<InlineFilterField[]>([]);
+
+  constructor() {
+    handleAccessibility(this.selectedOptions, this.destroyRef);
+
+    effect(() => {
+      const triggerElement = this.triggerOptionsElement()?.nativeElement;
+      const filterOptionsElement = this.filterOptionsElement()?.nativeElement?.parentElement;
+      const isVisible = filterOptionsElement?.matches(':popover-open') ?? false;
+      const filteredOptions = this.filteredOptions();
+      const hasFilter = !!this.filter();
+
+      if (!triggerElement) {
+        return;
+      }
+
+      if (isVisible && (!hasFilter || filteredOptions.length === 0)) {
+        filterOptionsElement?.hidePopover();
+        return;
+      }
+
+      if (!isVisible && hasFilter && filteredOptions.length > 0) {
+        triggerElement.click();
+      }
+    });
+
+    effect(() => {
+      const selectedOptions = this.selectedOptions();
+
+      if (!selectedOptions.some((option) => option.editing)) {
+        this.inputFilterElement()?.nativeElement.focus();
+      }
+    });
+  }
+
+  chooseOption(values: InlineFilterField[]) {
+    const option = values[0];
+
+    option.editing = true;
+
+    this.selectedOptions.update((options) => {
+      if (options.includes(option)) {
+        return options.filter((o) => o !== option);
+      }
+
+      return [...options, option];
+    });
+
+    this.filter.set('');
+  }
+
+  removeOption(option: InlineFilterField) {
+    this.selectedOptions.update((options) => options.filter((o) => o !== option));
+  }
+}

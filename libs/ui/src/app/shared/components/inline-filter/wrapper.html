@@ -1,0 +1,8 @@
+@if (isMobile) {
+  <button appButton class="">
+    <i class="fa-solid fa-filter"></i>
+    Filter
+  </button>
+} @else {
+  <app-input-picker [filterOptions]="config().fields" [placeholder]="placeholder()" />
+}

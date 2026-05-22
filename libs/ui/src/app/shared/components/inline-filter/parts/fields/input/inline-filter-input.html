@@ -1,0 +1,11 @@
+@if (config(); as config) {
+  @switch (config.inputType) {
+    @case ('text')
+    @case ('email')
+    @case ('number')
+    @case ('tel')
+    @case ('url') {
+      <input class="outline-0 w-full text-xs" #inputField [type]="config.inputType" [placeholder]="config.placeholder" [(ngModel)]="value" />
+    }
+  }
+}

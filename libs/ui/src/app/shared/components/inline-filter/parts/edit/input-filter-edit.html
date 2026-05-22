@@ -1,0 +1,14 @@
+@if (field(); as field) {
+  <span class="flex items-center gap-1 px-2">
+    <span class="text-xs font-semibold">{{ field.label }}:</span>
+
+    @switch (field.type) {
+      @case ('input') {
+        <app-inline-filter-input class="relative top-[-0.05rem]" [config]="field" />
+      }
+      @case ('calendar') {}
+      @case ('select') {}
+      @case ('combobox') {}
+    }
+  </span>
+}

@@ -120,7 +120,8 @@ export const ROUTES: Routes = [
     loadComponent: () => import('./calendar/calendar.page').then((m) => m.CalendarPage),
   },
   {
-    path: 'filter',
-    loadComponent: () => import('./filter/filter.page').then((m) => m.FilterPage),
+    path: 'inline-filter',
+    loadComponent: () =>
+      import('./inline-filter/inline-filter.page').then((m) => m.InlineFilterPage),
   },
 ];
