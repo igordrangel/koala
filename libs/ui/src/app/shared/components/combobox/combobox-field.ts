@@ -47,9 +47,10 @@ export class ComboboxField implements OnInit, ControlValueAccessor {
   private readonly triggerOptionsElement =
     viewChild<ElementRef<HTMLButtonElement>>('triggerOptions');
   private readonly filterOptionsElement = viewChild<ElementRef<HTMLDivElement>>('filterOptions');
-  private readonly inputFilterElement = viewChild<ElementRef<HTMLInputElement>>('inputFilter');
   private readonly selectedOptionContentElement =
     viewChild<ElementRef<HTMLDivElement>>('selectedOptionContent');
+
+  readonly inputFilterElement = viewChild<ElementRef<HTMLInputElement>>('inputFilter');
 
   private readonly injector = inject(Injector);
   private onChanged?: (value: any) => void;

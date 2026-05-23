@@ -1,13 +1,17 @@
 <div class="relative w-full">
+  @let widthField = textInput.value.length - textInput.value.split(' ').length / 2;
+
   <input
     #textInput
-    type="text"
     appInput
-    class="w-full pr-10"
+    type="text"
+    [class.pr-10]="!inline()"
+    [inline]="inline()"
     [size]="size()"
     [appMask]="inputMask()"
     [id]="id"
     [style.anchor-name]="`--${id}`"
+    [style.width]="!inline() ? '100%' : widthField + 'ch'"
     [value]="inputValue()"
     [placeholder]="placeholder()"
     (input)="onInputChange($event)"
@@ -16,7 +20,7 @@
     (click)="openPopover()"
   />
 
-  @if (value()) {
+  @if (value() && !inline()) {
     <button
       type="button"
       class="btn btn-ghost btn-xs absolute top-1/2 right-2 -translate-y-1/2 min-h-0 h-6 w-6 p-0"

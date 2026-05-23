@@ -66,7 +66,7 @@ export class Select implements ControlValueAccessor, OnDestroy {
   private onTouched: () => void = () => {};
   private formDisabled = false;
 
-  readonly options = input<SelectOption[]>([]);
+  readonly options = input<SelectOption<any, any>[]>([]);
   readonly placeholder = input('Select an option');
   readonly size = input<SelectSize>('md');
   readonly multiple = input(false, { transform: booleanAttribute });
@@ -85,7 +85,8 @@ export class Select implements ControlValueAccessor, OnDestroy {
   readonly selectedValues = signal<unknown[]>([]);
   readonly dropdownStyle = signal('');
 
-  private readonly buttonRef = viewChild<ElementRef<HTMLButtonElement>>('triggerBtn');
+  readonly buttonRef = viewChild<ElementRef<HTMLButtonElement>>('triggerBtn');
+
   private readonly dropdownPopover = viewChild<ElementRef<HTMLElement>>('dropdownPopover');
   private _positionCleanup: (() => void)[] = [];
 

@@ -1,13 +1,26 @@
 @if (field(); as field) {
-  <span class="badge badge-success badge-soft badge-sm">
-    {{ field.label }}: <b>{{ field.templateValue }}</b>
+  <span class="badge badge-success badge-soft badge-sm cursor-pointer">
+    {{ field.label }}:
 
-    <button
-      type="button"
-      class="text-neutral-500 opacity-40 hover:opacity-70 transition-opacity duration-100 cursor-pointer"
-      (click)="removeAction.emit()"
-    >
-      <i class="fa-solid fa-xmark"></i>
-    </button>
+    @if (field.templateValue) {
+      <b>{{ field.templateValue }}</b>
+    } @else if (field.loading) {
+      <i class="flex items-end gap-0.5 text-base-content/50 font-light">
+        loading
+        <span appLoading class="relative top-[-0.05rem] size-[0.7rem]" variant="dots"></span>
+      </i>
+    } @else {
+      <i class="text-base-content/50 font-light">empty</i>
+    }
+
+    @if (!field.loading) {
+      <button
+        type="button"
+        class="text-neutral-500 opacity-40 hover:opacity-70 transition-opacity duration-100 cursor-pointer"
+        (click)="removeAction.emit()"
+      >
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    }
   </span>
 }

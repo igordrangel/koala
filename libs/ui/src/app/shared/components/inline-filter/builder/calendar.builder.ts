@@ -1,3 +1,13 @@
 import { BuilderBase } from './builder.base';
 
-export class CalendarBuilder extends BuilderBase {}
+export class CalendarBuilder extends BuilderBase {
+  placeholder(placeholder?: string) {
+    this.config.placeholder = placeholder;
+    return this;
+  }
+
+  override build() {
+    this.config.type = 'calendar';
+    return this.config;
+  }
+}

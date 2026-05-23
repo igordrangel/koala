@@ -42,11 +42,12 @@ export class InlineFilterBuilder {
     label: string,
     name: string,
     options: SelectOption<any, any>[] | ResourceRef<SelectOption<any, any>[]>,
-    fieldOptions?: CommonOptions,
+    fieldOptions?: CommonOptions & { multiple?: boolean },
   ) {
     this.config.fields.push(
       new SelectBuilder(label, name, fieldOptions?.validators, fieldOptions?.asyncValidators)
         .options(options)
+        .multiple(fieldOptions?.multiple)
         .hint(fieldOptions?.hint)
         .build(),
     );
@@ -73,7 +74,7 @@ export class InlineFilterBuilder {
   calendar(label: string, name: string, fieldOptions?: CommonOptions) {
     this.config.fields.push(
       new CalendarBuilder(label, name, fieldOptions?.validators, fieldOptions?.asyncValidators)
-        .hint(fieldOptions?.hint)
+        .placeholder(fieldOptions?.placeholder)
         .build(),
     );
 

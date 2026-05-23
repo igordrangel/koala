@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   Component,
   computed,
   effect,
@@ -48,17 +49,18 @@ const RANGE_SEPARATOR = ' - ';
 export class InputCalendar {
   private readonly textInput = viewChild<ElementRef<HTMLInputElement>>('textInput');
   private readonly popover = viewChild<ElementRef<HTMLElement>>('popover');
+  private readonly rangeEditTarget = signal<'from' | 'to'>('from');
 
   readonly id = `input-calendar-${Math.random().toString(16).slice(2)}`;
   readonly popoverId = `input-calendar-popover-${Math.random().toString(16).slice(2)}`;
   readonly format = input<InputCalendarFormat>('dd/MM/yyyy');
   readonly type = input<InputCalendarType>('date');
   readonly size = input<InputSize>('sm');
+  readonly inline = input(false, { transform: booleanAttribute });
 
   readonly value = model<string>('');
   readonly placeholder = input<string>('Pick a date');
   readonly inputValue = signal<string>('');
-  private readonly rangeEditTarget = signal<'from' | 'to'>('from');
   readonly inputMask = computed(() => {
     if (this.type() !== 'daterange') {
       return getInputMask(this.type(), this.format());
@@ -86,6 +88,76 @@ export class InputCalendar {
       value: this.value,
       setDisplayedYear: (year) => this.displayedYear.set(year),
     });
+  }
+
+  private handleRangeDeleteFromStart(input: HTMLInputElement, value: string) {
+    const separatorIndex = value.indexOf(RANGE_SEPARATOR);
+
+    let nextValue = '';
+
+    if (separatorIndex === -1) {
+      nextValue = value.slice(1);
+    } else {
+      const fromValue = value.slice(0, separatorIndex);
+      const toValue = value.slice(separatorIndex + RANGE_SEPARATOR.length);
+      const nextFromValue = fromValue.slice(1);
+
+      nextValue =
+        nextFromValue.length > 0 ? `${nextFromValue}${RANGE_SEPARATOR}${toValue}` : toValue;
+    }
+
+    this.applyInputText(input, nextValue);
+    this.inputValue.set(nextValue);
+    this.rangeEditTarget.set('from');
+
+    this.applyParsedValue(nextValue);
+
+    queueMicrotask(() => {
+      this.setCursor(input, 0);
+    });
+  }
+
+  private hasCollapsedSelection(start: number | null, end: number | null): start is number {
+    return start !== null && end !== null && start === end;
+  }
+
+  private setCursor(input: HTMLInputElement, position: number) {
+    input.setSelectionRange(position, position);
+  }
+
+  private applyInputText(input: HTMLInputElement | null, value: string) {
+    if (!input || input.value === value) {
+      return;
+    }
+
+    input.value = value;
+  }
+
+  private applyParsedValue(rawValue: string) {
+    const parsedValue = parseInputValue(rawValue, this.type(), this.format());
+
+    if (parsedValue === undefined) {
+      return;
+    }
+
+    this.value.set(parsedValue);
+  }
+
+  private syncRangeEditTarget(rawValue: string) {
+    if (this.type() !== 'daterange') {
+      return;
+    }
+
+    if (!rawValue.trim()) {
+      this.rangeEditTarget.set('from');
+      return;
+    }
+
+    const [fromValue = ''] = rawValue.split(/\s-\s/);
+
+    if (fromValue.replace(/\D/g, '').length > 0) {
+      this.rangeEditTarget.set('from');
+    }
   }
 
   onInputChange(event: Event) {
@@ -189,76 +261,6 @@ export class InputCalendar {
     queueMicrotask(() => {
       this.setCursor(input, input.value.length);
     });
-  }
-
-  private handleRangeDeleteFromStart(input: HTMLInputElement, value: string) {
-    const separatorIndex = value.indexOf(RANGE_SEPARATOR);
-
-    let nextValue = '';
-
-    if (separatorIndex === -1) {
-      nextValue = value.slice(1);
-    } else {
-      const fromValue = value.slice(0, separatorIndex);
-      const toValue = value.slice(separatorIndex + RANGE_SEPARATOR.length);
-      const nextFromValue = fromValue.slice(1);
-
-      nextValue =
-        nextFromValue.length > 0 ? `${nextFromValue}${RANGE_SEPARATOR}${toValue}` : toValue;
-    }
-
-    this.applyInputText(input, nextValue);
-    this.inputValue.set(nextValue);
-    this.rangeEditTarget.set('from');
-
-    this.applyParsedValue(nextValue);
-
-    queueMicrotask(() => {
-      this.setCursor(input, 0);
-    });
-  }
-
-  private hasCollapsedSelection(start: number | null, end: number | null): start is number {
-    return start !== null && end !== null && start === end;
-  }
-
-  private setCursor(input: HTMLInputElement, position: number) {
-    input.setSelectionRange(position, position);
-  }
-
-  private applyInputText(input: HTMLInputElement | null, value: string) {
-    if (!input || input.value === value) {
-      return;
-    }
-
-    input.value = value;
-  }
-
-  private applyParsedValue(rawValue: string) {
-    const parsedValue = parseInputValue(rawValue, this.type(), this.format());
-
-    if (parsedValue === undefined) {
-      return;
-    }
-
-    this.value.set(parsedValue);
-  }
-
-  private syncRangeEditTarget(rawValue: string) {
-    if (this.type() !== 'daterange') {
-      return;
-    }
-
-    if (!rawValue.trim()) {
-      this.rangeEditTarget.set('from');
-      return;
-    }
-
-    const [fromValue = ''] = rawValue.split(/\s-\s/);
-
-    if (fromValue.replace(/\D/g, '').length > 0) {
-      this.rangeEditTarget.set('from');
-    }
   }
 
   openPopover() {

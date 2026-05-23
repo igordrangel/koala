@@ -1,18 +1,43 @@
-import { Component, ElementRef, OnInit, output, viewChild } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { CnpjValidator } from '@/shared/validators/cnpj.validator';
+import { CpfValidator } from '@/shared/validators/cpf.validator';
+import { Component, effect, ElementRef, OnInit, viewChild } from '@angular/core';
+import { ReactiveFormsModule, Validators } from '@angular/forms';
+import { maskCoin } from '@koalarx/utils/KlNumber';
+import { CurrencyMask } from '../../../../../directives/currency.directive';
+import { Mask } from '../../../../../directives/mask.directive';
 import { FieldBase } from '../field.base';
 
 @Component({
   selector: 'app-inline-filter-input',
   templateUrl: './inline-filter-input.html',
-  imports: [FormsModule],
+  imports: [ReactiveFormsModule, Mask, CurrencyMask],
 })
 export class InlineFilterInput extends FieldBase implements OnInit {
   private readonly inputElement = viewChild<ElementRef<HTMLInputElement>>('inputField');
 
-  readonly isInvalid = output<boolean>();
+  constructor() {
+    super();
+
+    effect(() => {
+      const value = this.valueChanges();
+
+      if (!this.valueControl.invalid) {
+        this.templateValue.set(this.config().inputType === 'currency' ? maskCoin(value) : value);
+      }
+    });
+  }
 
   ngOnInit(): void {
+    const config = this.config();
+
+    if (config.inputType === 'cpf') {
+      this.valueControl.addValidators(CpfValidator);
+    } else if (config.inputType === 'cnpj') {
+      this.valueControl.addValidators(CnpjValidator);
+    } else if (config.inputType === 'email') {
+      this.valueControl.addValidators(Validators.email);
+    }
+
     setTimeout(() => {
       this.inputElement()?.nativeElement.focus();
     });

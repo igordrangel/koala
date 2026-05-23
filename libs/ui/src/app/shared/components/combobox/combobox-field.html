@@ -3,6 +3,7 @@
     class="relative flex flex-wrap gap-1 w-full h-auto"
     [class.input]="!inline()"
     [class.validator]="!inline()"
+    [class]="'text-' + size()"
   >
     <div
       #selectedOptionContent
@@ -11,6 +12,7 @@
       [class.hidden]="!multiple() && dropdownOpened()"
       [class.w-full]="!multiple()"
       [class.pr-7]="!multiple()"
+      [class.p-0!]="inline()"
     >
       @if (selectedOptions().length > 0) {
         @if (multiple()) {
@@ -29,7 +31,7 @@
         } @else {
           @let option = selectedOptions()[0];
 
-          <div class="flex items-center justify-between w-full cursor-text">
+          <div class="flex items-center justify-between gap-2 w-full cursor-text">
             <span>{{ option.label }}</span>
 
             <button
@@ -51,9 +53,12 @@
       #inputFilter
       role="inputFilter"
       type="text"
-      class="relative flex-1 outline-0 w-full min-w-20 pr-10 h-8 py-2"
+      class="relative flex-1 outline-0 w-full min-w-20 pr-10"
       [class.hidden]="!multiple() && selectedOptions().length > 0 && !dropdownOpened()"
       [class.border-0]="inline()"
+      [class.h-8]="!inline()"
+      [class.py-2]="!inline()"
+      [class.py-0]="inline()"
       [attr.list]="listElementId"
       [placeholder]="placeholderText"
       [(ngModel)]="filter"
@@ -100,28 +105,40 @@
       </span>
 
       <ul class="w-full max-h-40 overflow-y-auto p-1">
-        @for (option of filteredOptions()?.value(); track $index) {
+        @if (filteredOptions()?.isLoading() && !filteredOptions()?.error()) {
           <li
-            class="data-[active=true]:bg-neutral-800 rounded cursor-pointer text-left w-full group"
-            [attr.data-value]="option.value"
-            [attr.data-selected]="selectedValues().includes(option.value)"
-            (click)="toggleOption(option)"
+            class="flex items-center justify-center gap-2 pointer-events-none py-3 text-neutral-500"
           >
-            <div class="flex items-center justify-between">
-              <div class="flex flex-col gap-1">
-                <span>{{ option.label }}</span>
-                <span class="empty:hidden">{{ option.description }}</span>
-              </div>
-
-              <i
-                class="fa-solid fa-check text-success invisible group-data-[selected=true]:visible"
-              ></i>
-            </div>
+            <span appLoading size="xs"></span> Loading...
           </li>
-        } @empty {
+        } @else if (filteredOptions()?.error()) {
           <li class="flex items-center justify-center pointer-events-none py-3 text-neutral-500">
-            No data found
+            Error loading data
           </li>
+        } @else {
+          @for (option of filteredOptions()?.value(); track $index) {
+            <li
+              class="data-[active=true]:bg-neutral-800 rounded cursor-pointer text-left w-full group"
+              [attr.data-value]="option.value"
+              [attr.data-selected]="selectedValues().includes(option.value)"
+              (click)="toggleOption(option)"
+            >
+              <div class="flex items-center justify-between">
+                <div class="flex flex-col gap-1">
+                  <span>{{ option.label }}</span>
+                  <span class="empty:hidden">{{ option.description }}</span>
+                </div>
+
+                <i
+                  class="fa-solid fa-check text-success invisible group-data-[selected=true]:visible"
+                ></i>
+              </div>
+            </li>
+          } @empty {
+            <li class="flex items-center justify-center pointer-events-none py-3 text-neutral-500">
+              No data found
+            </li>
+          }
         }
       </ul>
     </div>

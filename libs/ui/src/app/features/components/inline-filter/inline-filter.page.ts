@@ -1,5 +1,5 @@
 import { JsonPipe } from '@angular/common';
-import { Component, inject, resource, signal, Signal } from '@angular/core';
+import { Component, inject, Injector, resource, signal, Signal } from '@angular/core';
 import { KlArray } from '@koalarx/utils/KlArray';
 import { Section } from '../../../core/components/section';
 import { InlineFilter, InlineFilterBuilder } from '../../../shared/components/inline-filter';
@@ -22,8 +22,13 @@ interface User {
   imports: [JsonPipe, Section, InlineFilter, Tabs],
 })
 export class InlineFilterPage {
-  private readonly usersResourceFactory = (filter: Signal<string>, values: Signal<number[]>) =>
+  private readonly usersResourceFactory = (
+    filter: Signal<string>,
+    values: Signal<number[]>,
+    injector: Injector,
+  ) =>
     resource({
+      injector,
       params: () => ({
         selectedValues: values(),
         filter: filter?.() ?? '',
@@ -65,12 +70,17 @@ export class InlineFilterPage {
       { value: 'closed', label: 'Closed', data: undefined },
       { value: 'draft', label: 'Draft', data: undefined },
     ])
-    .select('Labels', 'labels', [
-      { value: 'frontend', label: 'Frontend', data: undefined },
-      { value: 'backend', label: 'Backend', data: undefined },
-      { value: 'docs', label: 'Documentation', data: undefined },
-      { value: 'design-system', label: 'Design System', data: undefined },
-    ])
+    .select(
+      'Labels',
+      'labels',
+      [
+        { value: 'frontend', label: 'Frontend', data: undefined },
+        { value: 'backend', label: 'Backend', data: undefined },
+        { value: 'docs', label: 'Documentation', data: undefined },
+        { value: 'design-system', label: 'Design System', data: undefined },
+      ],
+      { multiple: true },
+    )
     .select('Type', 'type', [
       { value: 'feat', label: 'Feature', data: undefined },
       { value: 'fix', label: 'Fix', data: undefined },

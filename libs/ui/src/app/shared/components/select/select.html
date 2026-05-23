@@ -2,6 +2,7 @@
   #triggerBtn
   type="button"
   [class]="buttonClass()"
+  [class.outline-none]="inline()"
   [disabled]="isDisabled()"
   [attr.aria-haspopup]="'listbox'"
   [attr.aria-expanded]="isOpen()"
@@ -10,9 +11,9 @@
   (keydown)="onTriggerKeydown($event)"
 >
   @if (multiple() && selectedValues().length > 0) {
-    <span class="flex flex-1 flex-wrap gap-1 py-0.5">
+    <span class="flex flex-1 flex-wrap gap-1" [class.py-0.5]="!inline()">
       @for (val of selectedValues(); track val) {
-        <span [class]="badgeClass()">
+        <span class="badge badge-success badge-soft badge-xs py-1.5 text-xs">
           {{ getOptionLabel(val) }}
           <i
             class="fa-solid fa-xmark text-[10px] cursor-pointer"
@@ -22,7 +23,10 @@
       }
     </span>
   } @else {
-    <span class="flex-1 truncate" [class.text-base-content/50]="selectedValues().length === 0">
+    <span
+      class="flex-1 truncate text-xs"
+      [class.text-base-content/50]="selectedValues().length === 0"
+    >
       {{ triggerLabel() }}
     </span>
   }
@@ -38,10 +42,13 @@
         <i class="fa-solid fa-xmark text-xs"></i>
       </span>
     }
-    <i
-      class="fa-solid fa-chevron-down text-xs text-base-content/50 transition-transform duration-200"
-      [class.rotate-180]="isOpen()"
-    ></i>
+
+    @if (!inline()) {
+      <i
+        class="fa-solid fa-chevron-down text-xs text-base-content/50 transition-transform duration-200"
+        [class.rotate-180]="isOpen()"
+      ></i>
+    }
   </span>
 </button>
 

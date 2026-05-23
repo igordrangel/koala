@@ -26,7 +26,10 @@ export class Input {
 
   constructor() {
     afterRenderEffect(() => {
-      if (this.inline()) return;
+      if (this.inline()) {
+        this.elementRef.nativeElement.classList.add('outline-none');
+        return;
+      }
       this.elementRef.nativeElement.classList.add('input', 'validator', this.inputSizeClass);
     });
   }

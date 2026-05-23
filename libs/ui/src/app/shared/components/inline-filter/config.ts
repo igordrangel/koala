@@ -27,8 +27,12 @@ export interface InlineFilterField {
   placeholder?: string;
   validators?: ValidatorFn | ValidatorFn[];
   asyncValidators?: AsyncValidatorFn | AsyncValidatorFn[];
+  multiple?: boolean;
   editing?: boolean;
   templateValue?: string;
+  value?: any;
+  invalid?: boolean;
+  loading?: boolean;
 }
 
 export interface InlineFilterConfig {

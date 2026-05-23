@@ -1,0 +1,50 @@
+import { Component, computed, effect, OnInit, ResourceRef, viewChild } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+import { Select, SelectOption } from '../../../../select/select';
+import { FieldBase } from '../field.base';
+
+@Component({
+  selector: 'app-inline-filter-select',
+  templateUrl: './inline-filter-select.html',
+  imports: [ReactiveFormsModule, Select],
+})
+export class InlineFilterSelect extends FieldBase implements OnInit {
+  private readonly selectComponentRef = viewChild<Select>('selectField');
+
+  readonly options = computed(() => {
+    const options = this.config().options || [];
+    if (Array.isArray(options)) {
+      return options as SelectOption<any, any>[];
+    }
+    return (options as ResourceRef<SelectOption<any, any>[]>).value();
+  });
+
+  constructor() {
+    super();
+
+    effect(() => {
+      const value = this.valueChanges();
+      const options = this.options();
+
+      if (this.valueControl.invalid) {
+        return;
+      }
+
+      const selectedOption = options
+        .filter((option) =>
+          Array.isArray(value) ? value.includes(option.value) : option.value === value,
+        )
+        .map((option) => option.label)
+        .join(', ');
+
+      this.templateValue.set(selectedOption);
+    });
+  }
+
+  ngOnInit(): void {
+    setTimeout(() => {
+      this.selectComponentRef()?.buttonRef()?.nativeElement.focus();
+      this.selectComponentRef()?.toggleOpen();
+    });
+  }
+}

@@ -8,4 +8,9 @@ export class SelectBuilder extends BuilderBase {
     this.config.options = options;
     return this;
   }
+
+  multiple(multiple?: boolean) {
+    this.config.multiple = multiple ?? false;
+    return this;
+  }
 }
