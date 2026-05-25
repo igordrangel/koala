@@ -109,14 +109,14 @@
     <ng-container *ngTemplateOutlet="logotype" />
   </div>
 
-  <div class="px-3 py-3 border-b border-base-300 shrink-0">
+  <app-nav-menu class="block flex-1 overflow-y-auto"></app-nav-menu>
+
+  <div class="px-3 py-3 border-t border-base-300 shrink-0">
     <div class="grid grid-cols-1 gap-2">
-      <ng-container *ngTemplateOutlet="externalLinks" />
       <ng-container *ngTemplateOutlet="navButtons" />
+      <ng-container *ngTemplateOutlet="externalLinks" />
     </div>
   </div>
-
-  <app-nav-menu class="block flex-1 overflow-y-auto"></app-nav-menu>
 </aside>
 
 <div class="flex items-center justify-between py-2 w-full bg-base-100 min-w-0">

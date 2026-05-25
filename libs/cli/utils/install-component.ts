@@ -127,7 +127,7 @@ export function installComponent(projectName: string, component: InstallComponen
       componentDeps.push('dropdown', 'input-field', 'loading');
       break;
     case 'inline-filter':
-      utilDeps.push('scroll-into-view');
+      utilDeps.push('is-mobile', 'scroll-into-view');
       componentDeps.push(
         'combobox',
         'select',

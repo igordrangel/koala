@@ -1,4 +1,5 @@
 import { Button } from '@/shared/components/button/button';
+import { isMobile } from '@/shared/utils/is-mobile';
 import { Component, input, output } from '@angular/core';
 import { InlineFilterConfig } from './config';
 import { InputPicker } from './parts/picker/input-picker';
@@ -9,7 +10,7 @@ import { InputPicker } from './parts/picker/input-picker';
   imports: [InputPicker, Button],
 })
 export class Wrapper {
-  protected readonly isMobile = window.innerWidth < 768;
+  protected readonly isMobile = isMobile();
 
   readonly config = input.required<InlineFilterConfig>();
   readonly placeholder = input('Type to filter');
