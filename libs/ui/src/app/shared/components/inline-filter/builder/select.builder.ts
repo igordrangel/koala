@@ -3,8 +3,9 @@ import { SelectOption } from '../../select/select';
 import { BuilderBase } from './builder.base';
 
 export class SelectBuilder extends BuilderBase {
-  options(options: SelectOption[] | ResourceRef<SelectOption[]>) {
-    this.config.type = 'select';
+  options<TValue = any, TData = any>(
+    options: SelectOption<TValue, TData>[] | ResourceRef<SelectOption<TValue, TData>[]>,
+  ) {
     this.config.options = options;
     return this;
   }

@@ -5,4 +5,4 @@ export * from './builder/inline-filter.builder';
 
 export { Wrapper };
 
-export const InlineFilter = [Wrapper];
+export const InlineFilter = [Wrapper] as const;

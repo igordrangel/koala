@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { Button } from '../../../shared/components/button/button';
-import { Tooltip } from '../../../shared/components/tooltip/tooltip';
+import { Button } from '@/shared/components/button/button';
+import { Tooltip } from '@/shared/components/tooltip/tooltip';
 import { APP_VERSION } from '../../constants/app-version';
 import { GithubStars } from '../github-starts/github-stars';
 import { NavMenu } from '../nav-menu/nav-menu';

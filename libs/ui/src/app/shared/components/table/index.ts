@@ -4,4 +4,4 @@ import { TableContainer } from './table-container';
 
 export { OrderedBodyCol, OrderedHeaderCol, TableContainer };
 
-export const Table = [OrderedBodyCol, OrderedHeaderCol, TableContainer];
+export const Table = [OrderedBodyCol, OrderedHeaderCol, TableContainer] as const;

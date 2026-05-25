@@ -42,7 +42,7 @@ export const InstallComponentFlagsList = [
   'range',
   'select',
   'combobox',
-  'filter',
+  'inline-filter',
   'list-base',
   'auth',
 ] as const;
@@ -122,32 +122,22 @@ export function installComponent(projectName: string, component: InstallComponen
       break;
     case 'combobox':
       libDeps.push('@angular/aria');
-      utilDeps.push(
-        'find-item-by-value',
-        'has-item-with-value',
-        'remove-item-by-value',
-        'toggle-item-by-value',
-        'map-items-by-values',
-        'are-items-equal-by-value',
-      );
-      componentDeps.push('loading');
+      componentDeps.push('dropdown', 'input-field', 'loading');
       break;
     case 'select':
-      utilDeps.push('find-item-by-value', 'toggle-primitive-value');
       break;
-    case 'filter':
+    case 'inline-filter':
       componentDeps.push(
+        'combobox',
+        'select',
         'button',
         'tooltip',
         'dropdown',
-        'combobox',
-        'select',
-        'loading',
-        'calendar',
-        'input-field',
         'input-cpf',
         'input-cnpj',
         'currency',
+        'calendar',
+        'loading',
       );
       break;
     case 'pagination':
@@ -155,7 +145,7 @@ export function installComponent(projectName: string, component: InstallComponen
       break;
     case 'list-base':
       baseDeps.push('list');
-      componentDeps.push('filter', 'table');
+      componentDeps.push('table');
       break;
     case 'auth':
       libDeps.push('jwt-decode');
@@ -169,6 +159,9 @@ export function installComponent(projectName: string, component: InstallComponen
         'utils/authentication',
         'utils/routes-registre',
       );
+      break;
+    case 'dropdown':
+      utilDeps.push('is-mobile');
       break;
   }
 

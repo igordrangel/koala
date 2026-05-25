@@ -4,7 +4,7 @@ import { Validators } from '@angular/forms';
 import { KlArray } from '@koalarx/utils/KlArray';
 import { ListBase } from '@/shared/base/list.base';
 import { Button } from '@/shared/components/button/button';
-import { Filter, FilterDef } from '@/shared/components/filter/filter';
+import { InlineFilter, InlineFilterBuilder } from '@/shared/components/inline-filter';
 import { Loading } from '@/shared/components/loading/loading';
 import { Pagination } from '@/shared/components/pagination/pagination';
 import { Skeleton } from '@/shared/components/skeleton/skeleton';
@@ -29,18 +29,10 @@ interface UserFilter {
 @Component({
   selector: 'app-datatable-sample',
   templateUrl: './datatable-sample.html',
-  imports: [Filter, Table, Pagination, Skeleton, Button, Loading],
+  imports: [InlineFilter, Table, Pagination, Skeleton, Button, Loading],
+  providers: [InlineFilterBuilder],
 })
 export class DatatableSample extends ListBase<User, UserFilter> {
-  constructor() {
-    super([
-      FilterDef.text('name', 'Name').build(),
-      FilterDef.text('email', 'Email').validators(Validators.email).build(),
-    ]);
-
-    this.orderedBy.set({ field: 'firstName', direction: 'asc' });
-  }
-
   protected override datalist = resource({
     params: () => this.filterParams,
     defaultValue: this.defaultList,
@@ -69,7 +61,7 @@ export class DatatableSample extends ListBase<User, UserFilter> {
       );
 
       const totalItems = users.length;
-      const limitedItems = users.split(params.pageSize)[page - 1];
+      const limitedItems = users.split(params.pageSize)[page - 1] ?? [];
 
       this.totalItems.set(totalItems);
 
@@ -79,5 +71,16 @@ export class DatatableSample extends ListBase<User, UserFilter> {
       };
     },
   });
+
+  readonly filterConfig = inject(InlineFilterBuilder)
+    .input('Name', 'name')
+    .input('Email', 'email', 'email')
+    .build();
+
+  constructor() {
+    super();
+
+    this.orderedBy.set({ field: 'firstName', direction: 'asc' });
+  }
 }
 ```

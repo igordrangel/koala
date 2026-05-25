@@ -14,5 +14,5 @@ export class Wrapper {
   readonly config = input.required<InlineFilterConfig>();
   readonly placeholder = input('Type to filter');
 
-  readonly appliedFilters = output<any>();
+  readonly payload = output<any>();
 }

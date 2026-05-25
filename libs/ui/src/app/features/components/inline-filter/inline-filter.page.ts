@@ -1,9 +1,9 @@
+import { Section } from '@/core/components/section';
+import { InlineFilter, InlineFilterBuilder } from '@/shared/components/inline-filter';
+import { Tabs } from '@/shared/components/tabs';
 import { JsonPipe } from '@angular/common';
 import { Component, inject, Injector, resource, signal, Signal } from '@angular/core';
 import { KlArray } from '@koalarx/utils/KlArray';
-import { Section } from '../../../core/components/section';
-import { InlineFilter, InlineFilterBuilder } from '../../../shared/components/inline-filter';
-import { Tabs } from '../../../shared/components/tabs';
 
 interface User {
   id: number;
@@ -20,6 +20,7 @@ interface User {
   selector: 'app-inline-filter-page',
   templateUrl: './inline-filter.page.html',
   imports: [JsonPipe, Section, InlineFilter, Tabs],
+  providers: [InlineFilterBuilder],
 })
 export class InlineFilterPage {
   private readonly usersResourceFactory = (
@@ -60,33 +61,39 @@ export class InlineFilterPage {
       },
     });
 
-  readonly appliedFilters = signal<any[]>([]);
+  readonly appliedFilters = signal<Record<string, any>>({});
+
   readonly inlineFilterConfig = inject(InlineFilterBuilder)
-    .input('Author', 'author', 'text', { placeholder: 'e.g. igor' })
+    .input('Author', 'author', 'text', { placeholder: 'e.g. John' })
     .input('CPF', 'cpf', 'cpf')
     .input('CNPJ', 'cnpj', 'cnpj')
-    .select('Status', 'status', [
-      { value: 'open', label: 'Open', data: undefined },
-      { value: 'closed', label: 'Closed', data: undefined },
-      { value: 'draft', label: 'Draft', data: undefined },
-    ])
+    .select(
+      'Status',
+      'status',
+      [
+        { value: 'open', label: 'Open' },
+        { value: 'closed', label: 'Closed' },
+        { value: 'draft', label: 'Draft' },
+      ] as const,
+      { defaultValue: 'open' },
+    )
     .select(
       'Labels',
       'labels',
       [
-        { value: 'frontend', label: 'Frontend', data: undefined },
-        { value: 'backend', label: 'Backend', data: undefined },
-        { value: 'docs', label: 'Documentation', data: undefined },
-        { value: 'design-system', label: 'Design System', data: undefined },
-      ],
+        { value: 'frontend', label: 'Frontend' },
+        { value: 'backend', label: 'Backend' },
+        { value: 'docs', label: 'Documentation' },
+        { value: 'design-system', label: 'Design System' },
+      ] as const,
       { multiple: true },
     )
     .select('Type', 'type', [
-      { value: 'feat', label: 'Feature', data: undefined },
-      { value: 'fix', label: 'Fix', data: undefined },
-      { value: 'docs', label: 'Docs', data: undefined },
-      { value: 'refactor', label: 'Refactor', data: undefined },
-    ])
+      { value: 'feat', label: 'Feature' },
+      { value: 'fix', label: 'Fix' },
+      { value: 'docs', label: 'Docs' },
+      { value: 'refactor', label: 'Refactor' },
+    ] as const)
     .combobox('Assignee', 'assignee', this.usersResourceFactory, {})
     .calendar('Created after', 'createdAfter')
     .input('Min comments', 'minComments', 'number', { placeholder: '0' })

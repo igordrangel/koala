@@ -8,7 +8,7 @@
     ],
     "paths": {
       "@/*": [
-        "./libs/*"
+        "./libs/ui/src/app/*"
       ],
     },
     "removeComments": true,

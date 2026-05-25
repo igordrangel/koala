@@ -1,6 +1,6 @@
+import { Select, SelectOption } from '@/shared/components/select/select';
 import { Component, computed, effect, OnInit, ResourceRef, viewChild } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Select, SelectOption } from '../../../../select/select';
 import { FieldBase } from '../field.base';
 
 @Component({

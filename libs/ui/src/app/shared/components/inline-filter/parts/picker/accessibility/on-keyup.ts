@@ -1,21 +1,24 @@
-import { Signal } from '@angular/core';
-
 export function onKeyUp(
   optionsElement: HTMLDivElement,
-  filter: Signal<string>,
-  removeLastSelected: () => void,
+  openOptions: () => boolean,
+  editLastOption: () => void,
 ) {
   return (event: KeyboardEvent) => {
     const focusedOption: HTMLElement = optionsElement.querySelector('li[data-active="true"]')!;
 
     switch (event.key) {
+      case 'ArrowLeft': {
+        editLastOption();
+        event.preventDefault();
+        break;
+      }
       case 'Enter':
         if (focusedOption) {
           focusedOption.click();
           event.preventDefault();
         }
         break;
-      case 'ArrowUp':
+      case 'ArrowUp': {
         let previousOption: HTMLLIElement = focusedOption?.previousElementSibling as HTMLLIElement;
 
         if (!previousOption) {
@@ -31,8 +34,13 @@ export function onKeyUp(
         previousOption.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
         event.preventDefault();
         break;
-      case 'ArrowDown':
-        let nextOption: HTMLLIElement = focusedOption?.nextElementSibling as HTMLLIElement;
+      }
+      case 'ArrowDown': {
+        const alreadyVisible = openOptions();
+
+        let nextOption: HTMLLIElement | null = alreadyVisible
+          ? (focusedOption?.nextElementSibling as HTMLLIElement)
+          : null;
 
         if (!nextOption) {
           nextOption = optionsElement.querySelector('li')!;
@@ -46,13 +54,8 @@ export function onKeyUp(
         nextOption.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
         event.preventDefault();
         break;
-      case 'Backspace':
-      default:
-        if (event.key === 'Backspace' && !filter().length) {
-          removeLastSelected();
-          event.preventDefault();
-        }
-
+      }
+      default: {
         const firstOption: HTMLElement | null = optionsElement.querySelector('li');
 
         if (firstOption) {
@@ -60,6 +63,7 @@ export function onKeyUp(
           firstOption.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
         }
         break;
+      }
     }
   };
 }

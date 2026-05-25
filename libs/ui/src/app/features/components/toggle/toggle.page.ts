@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Section } from '../../../core/components/section';
-import { Tabs } from '../../../shared/components/tabs';
-import { Toggle } from '../../../shared/components/toggle/toggle';
+import { Section } from '@/core/components/section';
+import { Tabs } from '@/shared/components/tabs';
+import { Toggle } from '@/shared/components/toggle/toggle';
 
 @Component({
   selector: 'app-toggle-page',

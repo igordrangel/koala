@@ -1,10 +1,5 @@
 ```html
 <div class="flex items-center gap-1 w-full">
-  <app-filter
-    class="w-full"
-    [definitions]="filterDefinitions"
-    (filtersChange)="filter.set($event)"
-  />
   <button
     appButton
     btnVariant="ghost"
@@ -18,6 +13,8 @@
       <i class="fa-solid fa-arrow-rotate-right"></i>
     }
   </button>
+
+  <app-inline-filter class="w-full" [config]="filterConfig" (payload)="filter.set($event)" />
 </div>
 <app-table striped pinnedHeader class="w-full max-h-96 border border-base-200 rounded-lg">
   <ng-container header>
@@ -31,7 +28,7 @@
     </tr>
   </ng-container>
   <ng-container body>
-    @if (datalist.error()) {
+    @if (!datalist.isLoading() && datalist.error()) {
       <tr>
         <td class="text-center text-error" colspan="6">Failed to load data. Please try again.</td>
       </tr>

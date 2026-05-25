@@ -4,6 +4,7 @@ import { toCalendar } from './to-calendar';
 import { toCombobox } from './to-combobox';
 import { toInput } from './to-input';
 import { toSelect } from './to-select';
+import { validateOption } from './validate-options';
 
 export function queryParamsToOptions(
   config: InlineFilterField[],
@@ -11,11 +12,27 @@ export function queryParamsToOptions(
   queryParams: Record<string, string>,
   injector: Injector,
 ) {
-  const options = Object.entries(queryParams)
+  const queryProps = { ...queryParams };
+
+  for (const field of config) {
+    if (queryProps[field.name]) {
+      continue;
+    }
+
+    if (field.defaultValue) {
+      queryProps[field.name] = field.defaultValue;
+    }
+  }
+
+  const options = Object.entries(queryProps)
     .map(([key, value]) => {
       const fieldConfig = config.find((field) => field.name === key);
 
       if (!fieldConfig) {
+        return null;
+      }
+
+      if (!validateOption(fieldConfig, value)) {
         return null;
       }
 

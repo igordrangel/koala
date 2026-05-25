@@ -5,9 +5,4 @@ export class CalendarBuilder extends BuilderBase {
     this.config.placeholder = placeholder;
     return this;
   }
-
-  override build() {
-    this.config.type = 'calendar';
-    return this.config;
-  }
 }

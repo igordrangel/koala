@@ -1,5 +1,6 @@
-import { Combobox, ComboboxInput } from '@angular/aria/combobox';
-import { Listbox, Option } from '@angular/aria/listbox';
+import { Dropdown } from '@/shared/components/dropdown';
+import { Tooltip } from '@/shared/components/tooltip/tooltip';
+import { Combobox } from '@angular/aria/combobox';
 import {
   Component,
   computed,
@@ -9,21 +10,21 @@ import {
   inject,
   Injector,
   input,
-  model,
   OnInit,
+  output,
   signal,
   viewChild,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Dropdown } from '../../../dropdown';
 import { InlineFilterField } from '../../config';
 import { optionsToQueryParams } from '../../utils/options-to-query-params';
 import { queryParamsToOptions } from '../../utils/query-params-to-options';
 import { InputFilterChip } from '../chip/input-filter-chip';
 import { InputFilterEdit } from '../edit/input-filter-edit';
 import { handleAccessibility } from './accessibility/handle-accessibility';
+import { KeyboardShortcuts } from './keyboard-shortcuts';
 
 @Component({
   selector: 'app-input-picker',
@@ -31,12 +32,11 @@ import { handleAccessibility } from './accessibility/handle-accessibility';
   imports: [
     FormsModule,
     Dropdown,
-    Listbox,
-    Option,
     Combobox,
-    ComboboxInput,
     InputFilterEdit,
     InputFilterChip,
+    Tooltip,
+    KeyboardShortcuts,
   ],
 })
 export class InputPicker implements OnInit {
@@ -52,11 +52,15 @@ export class InputPicker implements OnInit {
     viewChild<ElementRef<HTMLButtonElement>>('triggerOptions');
   private readonly filterOptionsElement = viewChild<ElementRef<HTMLDivElement>>('filterOptions');
 
+  protected readonly filter = signal('');
+  protected readonly selectedOptions = signal<InlineFilterField[]>([]);
+
   readonly inlineFilterElementId = `inline-filter-${Math.random().toString(16).slice(2)}`;
 
   readonly filterOptions = input.required<InlineFilterField[]>();
   readonly placeholder = input('Type to filter');
-  readonly filter = model('');
+
+  readonly optionsVisible = signal(false);
 
   readonly filteredOptions = computed(() => {
     const filterOptions = this.filterOptions().filter(
@@ -71,15 +75,13 @@ export class InputPicker implements OnInit {
     return filterOptions.filter((option) => option.label.toLowerCase().includes(filterValue));
   });
 
-  readonly selectedOptions = signal<InlineFilterField[]>([]);
+  readonly payload = output<Record<string, any>>();
 
   constructor() {
-    handleAccessibility(this.selectedOptions, this.filter, this.destroyRef);
-
     effect(() => {
       const triggerElement = this.triggerOptionsElement()?.nativeElement;
       const filterOptionsElement = this.filterOptionsElement()?.nativeElement?.parentElement;
-      const isVisible = filterOptionsElement?.matches(':popover-open') ?? false;
+      const isVisible = this.optionsVisible();
       const filteredOptions = this.filteredOptions();
       const hasFilter = !!this.filter();
 
@@ -93,7 +95,7 @@ export class InputPicker implements OnInit {
       }
 
       if (!isVisible && hasFilter && filteredOptions.length > 0) {
-        triggerElement.click();
+        this.toggleOptions();
       }
     });
 
@@ -104,22 +106,49 @@ export class InputPicker implements OnInit {
       this.router.navigate([], { queryParams: payload });
 
       if (!selectedOptions.some((option) => option.editing)) {
-        this.inputFilterElement()?.nativeElement.focus();
+        setTimeout(() => this.inputFilterElement()?.nativeElement.focus());
+        this.payload.emit(payload);
       }
     });
   }
 
   ngOnInit() {
-    const queryParams = this.queryParams();
+    handleAccessibility(
+      this.inputFilterElement()!.nativeElement,
+      this.filterOptionsElement()!.nativeElement,
+      () => {
+        const alreadyVisible = this.optionsVisible();
 
-    if (queryParams) {
-      queryParamsToOptions(this.filterOptions(), this.selectedOptions, queryParams, this.injector);
-    }
+        if (alreadyVisible) {
+          return true;
+        }
+
+        this.toggleOptions();
+
+        return false;
+      },
+      () => this.editLastOption(),
+      () => this.removeLastOption(),
+      this.filter,
+      this.destroyRef,
+    );
+
+    const queryParams = this.queryParams() ?? {};
+    queryParamsToOptions(this.filterOptions(), this.selectedOptions, queryParams, this.injector);
   }
 
-  chooseOption(values: InlineFilterField[]) {
-    const option = values[0];
+  toggleOptions() {
+    this.optionsVisible.update((visible) => {
+      if (!visible) {
+        this.triggerOptionsElement()?.nativeElement.click();
+        return true;
+      }
 
+      return visible;
+    });
+  }
+
+  chooseOption(option: InlineFilterField) {
     option.editing = true;
 
     this.selectedOptions.update((options) => {
@@ -129,8 +158,6 @@ export class InputPicker implements OnInit {
 
       return [...options, option];
     });
-
-    this.filter.set('');
   }
 
   edit(field: InlineFilterField) {
@@ -149,7 +176,31 @@ export class InputPicker implements OnInit {
     });
   }
 
+  editLastOption() {
+    this.filter.set('');
+
+    const hasEditing = this.selectedOptions().some((item) => item.editing);
+
+    if (!hasEditing && !this.filter()) {
+      this.selectedOptions.update((current) => {
+        const lastIndex = current.length - 1;
+
+        if (lastIndex >= 0) {
+          current[lastIndex].editing = true;
+        }
+
+        return [...current];
+      });
+    }
+  }
+
+  removeLastOption() {
+    this.filter.set('');
+    this.selectedOptions.update((options) => options.slice(0, -1));
+  }
+
   exitEditMode(field: InlineFilterField) {
+    this.filter.set('');
     this.selectedOptions.update((options) =>
       options.map((o) => {
         if (o === field) {
@@ -162,6 +213,7 @@ export class InputPicker implements OnInit {
   }
 
   removeOption(option: InlineFilterField) {
+    this.filter.set('');
     this.selectedOptions.update((options) => options.filter((o) => o !== option));
   }
 }

@@ -33,10 +33,6 @@ export abstract class FieldBase {
         this.valueControl.setValidators(config.validators);
       }
 
-      if (config.asyncValidators) {
-        this.valueControl.setAsyncValidators(config.asyncValidators);
-      }
-
       this.templateValue.set(config.templateValue);
       this.value.set(config.value);
     });

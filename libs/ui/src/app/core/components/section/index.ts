@@ -4,4 +4,4 @@ import { SectionContent } from './section-content';
 
 export { SectionContainer, SectionContent, CodeViewer };
 
-export const Section = [SectionContainer, SectionContent, CodeViewer];
+export const Section = [SectionContainer, SectionContent, CodeViewer] as const;

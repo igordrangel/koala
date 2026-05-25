@@ -52,7 +52,7 @@ kl version
 - **Data Table** – `kl install datatable`
 - **Dropdown** – `kl install dropdown`
 - **Fieldset** – `kl install fieldset`
-- **Filter** – `kl install filter`
+- **Filter** – `kl install inline-filter`
 - **Input CNPJ** – `kl install input-cnpj`
 - **Input CPF** – `kl install input-cpf`
 - **Input Currency** – `kl install input-currency`

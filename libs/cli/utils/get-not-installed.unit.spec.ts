@@ -1,6 +1,6 @@
-import { describe, it, expect, vi } from 'vitest';
 import * as fs from 'node:fs';
-import { getNotInstalled, PackageType } from './get-not-installed';
+import { describe, expect, it, vi } from 'vitest';
+import { getNotInstalled } from './get-not-installed';
 
 vi.mock('node:fs');
 vi.mock('./project-path', () => ({
@@ -18,9 +18,7 @@ describe('getNotInstalled', () => {
     });
 
     it('should return not installed components', () => {
-      vi.mocked(fs.existsSync).mockImplementation(
-        (path: string) => !path.includes('button'),
-      );
+      vi.mocked(fs.existsSync).mockImplementation((path: string) => !path.includes('button'));
 
       const notInstalled = getNotInstalled('my-app', 'component', ['button', 'input']);
 
@@ -99,10 +97,10 @@ describe('getNotInstalled', () => {
       const mockPackageJson = {
         dependencies: {
           '@angular/core': '^21.0.0',
-          'tailwindcss': '^3.4.0',
+          tailwindcss: '^3.4.0',
         },
         devDependencies: {
-          'typescript': '^5.9.0',
+          typescript: '^5.9.0',
         },
       };
 
@@ -121,7 +119,7 @@ describe('getNotInstalled', () => {
     it('should check both dependencies and devDependencies', () => {
       const mockPackageJson = {
         dependencies: { '@angular/core': '^21.0.0' },
-        devDependencies: { 'typescript': '^5.9.0' },
+        devDependencies: { typescript: '^5.9.0' },
       };
 
       vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify(mockPackageJson));
@@ -138,7 +136,7 @@ describe('getNotInstalled', () => {
 
     it('should handle missing dependencies object', () => {
       const mockPackageJson = {
-        devDependencies: { 'typescript': '^5.9.0' },
+        devDependencies: { typescript: '^5.9.0' },
       };
 
       vi.mocked(fs.readFileSync).mockReturnValue(JSON.stringify(mockPackageJson));

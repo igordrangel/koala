@@ -1,132 +1,102 @@
 ```typescript
-import { Component, resource, signal, Signal } from '@angular/core';
-import { ComboboxOption } from '@/shared/components/combobox/combobox';
-import {
-  DEFAULT_FILTER_I18N,
-  InlineFilter,
-  FilterDef,
-  FilterDefinition,
-  FilterI18n,
-  FilterValue,
-} from '@/shared/components/inline-filter';
+import { InlineFilter, InlineFilterBuilder } from '@/shared/components/inline-filter';
+import { Component, inject, Injector, resource, signal, Signal } from '@angular/core';
+import { KlArray } from '@koalarx/utils/KlArray';
+
+interface User {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  age: number;
+  gender: string;
+  phone: string;
+  eyeColor: string;
+}
 
 @Component({
   selector: 'app-filter-sample',
   templateUrl: './filter-sample.html',
   imports: [InlineFilter],
+  providers: [InlineFilterBuilder],
 })
 export class InlineFilterSample {
-  readonly appliedFilters = signal<FilterValue[]>([]);
-
-  private toUserId(value: unknown): number | null {
-    const numeric = typeof value === 'number' ? value : Number(`${value}`);
-    return Number.isInteger(numeric) && numeric > 0 ? numeric : null;
-  }
-
-  private readonly statusOptions: ComboboxOption<string>[] = [
-    { value: 'open', label: 'Open' },
-    { value: 'closed', label: 'Closed' },
-    { value: 'draft', label: 'Draft' },
-  ];
-
-  private readonly labelOptions: ComboboxOption<string>[] = [
-    { value: 'frontend', label: 'Frontend' },
-    { value: 'backend', label: 'Backend' },
-    { value: 'docs', label: 'Documentation' },
-    { value: 'design-system', label: 'Design System' },
-  ];
-
-  private readonly typeOptions: ComboboxOption<string>[] = [
-    { value: 'feat', label: 'Feature' },
-    { value: 'fix', label: 'Fix' },
-    { value: 'docs', label: 'Docs' },
-    { value: 'refactor', label: 'Refactor' },
-  ];
-
-  private readonly usersResourceFactory = (values: Signal<unknown[]>, filter?: Signal<string>) =>
+  private readonly usersResourceFactory = (
+    filter: Signal<string>,
+    values: Signal<number[]>,
+    injector: Injector,
+  ) =>
     resource({
+      injector,
       params: () => ({
         selectedValues: values(),
         filter: filter?.() ?? '',
       }),
       defaultValue: [],
       loader: async ({ params, abortSignal }) => {
-        const selectedIds = params.selectedValues
-          .map((value) => this.toUserId(value))
-          .filter((value): value is number => value !== null);
+        const sortBy = 'firstName';
+        const order = 'asc';
+        const selectedIds = params.selectedValues;
 
-        const query = params.filter.trim();
-        const endpoint = query
-          ? `https://dummyjson.com/users/search?q=${encodeURIComponent(query)}`
-          : 'https://dummyjson.com/users?limit=8';
+        const endpoint = `https://dummyjson.com/users?limit=300&sortBy=${sortBy}&order=${order}`;
 
-        const baseUsers = await fetch(endpoint, { signal: abortSignal })
-          .then((res) => res.json())
-          .then((data: { users: { id: number; firstName: string; lastName: string }[] }) =>
-            data.users.map(
-              (user) =>
-                ({
-                  label: `${user.firstName} ${user.lastName}`,
-                  value: user.id,
-                  data: user,
-                }) as ComboboxOption<number>,
-            ),
-          );
+        const response = await fetch(endpoint, { signal: abortSignal });
+        const data: { users: User[]; total: number } = await response.json();
 
-        const missingSelectedIds = selectedIds.filter(
-          (id) => !baseUsers.some((user) => Object.is(user.value, id)),
-        );
+        const users =
+          new KlArray<User>([
+            ...data.users.filter((item) => selectedIds.includes(item.id)),
+            ...data.users.filter((item) => !selectedIds.includes(item.id)),
+          ])
+            .orderBy('firstName', 'asc')
+            .split(30)[0] ?? [];
 
-        if (missingSelectedIds.length === 0) {
-          return baseUsers;
-        }
-
-        const selectedUsers = await Promise.all(
-          missingSelectedIds.map((id) =>
-            fetch(`https://dummyjson.com/users/${id}`, { signal: abortSignal })
-              .then((res) => (res.ok ? res.json() : null))
-              .then((user: { id: number; firstName: string; lastName: string } | null) =>
-                user
-                  ? ({
-                      label: `${user.firstName} ${user.lastName}`,
-                      value: user.id,
-                      data: user,
-                    } as ComboboxOption<number>)
-                  : null,
-              ),
-          ),
-        );
-
-        return [
-          ...baseUsers,
-          ...selectedUsers.filter((user): user is ComboboxOption<number> => !!user),
-        ];
+        return users.map((user) => ({
+          value: user.id,
+          label: `${user.firstName} ${user.lastName}`,
+          data: user,
+        }));
       },
     });
 
-  readonly filterI18n: FilterI18n = {
-    ...DEFAULT_FILTER_I18N,
-    placeholder: 'Choose a filter type',
-  };
+  readonly appliedFilters = signal<Record<string, any>>({});
 
-  readonly filterDefinitions: FilterDefinition[] = [
-    FilterDef.text('author', 'Author').placeholder('e.g. john').build(),
-    FilterDef.cpf('cpf', 'CPF').build(),
-    FilterDef.cnpj('cnpj', 'CNPJ').build(),
-    FilterDef.select('status', 'Status').options(this.statusOptions).build(),
-    FilterDef.selectMultiple('labels', 'Labels').options(this.labelOptions).build(),
-    FilterDef.combobox('type', 'Type').options(this.typeOptions).build(),
-    FilterDef.combobox('assignee', 'Assignee')
-      .placeholder('Search user...')
-      .resourceFactory(this.usersResourceFactory)
-      .build(),
-    FilterDef.date('created', 'Created after').build(),
-    FilterDef.number('min-comments', 'Min comments').placeholder('0').build(),
-    FilterDef.email('contact', 'Contact e-mail').build(),
-  ];
-
-  handleFiltersChange(filters: FilterValue[]) {
-    this.appliedFilters.set(filters);
-  }
+  readonly inlineFilterConfig = inject(InlineFilterBuilder)
+    .input('Author', 'author', 'text', { placeholder: 'e.g. John' })
+    .input('CPF', 'cpf', 'cpf')
+    .input('CNPJ', 'cnpj', 'cnpj')
+    .select(
+      'Status',
+      'status',
+      [
+        { value: 'open', label: 'Open' },
+        { value: 'closed', label: 'Closed' },
+        { value: 'draft', label: 'Draft' },
+      ] as const,
+      { defaultValue: 'open' },
+    )
+    .select(
+      'Labels',
+      'labels',
+      [
+        { value: 'frontend', label: 'Frontend' },
+        { value: 'backend', label: 'Backend' },
+        { value: 'docs', label: 'Documentation' },
+        { value: 'design-system', label: 'Design System' },
+      ] as const,
+      { multiple: true },
+    )
+    .select('Type', 'type', [
+      { value: 'feat', label: 'Feature' },
+      { value: 'fix', label: 'Fix' },
+      { value: 'docs', label: 'Docs' },
+      { value: 'refactor', label: 'Refactor' },
+    ] as const)
+    .combobox('Assignee', 'assignee', this.usersResourceFactory, {})
+    .calendar('Created after', 'createdAfter')
+    .input('Min comments', 'minComments', 'number', { placeholder: '0' })
+    .input('Contact e-mail', 'contactEmail', 'email')
+    .input('Price', 'price', 'currency')
+    .build();
 }
 ```

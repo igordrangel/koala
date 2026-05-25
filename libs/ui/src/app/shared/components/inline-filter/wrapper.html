@@ -4,5 +4,9 @@
     Filter
   </button>
 } @else {
-  <app-input-picker [filterOptions]="config().fields" [placeholder]="placeholder()" />
+  <app-input-picker
+    [filterOptions]="config().fields"
+    [placeholder]="placeholder()"
+    (payload)="payload.emit($event)"
+  />
 }

@@ -1,13 +1,12 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import * as fs from 'node:fs';
 import prompts from 'prompts';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-  getPmCommands,
-  getAngularCreateCommand,
-  getProjectExecCommand,
   askPackageManager,
   detectPackageManager,
-  PackageManager,
+  getAngularCreateCommand,
+  getPmCommands,
+  getProjectExecCommand,
 } from './package-manager';
 
 vi.mock('node:fs');

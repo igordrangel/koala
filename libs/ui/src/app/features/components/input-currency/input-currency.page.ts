@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Section } from '../../../core/components/section';
-import { Fieldset } from '../../../shared/components/fieldset/fieldset';
-import { Input } from '../../../shared/components/input-field/input';
-import { Tabs } from '../../../shared/components/tabs';
-import { ValidatorHint } from '../../../shared/components/validator/validator-hint';
-import { CurrencyMask } from '../../../shared/directives/currency.directive';
+import { Section } from '@/core/components/section';
+import { Fieldset } from '@/shared/components/fieldset/fieldset';
+import { Input } from '@/shared/components/input-field/input';
+import { Tabs } from '@/shared/components/tabs';
+import { ValidatorHint } from '@/shared/components/validator/validator-hint';
+import { CurrencyMask } from '@/shared/directives/currency.directive';
 
 @Component({
   selector: 'app-input-currency-page',

@@ -1,5 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import * as fs from 'node:fs';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('node:fs');
 vi.mock('../utils/package-manager');

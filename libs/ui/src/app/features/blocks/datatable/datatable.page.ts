@@ -1,13 +1,14 @@
-import { Component, resource } from '@angular/core';
+import { Section } from '@/core/components/section';
+import { ListBase } from '@/shared/base/list.base';
+import { Button } from '@/shared/components/button/button';
+import { InlineFilter, InlineFilterBuilder } from '@/shared/components/inline-filter';
+import { Loading } from '@/shared/components/loading/loading';
+import { Pagination } from '@/shared/components/pagination/pagination';
+import { Skeleton } from '@/shared/components/skeleton/skeleton';
+import { Table } from '@/shared/components/table';
+import { Tabs } from '@/shared/components/tabs';
+import { Component, inject, resource } from '@angular/core';
 import { KlArray } from '@koalarx/utils/KlArray';
-import { Section } from '../../../core/components/section';
-import { ListBase } from '../../../shared/base/list.base';
-import { Button } from '../../../shared/components/button/button';
-import { Loading } from '../../../shared/components/loading/loading';
-import { Pagination } from '../../../shared/components/pagination/pagination';
-import { Skeleton } from '../../../shared/components/skeleton/skeleton';
-import { Table } from '../../../shared/components/table';
-import { Tabs } from '../../../shared/components/tabs';
 
 interface User {
   id: number;
@@ -28,15 +29,10 @@ interface UserFilter {
 @Component({
   selector: 'app-datatable',
   templateUrl: './datatable.page.html',
-  imports: [Section, Tabs, Table, Pagination, Skeleton, Button, Loading],
+  imports: [Section, Tabs, InlineFilter, Table, Pagination, Skeleton, Button, Loading],
+  providers: [InlineFilterBuilder],
 })
 export class DatatablePage extends ListBase<User, UserFilter> {
-  constructor() {
-    super();
-
-    this.orderedBy.set({ field: 'firstName', direction: 'asc' });
-  }
-
   protected override datalist = resource({
     params: () => this.filterParams,
     defaultValue: this.defaultList,
@@ -75,4 +71,15 @@ export class DatatablePage extends ListBase<User, UserFilter> {
       };
     },
   });
+
+  readonly filterConfig = inject(InlineFilterBuilder)
+    .input('Name', 'name')
+    .input('Email', 'email', 'email')
+    .build();
+
+  constructor() {
+    super();
+
+    this.orderedBy.set({ field: 'firstName', direction: 'asc' });
+  }
 }

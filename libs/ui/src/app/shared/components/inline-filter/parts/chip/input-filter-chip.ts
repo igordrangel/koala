@@ -1,4 +1,4 @@
-import { Loading } from '../../../loading/loading';
+import { Loading } from '@/shared/components/loading/loading';
 import { Component, input, output } from '@angular/core';
 import { InlineFilterField } from '../../config';
 

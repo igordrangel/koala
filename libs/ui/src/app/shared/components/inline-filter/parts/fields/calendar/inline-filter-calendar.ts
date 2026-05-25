@@ -1,8 +1,8 @@
+import { InputCalendar } from '@/shared/components/calendar/input-calendar';
 import { Component, effect, OnInit, viewChild } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { InputCalendar } from '../../../../calendar/input-calendar';
-import { FieldBase } from '../field.base';
 import { KlDate } from '@koalarx/utils/light/KlDate';
+import { FieldBase } from '../field.base';
 
 @Component({
   selector: 'app-inline-filter-calendar',

@@ -1,10 +1,10 @@
+import { CurrencyMask } from '@/shared/directives/currency.directive';
+import { Mask } from '@/shared/directives/mask.directive';
 import { CnpjValidator } from '@/shared/validators/cnpj.validator';
 import { CpfValidator } from '@/shared/validators/cpf.validator';
 import { Component, effect, ElementRef, OnInit, viewChild } from '@angular/core';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { maskCoin } from '@koalarx/utils/KlNumber';
-import { CurrencyMask } from '../../../../../directives/currency.directive';
-import { Mask } from '../../../../../directives/mask.directive';
 import { FieldBase } from '../field.base';
 
 @Component({

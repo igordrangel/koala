@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Section } from '../../../core/components/section';
-import { Button } from '../../../shared/components/button/button';
-import { Fieldset } from '../../../shared/components/fieldset/fieldset';
-import { Input } from '../../../shared/components/input-field/input';
-import { Tabs } from '../../../shared/components/tabs';
-import { ValidatorHint } from '../../../shared/components/validator/validator-hint';
+import { Section } from '@/core/components/section';
+import { Button } from '@/shared/components/button/button';
+import { Fieldset } from '@/shared/components/fieldset/fieldset';
+import { Input } from '@/shared/components/input-field/input';
+import { Tabs } from '@/shared/components/tabs';
+import { ValidatorHint } from '@/shared/components/validator/validator-hint';
 
 @Component({
   selector: 'app-fieldset-page',

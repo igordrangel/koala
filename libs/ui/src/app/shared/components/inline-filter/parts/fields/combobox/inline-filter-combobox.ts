@@ -1,6 +1,6 @@
+import { Combobox, ComboboxField, ComboboxOptions } from '@/shared/components/combobox';
 import { Component, computed, effect, OnInit, viewChild } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Combobox, ComboboxField, ComboboxOptions } from '../../../../combobox';
 import { FieldBase } from '../field.base';
 
 @Component({

@@ -10,7 +10,7 @@ import 'prismjs/plugins/line-numbers/prism-line-numbers';
 
 import { booleanAttribute, Component, input, linkedSignal, signal } from '@angular/core';
 import { MarkdownModule } from 'ngx-markdown';
-import { Tooltip } from '../../../shared/components/tooltip/tooltip';
+import { Tooltip } from '@/shared/components/tooltip/tooltip';
 
 export type CodeViewerLanguage = 'bash' | 'typescript' | 'html' | 'css' | 'json' | 'other';
 

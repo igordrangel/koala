@@ -1,17 +1,24 @@
-import { DestroyRef, Signal, WritableSignal } from '@angular/core';
-import { InlineFilterField } from '../../../config';
-import { onKeyUp } from './on-key-up';
+import { DestroyRef, Signal } from '@angular/core';
+import { onKeyDown } from './on-keydown';
+import { onKeyUp } from './on-keyup';
 
 export function handleAccessibility(
-  selectedOptions: WritableSignal<InlineFilterField[]>,
+  inputElement: HTMLInputElement,
+  optionsElement: HTMLDivElement,
+  openOptions: () => boolean,
+  editLastOption: () => void,
+  removeLastOption: () => void,
   filter: Signal<string>,
   destroyRef: DestroyRef,
 ) {
-  const onKeyUpHandler = onKeyUp(selectedOptions, filter);
+  const onKeyUpHandler = onKeyUp(optionsElement, openOptions, editLastOption);
+  const onKeyDownHandler = onKeyDown(filter, removeLastOption);
 
-  document.addEventListener('keydown', onKeyUpHandler);
+  inputElement.addEventListener('keyup', onKeyUpHandler);
+  inputElement.addEventListener('keydown', onKeyDownHandler);
 
   destroyRef.onDestroy(() => {
-    document.removeEventListener('keydown', onKeyUpHandler);
+    inputElement.removeEventListener('keyup', onKeyUpHandler);
+    inputElement.removeEventListener('keydown', onKeyDownHandler);
   });
 }

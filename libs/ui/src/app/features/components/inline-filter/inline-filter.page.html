@@ -22,10 +22,7 @@
     <div appTabGroup align="start" class="flex items-center">
       <div appTab label="Preview" checked>
         <div class="border border-t-0 border-base-300 rounded-b-lg p-5">
-          <app-inline-filter
-            [config]="inlineFilterConfig"
-            (appliedFilters)="appliedFilters.set($event)"
-          />
+          <app-inline-filter [config]="inlineFilterConfig" (payload)="appliedFilters.set($event)" />
 
           <div class="mt-6 border border-base-300 rounded-lg bg-base-100 p-4 text-sm">
             <ng-container title>Applied Filters</ng-container>
@@ -34,11 +31,7 @@
               builders.
             </ng-container>
 
-            @if (appliedFilters().length === 0) {
-              <p class="text-base-content/60">No filters selected.</p>
-            } @else {
-              <pre class="overflow-x-auto text-xs leading-6">{{ appliedFilters() | json }}</pre>
-            }
+            <pre class="overflow-x-auto text-xs leading-6">{{ appliedFilters() | json }}</pre>
           </div>
         </div>
       </div>

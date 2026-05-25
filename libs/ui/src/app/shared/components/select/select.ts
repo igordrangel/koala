@@ -26,7 +26,7 @@ export interface SelectOption<TValue = unknown, TData = undefined> {
   label: string;
   description?: string;
   disabled?: boolean;
-  data: TData;
+  data?: TData;
 }
 
 export type SelectSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';

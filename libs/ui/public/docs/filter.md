@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-kl install filter
+kl install inline-filter
 ```
 
 ### Builder

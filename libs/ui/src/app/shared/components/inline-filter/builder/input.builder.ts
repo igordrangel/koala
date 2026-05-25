@@ -2,8 +2,7 @@ import { InlineFilterInputType } from '../config';
 import { BuilderBase } from './builder.base';
 
 export class InputBuilder extends BuilderBase {
-  type(type: InlineFilterInputType) {
-    this.config.type = 'input';
+  inputType(type: InlineFilterInputType) {
     this.config.inputType = type;
     return this;
   }

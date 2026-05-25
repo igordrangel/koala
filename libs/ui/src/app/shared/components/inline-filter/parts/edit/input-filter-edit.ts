@@ -1,13 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  inject,
-  input,
-  OnDestroy,
-  OnInit,
-  output,
-  signal,
-} from '@angular/core';
+import { Component, ElementRef, inject, input, output, signal } from '@angular/core';
 import { InlineFilterField } from '../../config';
 import { InlineFilterCalendar } from '../fields/calendar/inline-filter-calendar';
 import { InlineFilterCombobox } from '../fields/combobox/inline-filter-combobox';
@@ -18,10 +9,16 @@ import { InlineFilterSelect } from '../fields/select/inline-filter-select';
   selector: 'app-input-filter-edit',
   templateUrl: './input-filter-edit.html',
   imports: [InlineFilterInput, InlineFilterSelect, InlineFilterCombobox, InlineFilterCalendar],
+  host: {
+    class: 'block',
+    '(document:click)': 'closeOutsideClick($event)',
+    '(keyup)': 'onKeyUp($event)',
+  },
 })
-export class InputFilterEdit implements OnInit, OnDestroy {
+export class InputFilterEdit {
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
-  private readonly closeOutsideClick = (event: PointerEvent) => {
+
+  protected readonly closeOutsideClick = (event: PointerEvent) => {
     const contentElement = this.elementRef.nativeElement;
     const clickElement = event.target as HTMLElement;
 
@@ -30,15 +27,31 @@ export class InputFilterEdit implements OnInit, OnDestroy {
     }
   };
 
+  protected readonly onKeyUp = (event: KeyboardEvent) => {
+    switch (event.key) {
+      case 'Tab': {
+        this.exitEditMode.emit();
+        break;
+      }
+      case 'Enter': {
+        if (this.field().multiple) {
+          return;
+        }
+
+        this.exitEditMode.emit();
+        break;
+      }
+      case 'Escape': {
+        this.cancelEdit.emit();
+        break;
+      }
+      default:
+        break;
+    }
+  };
+
   readonly field = input.required<InlineFilterField>();
   readonly invalid = signal(false);
+  readonly cancelEdit = output<void>();
   readonly exitEditMode = output<void>();
-
-  ngOnDestroy(): void {
-    document.removeEventListener('click', this.closeOutsideClick);
-  }
-
-  ngOnInit(): void {
-    document.addEventListener('click', this.closeOutsideClick);
-  }
 }

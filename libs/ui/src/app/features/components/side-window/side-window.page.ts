@@ -2,7 +2,7 @@ import { Button } from '@/shared/components/button/button';
 import { SideWindow, SideWindowConfig } from '@/shared/components/side-window/side-window';
 import { Tabs } from '@/shared/components/tabs';
 import { Component, inject } from '@angular/core';
-import { Section } from '../../../core/components/section';
+import { Section } from '@/core/components/section';
 import { SideWindowSample } from './side-window-sample';
 
 @Component({

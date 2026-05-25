@@ -80,13 +80,13 @@ kl install login
 ```typescript
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Credentials } from '../../../core/models/credentials';
-import { AuthorizationService } from '../../../core/security/authorization.service';
-import { Button } from '../../../shared/components/button/button';
-import { Fieldset } from '../../../shared/components/fieldset/fieldset';
-import { Input } from '../../../shared/components/input-field/input';
-import { ValidatorHint } from '../../../shared/components/validator/validator-hint';
-import { Loading } from '../../../shared/components/loading/loading';
+import { Credentials } from '@/core/models/credentials';
+import { AuthorizationService } from '@/core/security/authorization.service';
+import { Button } from '@/shared/components/button/button';
+import { Fieldset } from '@/shared/components/fieldset/fieldset';
+import { Input } from '@/shared/components/input-field/input';
+import { ValidatorHint } from '@/shared/components/validator/validator-hint';
+import { Loading } from '@/shared/components/loading/loading';
 
 @Component({
   selector: 'app-login-form-sample',
@@ -138,9 +138,9 @@ export class LoginFormSample {
 
 ```typescript
 import { Component, inject, signal } from '@angular/core';
-import { AuthorizationService } from '../../../core/security/authorization.service';
-import { Button } from '../../../shared/components/button/button';
-import { Skeleton } from '../../../shared/components/skeleton/skeleton';
+import { AuthorizationService } from '@/core/security/authorization.service';
+import { Button } from '@/shared/components/button/button';
+import { Skeleton } from '@/shared/components/skeleton/skeleton';
 
 @Component({
   selector: 'app-logged-sample',

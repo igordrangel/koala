@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { Section } from '../../../core/components/section';
-import { Input } from '../../../shared/components/input-field/input';
-import { Tabs } from '../../../shared/components/tabs';
+import { Section } from '@/core/components/section';
+import { Input } from '@/shared/components/input-field/input';
+import { Tabs } from '@/shared/components/tabs';
 
 @Component({
   selector: 'app-input-field-page',
