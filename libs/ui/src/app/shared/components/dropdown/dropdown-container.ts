@@ -33,9 +33,11 @@ export class DropdownContainer implements OnInit, OnDestroy {
     }
   };
   private readonly dropdownToggle = (event: ToggleEvent) => {
+    this.isOpen.emit(event.newState === 'open');
+
     if (event.newState === 'closed') {
       this.closed.emit();
-    } else if (event.newState === 'opened') {
+    } else if (event.newState === 'open') {
       this.opened.emit();
     }
   };
@@ -49,6 +51,7 @@ export class DropdownContainer implements OnInit, OnDestroy {
 
   readonly opened = output<void>();
   readonly closed = output<void>();
+  readonly isOpen = output<boolean>();
 
   private isOverlapTrigger(triggerElement: HTMLElement, contentElement: HTMLElement) {
     const triggerRect = triggerElement.getBoundingClientRect();

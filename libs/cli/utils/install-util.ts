@@ -11,6 +11,8 @@ export const InstallUtilFlagsList = [
   'make-breadcrumbs',
   'mime-type-by-extension',
   'string-mask',
+  'scroll-into-view',
+  'control-changes',
 ] as const;
 export type InstallUtilFlags = (typeof InstallUtilFlagsList)[number];
 

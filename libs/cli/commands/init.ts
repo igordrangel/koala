@@ -1,4 +1,5 @@
 import { logHeader } from '../utils/cli-ui';
+import { installUtil } from '../utils/install-util';
 import { setupExistingProject } from '../utils/setup-existing-project';
 
 export interface InitArgs {
@@ -14,4 +15,6 @@ export async function runInitCommand(args: InitArgs): Promise<void> {
   logHeader(logger, 'KOALA PROJECT INITIALIZER', `Project: ${projectName}`);
 
   await setupExistingProject(projectName, verbose);
+
+  installUtil(projectName, 'control-changes');
 }

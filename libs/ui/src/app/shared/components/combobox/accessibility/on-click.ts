@@ -1,3 +1,5 @@
+import { scrollIntoView } from '@/shared/utils/scroll-into-view';
+
 export function onClick(
   optionsElement: HTMLDivElement | HTMLElement,
   type: 'selected' | 'trigger',
@@ -38,7 +40,7 @@ export function onClick(
         const selectedOptions = optionsElement.querySelectorAll('li[data-selected="true"]');
 
         if (focusedOption) {
-          focusedOption.scrollIntoView({ block: 'nearest' });
+          scrollIntoView(focusedOption);
         } else if (selectedOptions.length > 0) {
           const lastSelectedOption =
             selectedOptions[selectedOptions.length - 1]?.getAttribute('data-value');
@@ -48,14 +50,14 @@ export function onClick(
             : null;
 
           if (selectedOption) {
-            selectedOption.scrollIntoView({ block: 'nearest' });
+            scrollIntoView(selectedOption);
             selectedOption.dataset['active'] = 'true';
           }
         } else {
           const firstOption: HTMLElement | null = optionsElement.querySelector('li');
 
           if (firstOption) {
-            firstOption.scrollIntoView({ block: 'nearest' });
+            scrollIntoView(firstOption);
             firstOption.dataset['active'] = 'true';
           }
         }

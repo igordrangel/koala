@@ -1,3 +1,4 @@
+import { scrollIntoView } from '@/shared/utils/scroll-into-view';
 import { Signal } from '@angular/core';
 
 export function onKeyUp(
@@ -28,7 +29,7 @@ export function onKeyUp(
           .forEach((option) => (option.dataset['active'] = 'false'));
 
         previousOption.dataset['active'] = 'true';
-        previousOption.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        scrollIntoView(previousOption);
         event.preventDefault();
         break;
       case 'ArrowDown':
@@ -43,7 +44,7 @@ export function onKeyUp(
           .forEach((option) => (option.dataset['active'] = 'false'));
 
         nextOption.dataset['active'] = 'true';
-        nextOption.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        scrollIntoView(nextOption);
         event.preventDefault();
         break;
       case 'Backspace':
@@ -57,7 +58,7 @@ export function onKeyUp(
 
         if (firstOption) {
           firstOption.dataset['active'] = 'true';
-          firstOption.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          scrollIntoView(firstOption);
         }
         break;
     }

@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { ComboboxOptions } from '../../combobox';
+import { SelectOptions } from '../../select';
 import { InlineFilterConfig, InlineFilterInputType } from '../config';
 import { CalendarBuilder } from './calendar.builder';
 import { ComboboxBuilder } from './combobox.builder';
 import { InputBuilder } from './input.builder';
 import { SelectBuilder } from './select.builder';
-import { CommonOptions, SelectFieldConfig, SelectOptions } from './types';
+import { CommonOptions, SelectFieldConfig } from './types';
 
 @Injectable()
 export class InlineFilterBuilder {

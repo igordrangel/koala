@@ -2,13 +2,6 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: 'e2e/select',
-    loadComponent: () =>
-      import('./shared/components/select/testing/select-e2e-host').then(
-        (m) => m.SelectE2EHostComponent,
-      ),
-  },
-  {
     path: '',
     redirectTo: 'get-started/introduction',
     pathMatch: 'full',

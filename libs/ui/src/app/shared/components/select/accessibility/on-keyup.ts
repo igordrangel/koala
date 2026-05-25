@@ -1,26 +1,19 @@
 import { scrollIntoView } from '@/shared/utils/scroll-into-view';
 
-export function onKeyUp(
-  optionsElement: HTMLDivElement,
-  openOptions: () => boolean,
-  editLastOption: () => void,
-) {
+export function onKeyUp(optionsElement: HTMLDivElement) {
   return (event: KeyboardEvent) => {
     const focusedOption: HTMLElement = optionsElement.querySelector('li[data-active="true"]')!;
 
     switch (event.key) {
-      case 'ArrowLeft': {
-        editLastOption();
-        event.preventDefault();
-        break;
-      }
       case 'Enter':
-        if (focusedOption) {
+        const isOpened = focusedOption?.parentElement?.classList.contains('opened') ?? false;
+
+        if (focusedOption && isOpened) {
           focusedOption.click();
           event.preventDefault();
         }
         break;
-      case 'ArrowUp': {
+      case 'ArrowUp':
         let previousOption: HTMLLIElement = focusedOption?.previousElementSibling as HTMLLIElement;
 
         if (!previousOption) {
@@ -36,13 +29,8 @@ export function onKeyUp(
         scrollIntoView(previousOption);
         event.preventDefault();
         break;
-      }
-      case 'ArrowDown': {
-        const alreadyVisible = openOptions();
-
-        let nextOption: HTMLLIElement | null = alreadyVisible
-          ? (focusedOption?.nextElementSibling as HTMLLIElement)
-          : null;
+      case 'ArrowDown':
+        let nextOption: HTMLLIElement = focusedOption?.nextElementSibling as HTMLLIElement;
 
         if (!nextOption) {
           nextOption = optionsElement.querySelector('li')!;
@@ -56,8 +44,7 @@ export function onKeyUp(
         scrollIntoView(nextOption);
         event.preventDefault();
         break;
-      }
-      default: {
+      default:
         const firstOption: HTMLElement | null = optionsElement.querySelector('li');
 
         if (firstOption) {
@@ -65,7 +52,6 @@ export function onKeyUp(
           scrollIntoView(firstOption);
         }
         break;
-      }
     }
   };
 }

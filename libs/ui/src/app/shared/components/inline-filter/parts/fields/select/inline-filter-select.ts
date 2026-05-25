@@ -1,4 +1,4 @@
-import { Select, SelectOption } from '@/shared/components/select/select';
+import { Select, SelectField, SelectOption } from '@/shared/components/select';
 import { Component, computed, effect, OnInit, ResourceRef, viewChild } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FieldBase } from '../field.base';
@@ -9,7 +9,7 @@ import { FieldBase } from '../field.base';
   imports: [ReactiveFormsModule, Select],
 })
 export class InlineFilterSelect extends FieldBase implements OnInit {
-  private readonly selectComponentRef = viewChild<Select>('selectField');
+  private readonly selectComponentRef = viewChild<SelectField>('selectField');
 
   readonly options = computed(() => {
     const options = this.config().options || [];
@@ -43,8 +43,8 @@ export class InlineFilterSelect extends FieldBase implements OnInit {
 
   ngOnInit(): void {
     setTimeout(() => {
-      this.selectComponentRef()?.buttonRef()?.nativeElement.focus();
-      this.selectComponentRef()?.toggleOpen();
+      this.selectComponentRef()?.triggerOptionsElement()?.nativeElement.focus();
+      this.selectComponentRef()?.triggerOptionsElement()?.nativeElement.click();
     });
   }
 }

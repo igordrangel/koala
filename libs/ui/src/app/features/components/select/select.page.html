@@ -28,7 +28,7 @@
           />
           <div class="rounded-lg border border-dashed border-base-300 bg-base-200/50 p-4">
             <p class="mb-2 text-sm font-medium">Value</p>
-            <pre class="text-sm whitespace-pre-wrap">{{ singleControl.value | json }}</pre>
+            <pre class="text-sm whitespace-pre-wrap">{{ singleValueChanges() | json }}</pre>
           </div>
         </div>
       </div>
@@ -76,7 +76,7 @@
           />
           <div class="rounded-lg border border-dashed border-base-300 bg-base-200/50 p-4">
             <p class="mb-2 text-sm font-medium">Value</p>
-            <pre class="text-sm whitespace-pre-wrap">{{ multipleControl.value | json }}</pre>
+            <pre class="text-sm whitespace-pre-wrap">{{ multipleValueChanges() | json }}</pre>
           </div>
         </div>
       </div>

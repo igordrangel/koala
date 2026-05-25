@@ -1,5 +1,5 @@
 import { ResourceRef } from '@angular/core';
-import { SelectOption } from '../../select/select';
+import { SelectOption } from '../../select';
 import { BuilderBase } from './builder.base';
 
 export class SelectBuilder extends BuilderBase {

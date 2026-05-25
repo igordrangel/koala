@@ -1,7 +1,7 @@
-import { Component, input, output } from '@angular/core';
-import { InputPicker } from './parts/picker/input-picker';
-import { InlineFilterConfig } from './config';
 import { Button } from '@/shared/components/button/button';
+import { Component, input, output } from '@angular/core';
+import { InlineFilterConfig } from './config';
+import { InputPicker } from './parts/picker/input-picker';
 
 @Component({
   selector: 'app-inline-filter',

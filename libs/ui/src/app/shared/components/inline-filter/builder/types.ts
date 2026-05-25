@@ -1,6 +1,6 @@
-import { ValidatorFn } from '@angular/forms';
-import { SelectOption } from '../../select/select';
 import { ResourceRef } from '@angular/core';
+import { ValidatorFn } from '@angular/forms';
+import { SelectOption, SelectOptions } from '../../select';
 
 export interface CommonOptions<TDefaultValue = any> {
   hint?: string;
@@ -14,8 +14,6 @@ export type InferSelectValue<T> = T extends readonly SelectOption<infer U, any>[
   : T extends ResourceRef<readonly SelectOption<infer U, any>[]>
     ? U
     : never;
-
-export type SelectOptions = SelectOption<any, any>[] | ResourceRef<SelectOption<any, any>[]>;
 
 export type SelectFieldConfig<
   T extends SelectOptions = SelectOptions,

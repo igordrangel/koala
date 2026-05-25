@@ -1,5 +1,5 @@
 import { ComboboxOption } from '@/shared/components/combobox';
-import { SelectOption } from '@/shared/components/select/select';
+import { SelectOption } from '@/shared/components/select';
 import { normalizeValue } from './normalize-value';
 
 export function filterOptionsByValue(

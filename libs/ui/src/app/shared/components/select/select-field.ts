@@ -1,3 +1,4 @@
+import { scrollIntoView } from '@/shared/utils/scroll-into-view';
 import {
   booleanAttribute,
   Component,
@@ -9,48 +10,36 @@ import {
   Injector,
   input,
   linkedSignal,
-  model,
   OnInit,
   output,
   ResourceRef,
   signal,
   viewChild,
 } from '@angular/core';
-import {
-  ControlValueAccessor,
-  FormsModule,
-  NG_VALUE_ACCESSOR,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Dropdown } from '../dropdown';
 import { InputSize } from '../input-field/input';
 import { Loading } from '../loading/loading';
 import { handleAccessibility } from './accessibility/handle-accessibility';
-import { AsyncComboboxOptions, ComboboxOption, ComboboxOptions, ListConfig } from './config';
+import { ListConfig, SelectOption, SelectOptions } from './config';
 import { handleResourceOptions } from './utils/handle-resource-options';
 
 @Component({
-  selector: 'app-combobox',
-  templateUrl: './combobox-field.html',
-  imports: [ReactiveFormsModule, FormsModule, Dropdown, Loading],
+  selector: 'app-select',
+  templateUrl: './select-field.html',
+  imports: [Dropdown, Loading],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ComboboxField),
+      useExisting: forwardRef(() => SelectField),
       multi: true,
     },
   ],
 })
-export class ComboboxField implements OnInit, ControlValueAccessor {
+export class SelectField implements OnInit, ControlValueAccessor {
   private readonly destroyRef = inject(DestroyRef);
 
-  private readonly triggerOptionsElement =
-    viewChild<ElementRef<HTMLButtonElement>>('triggerOptions');
   private readonly filterOptionsElement = viewChild<ElementRef<HTMLDivElement>>('filterOptions');
-  private readonly selectedOptionContentElement =
-    viewChild<ElementRef<HTMLDivElement>>('selectedOptionContent');
-
-  readonly inputFilterElement = viewChild<ElementRef<HTMLInputElement>>('inputFilter');
 
   private readonly injector = inject(Injector);
   private onChanged: (value: any) => void = () => {};
@@ -58,52 +47,27 @@ export class ComboboxField implements OnInit, ControlValueAccessor {
 
   private firstLoad = true;
 
-  protected readonly listElementId = `combobox-list-${Math.random().toString(16).slice(2)}`;
+  protected readonly listElementId = `select-list-${Math.random().toString(16).slice(2)}`;
   protected disabled = false;
+
+  readonly triggerOptionsElement = viewChild<ElementRef<HTMLButtonElement>>('triggerOptions');
 
   readonly placeholder = input('Select an option');
   readonly inline = input(false, { transform: booleanAttribute });
-  readonly options = input.required<ComboboxOptions<any, any>>();
+  readonly options = input.required<SelectOptions>();
   readonly size = input<InputSize>('md');
-  readonly openOnType = input(false, { transform: booleanAttribute });
   readonly multiple = input(false, { transform: booleanAttribute });
 
-  readonly selected = output<ComboboxOption[]>();
-
-  readonly filter = model('');
-  readonly selectedOptions = signal<ComboboxOption[]>([]);
+  readonly selected = output<SelectOption[]>();
+  readonly selectedOptions = signal<SelectOption[]>([]);
   readonly selectedValues = linkedSignal<any[]>(() =>
     this.selectedOptions().map((option) => option.value),
   );
-  readonly filteredOptions = signal<ResourceRef<ComboboxOption<any, any>[]> | null>(null);
+  readonly filteredOptions = signal<ResourceRef<SelectOption<any, any>[]> | null>(null);
 
   readonly dropdownOpened = signal(false);
 
   constructor() {
-    effect(() => {
-      const triggerElement = this.triggerOptionsElement()?.nativeElement;
-      const optionsElement = this.filterOptionsElement()?.nativeElement;
-      const filterOptionsElement = optionsElement?.parentElement;
-      const isVisible = filterOptionsElement?.matches(':popover-open') ?? false;
-      const hasOptions = optionsElement?.children.length ?? 0 > 0;
-      const hasFilter = !!this.filter();
-
-      if (!triggerElement) {
-        return;
-      }
-
-      if (this.openOnType()) {
-        if (isVisible && (!hasFilter || !hasOptions)) {
-          filterOptionsElement?.hidePopover();
-          return;
-        }
-
-        if (!isVisible && hasFilter && hasOptions) {
-          triggerElement.click();
-        }
-      }
-    });
-
     effect(() => {
       const selectedOptions = this.selectedOptions();
       const multiple = this.multiple();
@@ -124,7 +88,7 @@ export class ComboboxField implements OnInit, ControlValueAccessor {
           value = selectedOptions[0]?.value ?? null;
         }
 
-        this.onChanged?.(value);
+        this.onChanged(value);
       });
     });
 
@@ -147,55 +111,55 @@ export class ComboboxField implements OnInit, ControlValueAccessor {
         this.selectedOptions.set(options.filter((option) => selectedValues.includes(option.value)));
       }
     });
+
+    effect(() => {
+      const isOpened = this.dropdownOpened();
+      const optionsElement = this.filterOptionsElement()!.nativeElement;
+
+      if (isOpened) {
+        const hasActiveOptions = optionsElement.querySelector('li[data-active="true"]');
+
+        if (!hasActiveOptions) {
+          const firstOption: HTMLElement | null =
+            optionsElement.querySelector('li[data-selected="true"]') ??
+            optionsElement.querySelector('li');
+
+          if (firstOption) {
+            firstOption.dataset['active'] = 'true';
+            scrollIntoView(firstOption);
+          }
+        }
+      }
+
+      this.onTouched();
+    });
   }
 
   ngOnInit(): void {
     handleAccessibility(
-      this.inputFilterElement()!.nativeElement,
+      this.triggerOptionsElement()!.nativeElement,
       this.filterOptionsElement()!.nativeElement,
-      this.selectedOptionContentElement()!.nativeElement,
-      this.filter,
-      () => {
-        if (this.multiple()) {
-          this.removeOption(this.selectedValues()[this.selectedValues().length - 1]);
-        }
-      },
       this.destroyRef,
     );
 
     const options = this.options();
     const isArray = Array.isArray(options);
-    const isResourceRef = typeof options === 'object' && options !== null && 'value' in options;
-    const isAsync = typeof options === 'function';
 
-    let listConfig: ListConfig | undefined;
+    let listConfig: ListConfig;
 
     if (isArray) {
       listConfig = {
-        onMemory: options as ComboboxOption[],
+        onMemory: options as SelectOption[],
         resourceRef: null!,
-        async: null!,
       };
-    } else if (isResourceRef) {
+    } else {
       listConfig = {
         onMemory: null!,
-        resourceRef: options as ResourceRef<ComboboxOption[]>,
-        async: null!,
-      };
-    } else if (isAsync) {
-      listConfig = {
-        onMemory: null!,
-        resourceRef: null!,
-        async: options as AsyncComboboxOptions,
+        resourceRef: options as ResourceRef<SelectOption[]>,
       };
     }
 
-    const resourceOptions = handleResourceOptions(
-      this.injector,
-      this.filter,
-      this.selectedValues,
-      listConfig,
-    );
+    const resourceOptions = handleResourceOptions(this.injector, listConfig);
 
     this.filteredOptions.set(resourceOptions);
   }
@@ -216,29 +180,26 @@ export class ComboboxField implements OnInit, ControlValueAccessor {
     this.disabled = isDisabled;
   }
 
-  toggleDropdown() {
-    if (!this.openOnType()) {
-      this.triggerOptionsElement()?.nativeElement.click();
-      this.dropdownOpened.set(true);
-      this.onTouched?.();
-    }
+  toggleDropdown(opened: boolean) {
+    setTimeout(() => this.dropdownOpened.set(opened), 150);
   }
 
-  toggleOption(option: ComboboxOption) {
+  toggleOption(option: SelectOption) {
+    const isOpened = this.dropdownOpened();
+
     this.selectedOptions.update((current) => {
       const isSelected = current.some((o) => o.value === option.value);
 
-      if (isSelected) {
+      if (isSelected && isOpened) {
         return current.filter((o) => o.value !== option.value);
       }
 
       if (this.multiple()) {
         return [...current, option];
       }
+
       return [option];
     });
-
-    this.filter.set('');
   }
 
   removeOption(value: string) {
@@ -246,7 +207,6 @@ export class ComboboxField implements OnInit, ControlValueAccessor {
       this.selectedOptions.set(this.selectedOptions().filter((option) => option.value !== value));
     } else {
       this.selectedOptions.set([]);
-      this.filter.set('');
     }
   }
 }

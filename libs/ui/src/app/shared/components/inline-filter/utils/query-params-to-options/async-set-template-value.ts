@@ -1,5 +1,5 @@
 import { ComboboxOption } from '@/shared/components/combobox';
-import { SelectOption } from '@/shared/components/select/select';
+import { SelectOption } from '@/shared/components/select';
 import { WritableSignal } from '@angular/core';
 import { InlineFilterField } from '../../config';
 import { filterOptionsByValue } from './filter-options-by-value';

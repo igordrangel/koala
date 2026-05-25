@@ -1,7 +1,6 @@
-import { SelectOption } from '@/shared/components/select/select';
-import { ResourceRef } from '@angular/core';
 import { ValidatorFn } from '@angular/forms';
 import { ComboboxOptions } from '../combobox';
+import { SelectOptions } from '../select/config';
 
 export type InlineFilterFieldType = 'input' | 'calendar' | 'select' | 'combobox';
 export type InlineFilterInputType =
@@ -19,10 +18,7 @@ export interface InlineFilterField {
   name: string;
   type: InlineFilterFieldType;
   inputType?: InlineFilterInputType;
-  options?:
-    | SelectOption<any, any>[]
-    | ResourceRef<SelectOption<any, any>[]>
-    | ComboboxOptions<any, any>;
+  options?: SelectOptions<any, any> | ComboboxOptions<any, any>;
   hint?: string;
   placeholder?: string;
   validators?: ValidatorFn | ValidatorFn[];

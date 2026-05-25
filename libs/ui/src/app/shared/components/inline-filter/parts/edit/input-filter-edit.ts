@@ -30,7 +30,7 @@ export class InputFilterEdit {
   protected readonly onKeyUp = (event: KeyboardEvent) => {
     switch (event.key) {
       case 'Tab': {
-        this.exitEditMode.emit();
+        setTimeout(() => this.exitEditMode.emit());
         break;
       }
       case 'Enter': {
@@ -38,11 +38,11 @@ export class InputFilterEdit {
           return;
         }
 
-        this.exitEditMode.emit();
+        setTimeout(() => this.exitEditMode.emit());
         break;
       }
       case 'Escape': {
-        this.cancelEdit.emit();
+        setTimeout(() => this.cancelEdit.emit());
         break;
       }
       default:

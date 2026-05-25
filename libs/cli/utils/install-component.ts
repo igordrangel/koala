@@ -121,12 +121,13 @@ export function installComponent(projectName: string, component: InstallComponen
       utilDeps.push('currency-mask');
       break;
     case 'combobox':
+    case 'select':
       libDeps.push('@angular/aria');
+      utilDeps.push('scroll-into-view');
       componentDeps.push('dropdown', 'input-field', 'loading');
       break;
-    case 'select':
-      break;
     case 'inline-filter':
+      utilDeps.push('scroll-into-view');
       componentDeps.push(
         'combobox',
         'select',

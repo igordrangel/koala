@@ -1,13 +1,13 @@
+import { SelectOption } from '@/shared/components/select';
 import { Injector, ResourceRef, WritableSignal } from '@angular/core';
-import { InlineFilterField } from '../../config';
-import { SelectOption } from '@/shared/components/select/select';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { first } from 'rxjs/internal/operators/first';
-import { joinOptionLabels } from './join-option-labels';
-import { filterOptionsByValue } from './filter-options-by-value';
 import { delay } from 'rxjs/internal/operators/delay';
-import { asyncSetTemplateValue } from './async-set-template-value';
+import { first } from 'rxjs/internal/operators/first';
+import { InlineFilterField } from '../../config';
 import { asyncNotFoundTemplateValue } from './async-not-found-template-value';
+import { asyncSetTemplateValue } from './async-set-template-value';
+import { filterOptionsByValue } from './filter-options-by-value';
+import { joinOptionLabels } from './join-option-labels';
 
 export function toSelect(
   option: InlineFilterField,

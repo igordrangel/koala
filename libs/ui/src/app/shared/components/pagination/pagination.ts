@@ -3,7 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs/internal/operators/map';
-import { Select, SelectOption } from '../select/select';
+import { Select, SelectOption } from '../select';
 
 export type PaginationSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
