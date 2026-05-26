@@ -17,17 +17,17 @@ kl install currency
     type="text"
     placeholder="Type here"
     [formControl]="currencyControl"
-    appMask="000.000.000-00"
+    appCurrency
   />
   @if (currencyControl.hasError('required')) {
-  <span appValidatorHint>Currency is required</span>
+    <span appValidatorHint>Currency is required</span>
   }
 </app-fieldset>
 ```
 
 ```typescript
-import { Fieldset } from '@/shared/components/fieldset/fieldset';
-import { Input } from '@/shared/components/input-field/input';
+import { Fieldset } from '@/shared/components/fieldset';
+import { Input } from '@/shared/components/input-field';
 import { ValidatorHint } from '@/shared/components/validator/validator-hint';
 import { CurrencyMask } from '@/shared/directives/currency.directive';
 import { Component } from '@angular/core';
@@ -46,8 +46,8 @@ export class InputCurrencySample {
 ### TypeScript
 
 ```typescript
-import { Fieldset } from '@/shared/components/fieldset/fieldset';
-import { Input } from '@/shared/components/input-field/input';
+import { Fieldset } from '@/shared/components/fieldset';
+import { Input } from '@/shared/components/input-field';
 import { ValidatorHint } from '@/shared/components/validator/validator-hint';
 import { CurrencyMask } from '@/shared/directives/currency.directive';
 import { Component } from '@angular/core';

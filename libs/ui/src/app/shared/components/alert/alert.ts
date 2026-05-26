@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { Modal } from '../modal/modal';
-import { AlertModal } from './alert.modal';
+import { AlertModal } from '.';
+import { Modal } from '../modal';
 
 export type AlertType = 'success' | 'error' | 'warning' | 'info';
 

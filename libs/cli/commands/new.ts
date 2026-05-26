@@ -11,6 +11,7 @@ import {
 } from '../utils/package-manager';
 import { runCommand } from '../utils/run-command';
 import { setupGlobalTests } from '../utils/setup-global-tests';
+import { installUtil } from '../utils/install-util';
 
 const originPath = path.join(__dirname, '../../');
 
@@ -148,5 +149,8 @@ export async function runNewCommand(args: NewArgs): Promise<void> {
     verbose,
     loaderText: 'Linting project',
   });
+
+  installUtil(name, 'control-changes');
+
   logSuccess(console.log, 'Project ready');
 }

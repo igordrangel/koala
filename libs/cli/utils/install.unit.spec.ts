@@ -1,11 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import * as fs from 'node:fs';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { install } from './install';
-import { InstallComponentFlags } from './install-component';
-import { InstallValidatorFlags } from './install-validator';
-import { InstallDirectiveFlags } from './install-directive';
-import { InstallUtilFlags } from './install-util';
-import { InstallBaseFlags } from './install-base';
 
 vi.mock('./install-component');
 vi.mock('./install-validator');
@@ -23,7 +17,6 @@ describe('install', () => {
   });
 
   it('should install components when provided', async () => {
-    const mockComponents = ['button', 'input'] as const;
     const mockGetNotInstalled = vi.fn().mockReturnValue([]);
 
     // Mock the dynamic import

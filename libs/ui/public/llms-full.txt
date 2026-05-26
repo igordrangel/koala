@@ -8,6 +8,9 @@ Components are installed directly into your project via the **Koala CLI**, givin
 ## 1. Install the CLI
 
 ```bash
+npm install -g @koalarx/ui-cli
+
+# or
 bun add -g @koalarx/ui-cli
 ```
 
@@ -15,56 +18,64 @@ bun add -g @koalarx/ui-cli
 
 ```bash
 kl new example
+
+# with custom package manager
+kl new example --pm pnpm
 ```
 
 ## 3. Add components
 
 ```bash
 kl install button,dropdown,modal
+
+# target a specific project
+kl install modal --project my-angular-app
 ```
 
 ## 4. Add resources (optional)
 
 ```bash
-kl resource auth,handle-error
+kl init --project my-angular-app
 ```
 
 ## Available components
 
-- **Alert** – `kl install alert`
-- **Auth** – `kl install auth`
-- **Breadcrumb** – `kl install breadcrumb`
-- **Button** – `kl install button`
-- **Calendar** – `kl install calendar`
-- **Checkbox** – `kl install checkbox`
-- **Collapse** – `kl install collapse`
-- **Combobox** – `kl install combobox`
-- **Confirm** – `kl install confirm`
-- **Data Table** – `kl install datatable`
-- **Dropdown** – `kl install dropdown`
-- **Fieldset** – `kl install fieldset`
-- **Filter** – `kl install filter`
-- **Input CNPJ** – `kl install input-cnpj`
-- **Input CPF** – `kl install input-cpf`
-- **Input Currency** – `kl install input-currency`
-- **Input Field** – `kl install input-field`
-- **ListBase** – `kl install list-base`
-- **Loading** – `kl install loading`
-- **Modal** – `kl install modal`
-- **Pagination** – `kl install pagination`
-- **Radio** – `kl install radio`
-- **Range** – `kl install range`
-- **Select** – `kl install select`
-- **Side Window** – `kl install side-window`
-- **Skeleton** – `kl install skeleton`
-- **Stepper** – `kl install stepper`
-- **Table** – `kl install table`
-- **Tabs** – `kl install tabs`
-- **Textarea** – `kl install textarea`
-- **Toast** – `kl install toast`
-- **Toggle** – `kl install toggle`
-- **Tooltip** – `kl install tooltip`
-- **Validator** – `kl install validator`
+- **Alert** – `kl install -n alert`
+- **Bottom Sheet** – `kl install -n bottom-sheet`
+- **Breadcrumb** – `kl install -n breadcrumb`
+- **Button** – `kl install -n button`
+- **Calendar** – `kl install -n calendar`
+- **Checkbox** – `kl install -n checkbox`
+- **Collapse** – `kl install -n collapse`
+- **Combobox** – `kl install -n combobox`
+- **Confirm** – `kl install -n confirm`
+- **DataTable** – `kl install -n datatable`
+- **Dropdown** – `kl install -n dropdown`
+- **Fieldset** – `kl install -n fieldset`
+- **Inline Filter** – `kl install -n inline-filter`
+- **Input CNPJ** – `kl install -n input-cnpj`
+- **Input CPF** – `kl install -n input-cpf`
+- **Input Currency** – `kl install -n input-currency`
+- **Input Field** – `kl install -n input-field`
+- **Loading** – `kl install -n loading`
+- **Login** – `kl install -n login`
+- **Modal** – `kl install -n modal`
+- **Pagination** – `kl install -n pagination`
+- **Radio** – `kl install -n radio`
+- **Range** – `kl install -n range`
+- **Select** – `kl install -n select`
+- **Side Window** – `kl install -n side-window`
+- **Skeleton** – `kl install -n skeleton`
+- **Stepper** – `kl install -n stepper`
+- **Table** – `kl install -n table`
+- **Tabs** – `kl install -n tabs`
+- **Textarea** – `kl install -n textarea`
+- **Toast** – `kl install -n toast`
+- **Toggle** – `kl install -n toggle`
+- **Tooltip** – `kl install -n tooltip`
+- **Validator** – `kl install -n validator`
+- **List Base** – `kl install -n list-base`
+- **Auth** – `kl install -n auth`
 
 ---
 
@@ -86,8 +97,8 @@ kl install alert
 ```
 
 ```typescript
-import { Alert, AlertType } from '@/shared/components/alert/alert';
-import { Button } from '@/shared/components/button/button';
+import { Alert, AlertType } from '@/shared/components/alert';
+import { Button } from '@/shared/components/button';
 import { Component, inject } from '@angular/core';
 
 @Component({
@@ -120,8 +131,8 @@ export class AlertSample {
 ### TypeScript
 
 ```typescript
-import { Alert, AlertType } from '@/shared/components/alert/alert';
-import { Button } from '@/shared/components/button/button';
+import { Alert, AlertType } from '@/shared/components/alert';
+import { Button } from '@/shared/components/button';
 import { Component, inject } from '@angular/core';
 
 @Component({
@@ -153,32 +164,125 @@ export class AlertSample {
 
 ---
 
-# Auth
+# Bottom Sheet
 
 ## Installation
 
 ```bash
-kl install auth
+kl install bottom-sheet
 ```
 
-## API
+### Close Corner
 
-### Signals and Properties
-- **loggedUser**: Signal holding the currently authenticated user (or undefined).
-- **event**: Signal that emits authentication events (login, failure, loading, etc).
-- **hasToken**: Computed signal indicating if an access token is present.
-- **accessToken**: Getter for the current access token.
-- **refreshToken**: Getter for the current refresh token.
-- **isAuthenticated**: Computed signal indicating if a user is authenticated.
+```html
+<app-bottom-sheet>
+  <div class="flex justify-between items-center" title>
+    <span>Hello!</span>
+    <button appButton circle variant="ghost" size="sm" (click)="bottomSheet.dismiss()">X</button>
+  </div>
+  <ng-container content> Press ESC key or click the button below to close </ng-container>
+</app-bottom-sheet>
+```
 
-### Methods
-- **auth(credentials: Credentials)**: Performs login with the provided credentials.
-- **logout()**: Logs out, clearing tokens and user state.
-- **updateToken()**: Updates the access token using the refresh token.
-- **isExpired()**: Returns true if the access token is expired.
+```typescript
+import { Component, inject } from '@angular/core';
+import { Button } from '@/shared/components/button';
+import { BottomSheetContainer, BottomSheetRef } from '@/shared/components/bottom-sheet';
 
-## Usage
-See usage examples in the [Login Block](./login.md).
+@Component({
+  selector: 'app-bottom-sheet-close-corner-sample',
+  templateUrl: './bottom-sheet-close-corner-sample.html',
+  imports: [BottomSheetContainer, Button],
+})
+export class BottomSheetCloseCornerSample {
+  readonly BottomSheetRef = inject(BottomSheetRef);
+}
+```
+
+### Sample
+
+```html
+<app-bottom-sheet>
+  <ng-container title>Hello!</ng-container>
+  <ng-container content> Press ESC key or click the button below to close </ng-container>
+  <ng-container actions>
+    <button appButton (click)="bottomSheet.dismiss()">Close</button>
+  </ng-container>
+</app-bottom-sheet>
+```
+
+```typescript
+import { Component, inject } from '@angular/core';
+import { Button } from '@/shared/components/button';
+import { BottomSheetContainer, BottomSheetRef } from '@/shared/components/bottom-sheet';
+
+@Component({
+  selector: 'app-bottom-sheet-sample',
+  templateUrl: './bottom-sheet-sample.html',
+  imports: [BottomSheetContainer, Button],
+})
+export class BottomSheetSample {
+  readonly bottomSheetRef = inject(BottomSheetRef);
+}
+```
+
+### Trigger
+
+```html
+<button appButton (click)="open()">open bottom sheet</button>
+```
+
+```typescript
+import { Component, inject } from '@angular/core';
+import { Button } from '@/shared/components/button';
+import { BottomSheet } from '@/shared/components/bottom-sheet';
+import { BottomSheetSample } from './bottom-sheet-dialog-sample';
+
+@Component({
+  selector: 'app-bottom-sheet-trigger-sample',
+  templateUrl: './bottom-sheet-trigger.sample.html',
+  imports: [Button],
+})
+export class BottomSheetTriggerSample {
+  private readonly bottomSheet = inject(BottomSheet);
+
+  openModal() {
+    this.bottomSheet.open(BottomSheetSample, {
+      closeOptions: {
+        pressEscape: true,
+        clickOutside: false,
+      },
+    });
+  }
+}
+```
+
+### Trigger Close Corner
+
+```typescript
+import { Component, inject } from '@angular/core';
+import { Button } from '@/shared/components/button';
+import { BottomSheet } from '@/shared/components/bottom-sheet';
+import { BottomSheetCloseCornerSample } from './bottom-sheet-dialog-close-corner-sample';
+
+@Component({
+  selector: 'app-bottom-sheet-trigger-close-corner-sample',
+  templateUrl: './bottom-sheet-trigger-close-corner.sample.html',
+  imports: [Button],
+})
+export class BottomSheetTriggerCloseCornerSample {
+  private readonly bottomSheet = inject(BottomSheet);
+
+  openModal() {
+    this.bottomSheet.open(BottomSheetCloseCornerSample, {
+      closeOptions: {
+        pressEscape: true,
+        clickOutside: false,
+      },
+    });
+  }
+}
+```
 
 ---
 
@@ -244,7 +348,7 @@ kl install button
 
 ```typescript
 import { Component } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
+import { Button } from '@/shared/components/button';
 
 @Component({
   selector: 'app-button-sample',
@@ -269,7 +373,7 @@ export class ButtonSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
+import { Button } from '@/shared/components/button';
 
 @Component({
   selector: 'app-button-sample',
@@ -287,7 +391,7 @@ export class ButtonSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
+import { Button } from '@/shared/components/button';
 
 @Component({
   selector: 'app-button-sample',
@@ -312,7 +416,7 @@ export class ButtonSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
+import { Button } from '@/shared/components/button';
 
 @Component({
   selector: 'app-button-sample',
@@ -334,7 +438,7 @@ export class ButtonSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
+import { Button } from '@/shared/components/button';
 
 @Component({
   selector: 'app-button-sample',
@@ -359,7 +463,7 @@ export class ButtonSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
+import { Button } from '@/shared/components/button';
 
 @Component({
   selector: 'app-button-sample',
@@ -384,7 +488,7 @@ export class ButtonSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
+import { Button } from '@/shared/components/button';
 
 @Component({
   selector: 'app-button-sample',
@@ -398,7 +502,7 @@ export class ButtonSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
+import { Button } from '@/shared/components/button';
 
 @Component({
   selector: 'app-button-sample',
@@ -426,7 +530,7 @@ kl install calendar
 
 ```typescript
 import { Component } from '@angular/core';
-import { Calendar } from '@/shared/components/calendar/calendar';
+import { Calendar } from '@/shared/components/calendar';
 
 @Component({
   selector: 'app-calendar-sample',
@@ -468,7 +572,7 @@ export class CalendarSample {}
 
 ```typescript
 import { Component, signal } from '@angular/core';
-import { InputCalendar } from '@/shared/components/calendar/input-calendar';
+import { InputCalendar } from '@/shared/components/calendar';
 
 @Component({
   selector: 'app-input-calendar-sample',
@@ -487,7 +591,7 @@ export class CalendarSample {
 
 ```typescript
 import { Component } from '@angular/core';
-import { Calendar } from '@/shared/components/calendar/calendar';
+import { Calendar } from '@/shared/components/calendar';
 
 @Component({
   selector: 'app-calendar-sample',
@@ -516,7 +620,7 @@ kl install checkbox
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Checkbox } from '@/shared/components/checkbox/checkbox';
+import { Checkbox } from '@/shared/components/checkbox';
 
 @Component({
   selector: 'app-checkbox-sample',
@@ -541,7 +645,7 @@ export class CheckboxSample {
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Checkbox } from '@/shared/components/checkbox/checkbox';
+import { Checkbox } from '@/shared/components/checkbox';
 
 @Component({
   selector: 'app-checkbox-sample',
@@ -569,7 +673,7 @@ export class CheckboxSample {
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Checkbox } from '@/shared/components/checkbox/checkbox';
+import { Checkbox } from '@/shared/components/checkbox';
 
 @Component({
   selector: 'app-checkbox-sample',
@@ -586,7 +690,7 @@ export class CheckboxSample {
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Checkbox } from '@/shared/components/checkbox/checkbox';
+import { Checkbox } from '@/shared/components/checkbox';
 
 @Component({
   selector: 'app-checkbox-sample',
@@ -632,7 +736,7 @@ kl install collapse
 
 ```typescript
 import { Component } from '@angular/core';
-import { Collapse } from '@/shared/components/collapse/collapse';
+import { Collapse } from '@/shared/components/collapse';
 
 @Component({
   selector: 'app-accordion-sample',
@@ -654,7 +758,7 @@ export class AccordionSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Collapse } from '@/shared/components/collapse/collapse';
+import { Collapse } from '@/shared/components/collapse';
 
 @Component({
   selector: 'app-collapse-sample',
@@ -668,7 +772,7 @@ export class CollapseSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Collapse } from '@/shared/components/collapse/collapse';
+import { Collapse } from '@/shared/components/collapse';
 
 @Component({
   selector: 'app-collapse-sample',
@@ -693,7 +797,6 @@ kl install combobox
 ```html
 <app-combobox
   placeholder="Select a state"
-  emptyMessage="No states found"
   [options]="localOptions"
   [formControl]="localComboboxControl"
 />
@@ -701,7 +804,6 @@ kl install combobox
 <app-combobox
   multiple
   placeholder="Select multiple states"
-  emptyMessage="No states found"
   [options]="localOptions"
   [formControl]="localMultipleComboboxControl"
 />
@@ -710,7 +812,8 @@ kl install combobox
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Combobox, ComboboxOption } from '@/shared/components/combobox/combobox';
+import { Combobox, ComboboxOption } from '@/shared/components/combobox';
+import { KlArray } from '@koalarx/utils/KlArray';
 
 @Component({
   selector: 'app-combobox-local-sample',
@@ -721,7 +824,7 @@ export class ComboboxLocalSample {
   readonly localComboboxControl = new FormControl<string | null>(null);
   readonly localMultipleComboboxControl = new FormControl<string[]>([], { nonNullable: true });
 
-  readonly localOptions: ComboboxOption<string>[] = [
+  readonly localOptions: ComboboxOption<string>[] = new KlArray([
     { value: 'sp', label: 'Sao Paulo' },
     { value: 'rj', label: 'Rio de Janeiro' },
     { value: 'mg', label: 'Minas Gerais' },
@@ -730,7 +833,7 @@ export class ComboboxLocalSample {
     { value: 'sc', label: 'Santa Catarina' },
     { value: 'rs', label: 'Rio Grande do Sul' },
     { value: 'pe', label: 'Pernambuco' },
-  ];
+  ]).orderBy('label', 'asc');
 }
 ```
 
@@ -739,21 +842,16 @@ export class ComboboxLocalSample {
 ```html
 <app-combobox
   placeholder="Search for a user"
-  searchingMessage="Searching..."
-  emptyMessage="No users found"
-  [resourceFactory]="usersResourceFactory"
+  [options]="asyncOptions"
   [formControl]="remoteComboboxControl"
 />
 ```
 
 ```typescript
-import { Component, resource, Signal } from '@angular/core';
+import { Component, Injector, resource, Signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import {
-  Combobox,
-  ComboboxOption,
-  ComboboxResourceFactory,
-} from '@/shared/components/combobox/combobox';
+import { Combobox, ComboboxOption, ComboboxResourceFactory } from '@/shared/components/combobox';
+import { KlArray } from '@koalarx/utils/KlArray';
 
 @Component({
   selector: 'app-combobox-remote-sample',
@@ -763,67 +861,45 @@ import {
 export class ComboboxRemoteSample {
   readonly remoteComboboxControl = new FormControl<number | null>(15);
 
-  readonly usersResourceFactory: ComboboxResourceFactory<number> = (
+  readonly asyncOptions: AsyncComboboxOptions<number, User> = (
     filter: Signal<string>,
-    selectedValues: Signal<number[]>,
+    values: Signal<number[]>,
+    injector: Injector,
   ) =>
     resource({
+      injector,
       params: () => ({
-        filter: filter(),
-        selectedValues: selectedValues(),
+        selectedValues: values(),
+        filter: filter?.() ?? '',
       }),
       defaultValue: [],
       loader: async ({ params, abortSignal }) => {
-        const query = params.filter.trim();
-        const endpoint = query
-          ? `https://dummyjson.com/users/search?q=${encodeURIComponent(query)}`
-          : 'https://dummyjson.com/users?limit=8';
+        const sortBy = 'firstName';
+        const order = 'asc';
+        const selectedIds = params.selectedValues;
 
-        const searchedUsers = await fetch(endpoint, { signal: abortSignal })
-          .then((res) => res.json())
-          .then((data: { users: { id: number; firstName: string; lastName: string }[] }) =>
-            data.users.map(
-              (user) =>
-                ({
-                  label: `${user.firstName} ${user.lastName}`,
-                  value: user.id,
-                  data: user,
-                }) as ComboboxOption<number>,
+        const endpoint = `https://dummyjson.com/users?limit=300&sortBy=${sortBy}&order=${order}`;
+
+        const response = await fetch(endpoint, { signal: abortSignal });
+        const data: { users: User[]; total: number } = await response.json();
+
+        const users = new KlArray<User>(
+          new KlArray([
+            ...data.users.filter((item) => selectedIds.includes(item.id)),
+            ...data.users.filter(
+              (item) =>
+                !selectedIds.includes(item.id) &&
+                (item.firstName.toLowerCase().includes(params.filter.toLowerCase()) ||
+                  item.lastName.toLowerCase().includes(params.filter.toLowerCase())),
             ),
-          );
+          ]).split(30)[0],
+        ).orderBy('firstName', 'asc');
 
-        const selectedIds = params.selectedValues
-          .map((value) => (typeof value === 'number' ? value : Number(`${value}`)))
-          .filter((value) => Number.isInteger(value) && value > 0);
-
-        const missingSelectedIds = selectedIds.filter(
-          (id) => !searchedUsers.some((user) => Object.is(user.value, id)),
-        );
-
-        if (missingSelectedIds.length === 0) {
-          return searchedUsers;
-        }
-
-        const selectedUsers = await Promise.all(
-          missingSelectedIds.map((id) =>
-            fetch(`https://dummyjson.com/users/${id}`, { signal: abortSignal })
-              .then((res) => (res.ok ? res.json() : null))
-              .then((user: { id: number; firstName: string; lastName: string } | null) =>
-                user
-                  ? ({
-                      label: `${user.firstName} ${user.lastName}`,
-                      value: user.id,
-                      data: user,
-                    } as ComboboxOption<number>)
-                  : null,
-              ),
-          ),
-        );
-
-        return [
-          ...searchedUsers,
-          ...selectedUsers.filter((user): user is ComboboxOption<number> => !!user),
-        ];
+        return users.map((user) => ({
+          value: user.id,
+          label: `${user.firstName} ${user.lastName}`,
+          data: user,
+        }));
       },
     });
 }
@@ -846,9 +922,9 @@ kl install confirm
 ```
 
 ```typescript
-import { Button } from '@/shared/components/button/button';
+import { Button } from '@/shared/components/button';
 import { Component, inject } from '@angular/core';
-import { Confirm } from '@/shared/components/confirm/confirm';
+import { Confirm } from '@/shared/components/confirm';
 
 @Component({
   selector: 'app-confirm-sample',
@@ -877,9 +953,9 @@ export class ConfirmSample {
 ### TypeScript
 
 ```typescript
-import { Button } from '@/shared/components/button/button';
+import { Button } from '@/shared/components/button';
 import { Component, inject } from '@angular/core';
-import { Confirm } from '@/shared/components/confirm/confirm';
+import { Confirm } from '@/shared/components/confirm';
 
 @Component({
   selector: 'app-confirm-sample',
@@ -907,23 +983,18 @@ export class ConfirmSample {
 
 ---
 
-# Data Table
+# DataTable
 
 ## Installation
 
 ```bash
-kl install datatable
+kl install inline-filter,table,pagination,skeleton,button,loading,list
 ```
 
 ### HTML
 
 ```html
 <div class="flex items-center gap-1 w-full">
-  <app-filter
-    class="w-full"
-    [definitions]="filterDefinitions"
-    (filtersChange)="filter.set($event)"
-  />
   <button
     appButton
     btnVariant="ghost"
@@ -937,6 +1008,8 @@ kl install datatable
       <i class="fa-solid fa-arrow-rotate-right"></i>
     }
   </button>
+
+  <app-inline-filter class="w-full" [config]="filterConfig" (payload)="filter.set($event)" />
 </div>
 <app-table striped pinnedHeader class="w-full max-h-96 border border-base-200 rounded-lg">
   <ng-container header>
@@ -950,7 +1023,7 @@ kl install datatable
     </tr>
   </ng-container>
   <ng-container body>
-    @if (datalist.error()) {
+    @if (!datalist.isLoading() && datalist.error()) {
       <tr>
         <td class="text-center text-error" colspan="6">Failed to load data. Please try again.</td>
       </tr>
@@ -1028,11 +1101,11 @@ import { Component, resource } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { KlArray } from '@koalarx/utils/KlArray';
 import { ListBase } from '@/shared/base/list.base';
-import { Button } from '@/shared/components/button/button';
-import { Filter, FilterDef } from '@/shared/components/filter/filter';
-import { Loading } from '@/shared/components/loading/loading';
-import { Pagination } from '@/shared/components/pagination/pagination';
-import { Skeleton } from '@/shared/components/skeleton/skeleton';
+import { Button } from '@/shared/components/button';
+import { InlineFilter, InlineFilterBuilder } from '@/shared/components/inline-filter';
+import { Loading } from '@/shared/components/loading';
+import { Pagination } from '@/shared/components/pagination';
+import { Skeleton } from '@/shared/components/skeleton';
 import { Table } from '@/shared/components/table';
 
 interface User {
@@ -1046,29 +1119,20 @@ interface User {
   eyeColor: string;
 }
 
+interface UserFilter {
+  name?: string;
+  email?: string;
+}
+
 @Component({
   selector: 'app-datatable-sample',
   templateUrl: './datatable-sample.html',
-  imports: [Filter, Table, Pagination, Skeleton, Button, Loading],
+  imports: [InlineFilter, Table, Pagination, Skeleton, Button, Loading],
+  providers: [InlineFilterBuilder],
 })
-export class DatatableSample extends ListBase<User> {
-  constructor() {
-    super([
-      FilterDef.text('name', 'Name').build(),
-      FilterDef.text('email', 'Email').validators(Validators.email).build(),
-    ]);
-
-    this.orderedBy.set({ field: 'firstName', direction: 'asc' });
-  }
-
+export class DatatableSample extends ListBase<User, UserFilter> {
   protected override datalist = resource({
-    params: () => ({
-      filter: this.filter(),
-      page: this.currentPage(),
-      pageSize: this.pageSize(),
-      sortBy: this.orderedBy()?.field,
-      order: this.orderedBy()?.direction,
-    }),
+    params: () => this.filterParams,
     defaultValue: this.defaultList,
     loader: async ({ params, abortSignal }) => {
       const page = params.page ?? 1;
@@ -1080,26 +1144,22 @@ export class DatatableSample extends ListBase<User> {
       const response = await fetch(endpoint, { signal: abortSignal });
       const data: { users: User[]; total: number } = await response.json();
 
-      function getFilter(key: string) {
-        return params.filter?.find((f) => f.key === key);
-      }
-
       const users = new KlArray<User>(
         data.users.filter((item) => {
-          const nameFilter = getFilter('name');
-          const emailFilter = getFilter('email');
+          const nameFilter = params.filter.name;
+          const emailFilter = params.filter.email;
 
           return (
             (!nameFilter ||
-              item.firstName.includes(nameFilter.value as string) ||
-              item.lastName.includes(nameFilter.value as string)) &&
-            (!emailFilter || item.email === (emailFilter.value as string))
+              item.firstName.toLowerCase().includes(nameFilter.toLowerCase()) ||
+              item.lastName.toLowerCase().includes(nameFilter.toLowerCase())) &&
+            (!emailFilter || item.email.toLowerCase() === emailFilter.toLowerCase())
           );
         }),
       );
 
       const totalItems = users.length;
-      const limitedItems = users.split(params.pageSize ?? 10)[page - 1];
+      const limitedItems = users.split(params.pageSize)[page - 1] ?? [];
 
       this.totalItems.set(totalItems);
 
@@ -1109,6 +1169,17 @@ export class DatatableSample extends ListBase<User> {
       };
     },
   });
+
+  readonly filterConfig = inject(InlineFilterBuilder)
+    .input('Name', 'name')
+    .input('Email', 'email', 'email')
+    .build();
+
+  constructor() {
+    super();
+
+    this.orderedBy.set({ field: 'firstName', direction: 'asc' });
+  }
 }
 ```
 
@@ -1119,11 +1190,11 @@ import { Component, resource } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { KlArray } from '@koalarx/utils/KlArray';
 import { ListBase } from '@/shared/base/list.base';
-import { Button } from '@/shared/components/button/button';
-import { Filter, FilterDef } from '@/shared/components/filter/filter';
-import { Loading } from '@/shared/components/loading/loading';
-import { Pagination } from '@/shared/components/pagination/pagination';
-import { Skeleton } from '@/shared/components/skeleton/skeleton';
+import { Button } from '@/shared/components/button';
+import { InlineFilter, InlineFilterBuilder } from '@/shared/components/inline-filter';
+import { Loading } from '@/shared/components/loading';
+import { Pagination } from '@/shared/components/pagination';
+import { Skeleton } from '@/shared/components/skeleton';
 import { Table } from '@/shared/components/table';
 
 interface User {
@@ -1137,29 +1208,20 @@ interface User {
   eyeColor: string;
 }
 
+interface UserFilter {
+  name?: string;
+  email?: string;
+}
+
 @Component({
   selector: 'app-datatable-sample',
   templateUrl: './datatable-sample.html',
-  imports: [Filter, Table, Pagination, Skeleton, Button, Loading],
+  imports: [InlineFilter, Table, Pagination, Skeleton, Button, Loading],
+  providers: [InlineFilterBuilder],
 })
-export class DatatableSample extends ListBase<User> {
-  constructor() {
-    super([
-      FilterDef.text('name', 'Name').build(),
-      FilterDef.text('email', 'Email').validators(Validators.email).build(),
-    ]);
-
-    this.orderedBy.set({ field: 'firstName', direction: 'asc' });
-  }
-
+export class DatatableSample extends ListBase<User, UserFilter> {
   protected override datalist = resource({
-    params: () => ({
-      filter: this.filter(),
-      page: this.currentPage(),
-      pageSize: this.pageSize(),
-      sortBy: this.orderedBy()?.field,
-      order: this.orderedBy()?.direction,
-    }),
+    params: () => this.filterParams,
     defaultValue: this.defaultList,
     loader: async ({ params, abortSignal }) => {
       const page = params.page ?? 1;
@@ -1171,26 +1233,22 @@ export class DatatableSample extends ListBase<User> {
       const response = await fetch(endpoint, { signal: abortSignal });
       const data: { users: User[]; total: number } = await response.json();
 
-      function getFilter(key: string) {
-        return params.filter?.find((f) => f.key === key);
-      }
-
       const users = new KlArray<User>(
         data.users.filter((item) => {
-          const nameFilter = getFilter('name');
-          const emailFilter = getFilter('email');
+          const nameFilter = params.filter.name;
+          const emailFilter = params.filter.email;
 
           return (
             (!nameFilter ||
-              item.firstName.includes(nameFilter.value as string) ||
-              item.lastName.includes(nameFilter.value as string)) &&
-            (!emailFilter || item.email === (emailFilter.value as string))
+              item.firstName.toLowerCase().includes(nameFilter.toLowerCase()) ||
+              item.lastName.toLowerCase().includes(nameFilter.toLowerCase())) &&
+            (!emailFilter || item.email.toLowerCase() === emailFilter.toLowerCase())
           );
         }),
       );
 
       const totalItems = users.length;
-      const limitedItems = users.split(params.pageSize ?? 10)[page - 1];
+      const limitedItems = users.split(params.pageSize)[page - 1] ?? [];
 
       this.totalItems.set(totalItems);
 
@@ -1200,6 +1258,17 @@ export class DatatableSample extends ListBase<User> {
       };
     },
   });
+
+  readonly filterConfig = inject(InlineFilterBuilder)
+    .input('Name', 'name')
+    .input('Email', 'email', 'email')
+    .build();
+
+  constructor() {
+    super();
+
+    this.orderedBy.set({ field: 'firstName', direction: 'asc' });
+  }
 }
 ```
 
@@ -1211,69 +1280,6 @@ export class DatatableSample extends ListBase<User> {
 
 ```bash
 kl install dropdown
-```
-
-### Directions
-
-```html
-<div class="grid h-80 grid-cols-2 gap-6">
-  <div class="self-start justify-self-start">
-    <app-dropdown>
-      <button appButton trigger>Top Left</button>
-      <div class="w-52" options>
-        <p class="p-4">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.
-        </p>
-      </div>
-    </app-dropdown>
-  </div>
-
-  <div class="self-start justify-self-end">
-    <app-dropdown>
-      <button appButton trigger>Top Right</button>
-      <div class="w-52" options>
-        <p class="p-4">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.
-        </p>
-      </div>
-    </app-dropdown>
-  </div>
-
-  <div class="self-end justify-self-start">
-    <app-dropdown>
-      <button appButton trigger>Bottom Left</button>
-      <div class="w-52" options>
-        <p class="p-4">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.
-        </p>
-      </div>
-    </app-dropdown>
-  </div>
-
-  <div class="self-end justify-self-end">
-    <app-dropdown>
-      <button appButton trigger>Bottom Right</button>
-      <div class="w-52" options>
-        <p class="p-4">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas, voluptate.
-        </p>
-      </div>
-    </app-dropdown>
-  </div>
-</div>
-```
-
-```typescript
-import { Component } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { Dropdown } from '@/shared/components/dropdown';
-
-@Component({
-  selector: 'app-dropdown-sample',
-  templateUrl: './dropdown.sample.html',
-  imports: [Button, Dropdown],
-})
-export class DropdownSample {}
 ```
 
 ### Notifications
@@ -1311,7 +1317,7 @@ export class DropdownSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
+import { Button } from '@/shared/components/button';
 import { Dropdown } from '@/shared/components/dropdown';
 
 @Component({
@@ -1337,7 +1343,7 @@ export class DropdownSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
+import { Button } from '@/shared/components/button';
 import { Dropdown } from '@/shared/components/dropdown';
 
 @Component({
@@ -1361,7 +1367,7 @@ export class DropdownSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
+import { Button } from '@/shared/components/button';
 import { Dropdown } from '@/shared/components/dropdown';
 
 @Component({
@@ -1376,7 +1382,7 @@ export class DropdownSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
+import { Button } from '@/shared/components/button';
 import { Dropdown } from '@/shared/components/dropdown';
 
 @Component({
@@ -1416,8 +1422,8 @@ kl install fieldset
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Fieldset } from '@/shared/components/fieldset/fieldset';
-import { Input } from '@/shared/components/input-field/input';
+import { Fieldset } from '@/shared/components/fieldset';
+import { Input } from '@/shared/components/input-field';
 import { ValidatorHint } from '@/shared/components/validator/validator-hint';
 
 @Component({
@@ -1503,9 +1509,9 @@ export class FieldsetSample {
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Button } from '@/shared/components/button/button';
-import { Fieldset } from '@/shared/components/fieldset/fieldset';
-import { Input } from '@/shared/components/input-field/input';
+import { Button } from '@/shared/components/button';
+import { Fieldset } from '@/shared/components/fieldset';
+import { Input } from '@/shared/components/input-field';
 import { ValidatorHint } from '@/shared/components/validator/validator-hint';
 
 @Component({
@@ -1526,8 +1532,8 @@ export class LoginSample {
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Fieldset } from '@/shared/components/fieldset/fieldset';
-import { Input } from '@/shared/components/input-field/input';
+import { Fieldset } from '@/shared/components/fieldset';
+import { Input } from '@/shared/components/input-field';
 import { ValidatorHint } from '@/shared/components/validator/validator-hint';
 
 @Component({
@@ -1542,289 +1548,225 @@ export class FieldsetSample {
 
 ---
 
-# Filter
+# Inline Filter
 
 ## Installation
 
 ```bash
-kl install filter
+kl install inline-filter
 ```
 
-### Builder
+### HTML
 
 ```html
-<app-filter
-  [definitions]="filterDefinitions"
-  [i18n]="filterI18n"
-  (filtersChange)="handleFiltersChange($event)"
-/>
+<app-inline-filter [config]="inlineFilterConfig" (payload)="appliedFilters.set($event)" />
 ```
 
 ```typescript
-import { Component, resource, signal, Signal } from '@angular/core';
-import { ComboboxOption } from '@/shared/components/combobox/combobox';
-import {
-  DEFAULT_FILTER_I18N,
-  Filter,
-  FilterDef,
-  FilterDefinition,
-  FilterI18n,
-  FilterValue,
-} from '@/shared/components/filter/filter';
+import { InlineFilter, InlineFilterBuilder } from '@/shared/components/inline-filter';
+import { Component, inject, Injector, resource, signal, Signal } from '@angular/core';
+import { KlArray } from '@koalarx/utils/KlArray';
+
+interface User {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  age: number;
+  gender: string;
+  phone: string;
+  eyeColor: string;
+}
 
 @Component({
   selector: 'app-filter-sample',
   templateUrl: './filter-sample.html',
-  imports: [Filter],
+  imports: [InlineFilter],
+  providers: [InlineFilterBuilder],
 })
-export class FilterSample {
-  readonly appliedFilters = signal<FilterValue[]>([]);
-
-  private toUserId(value: unknown): number | null {
-    const numeric = typeof value === 'number' ? value : Number(`${value}`);
-    return Number.isInteger(numeric) && numeric > 0 ? numeric : null;
-  }
-
-  private readonly statusOptions: ComboboxOption<string>[] = [
-    { value: 'open', label: 'Open' },
-    { value: 'closed', label: 'Closed' },
-    { value: 'draft', label: 'Draft' },
-  ];
-
-  private readonly labelOptions: ComboboxOption<string>[] = [
-    { value: 'frontend', label: 'Frontend' },
-    { value: 'backend', label: 'Backend' },
-    { value: 'docs', label: 'Documentation' },
-    { value: 'design-system', label: 'Design System' },
-  ];
-
-  private readonly typeOptions: ComboboxOption<string>[] = [
-    { value: 'feat', label: 'Feature' },
-    { value: 'fix', label: 'Fix' },
-    { value: 'docs', label: 'Docs' },
-    { value: 'refactor', label: 'Refactor' },
-  ];
-
-  private readonly usersResourceFactory = (values: Signal<unknown[]>, filter?: Signal<string>) =>
+export class InlineFilterSample {
+  private readonly usersResourceFactory = (
+    filter: Signal<string>,
+    values: Signal<number[]>,
+    injector: Injector,
+  ) =>
     resource({
+      injector,
       params: () => ({
         selectedValues: values(),
         filter: filter?.() ?? '',
       }),
       defaultValue: [],
       loader: async ({ params, abortSignal }) => {
-        const selectedIds = params.selectedValues
-          .map((value) => this.toUserId(value))
-          .filter((value): value is number => value !== null);
+        const sortBy = 'firstName';
+        const order = 'asc';
+        const selectedIds = params.selectedValues;
 
-        const query = params.filter.trim();
-        const endpoint = query
-          ? `https://dummyjson.com/users/search?q=${encodeURIComponent(query)}`
-          : 'https://dummyjson.com/users?limit=8';
+        const endpoint = `https://dummyjson.com/users?limit=300&sortBy=${sortBy}&order=${order}`;
 
-        const baseUsers = await fetch(endpoint, { signal: abortSignal })
-          .then((res) => res.json())
-          .then((data: { users: { id: number; firstName: string; lastName: string }[] }) =>
-            data.users.map(
-              (user) =>
-                ({
-                  label: `${user.firstName} ${user.lastName}`,
-                  value: user.id,
-                  data: user,
-                }) as ComboboxOption<number>,
-            ),
-          );
+        const response = await fetch(endpoint, { signal: abortSignal });
+        const data: { users: User[]; total: number } = await response.json();
 
-        const missingSelectedIds = selectedIds.filter(
-          (id) => !baseUsers.some((user) => Object.is(user.value, id)),
-        );
+        const users =
+          new KlArray<User>([
+            ...data.users.filter((item) => selectedIds.includes(item.id)),
+            ...data.users.filter((item) => !selectedIds.includes(item.id)),
+          ])
+            .orderBy('firstName', 'asc')
+            .split(30)[0] ?? [];
 
-        if (missingSelectedIds.length === 0) {
-          return baseUsers;
-        }
-
-        const selectedUsers = await Promise.all(
-          missingSelectedIds.map((id) =>
-            fetch(`https://dummyjson.com/users/${id}`, { signal: abortSignal })
-              .then((res) => (res.ok ? res.json() : null))
-              .then((user: { id: number; firstName: string; lastName: string } | null) =>
-                user
-                  ? ({
-                      label: `${user.firstName} ${user.lastName}`,
-                      value: user.id,
-                      data: user,
-                    } as ComboboxOption<number>)
-                  : null,
-              ),
-          ),
-        );
-
-        return [
-          ...baseUsers,
-          ...selectedUsers.filter((user): user is ComboboxOption<number> => !!user),
-        ];
+        return users.map((user) => ({
+          value: user.id,
+          label: `${user.firstName} ${user.lastName}`,
+          data: user,
+        }));
       },
     });
 
-  readonly filterI18n: FilterI18n = {
-    ...DEFAULT_FILTER_I18N,
-    placeholder: 'Choose a filter type',
-  };
+  readonly appliedFilters = signal<Record<string, any>>({});
 
-  readonly filterDefinitions: FilterDefinition[] = [
-    FilterDef.text('author', 'Author').placeholder('e.g. john').build(),
-    FilterDef.cpf('cpf', 'CPF').build(),
-    FilterDef.cnpj('cnpj', 'CNPJ').build(),
-    FilterDef.select('status', 'Status').options(this.statusOptions).build(),
-    FilterDef.selectMultiple('labels', 'Labels').options(this.labelOptions).build(),
-    FilterDef.combobox('type', 'Type').options(this.typeOptions).build(),
-    FilterDef.combobox('assignee', 'Assignee')
-      .placeholder('Search user...')
-      .resourceFactory(this.usersResourceFactory)
-      .build(),
-    FilterDef.date('created', 'Created after').build(),
-    FilterDef.number('min-comments', 'Min comments').placeholder('0').build(),
-    FilterDef.email('contact', 'Contact e-mail').build(),
-  ];
-
-  handleFiltersChange(filters: FilterValue[]) {
-    this.appliedFilters.set(filters);
-  }
+  readonly inlineFilterConfig = inject(InlineFilterBuilder)
+    .input('Author', 'author', 'text', { placeholder: 'e.g. John' })
+    .input('CPF', 'cpf', 'cpf')
+    .input('CNPJ', 'cnpj', 'cnpj')
+    .select(
+      'Status',
+      'status',
+      [
+        { value: 'open', label: 'Open' },
+        { value: 'closed', label: 'Closed' },
+        { value: 'draft', label: 'Draft' },
+      ] as const,
+      { defaultValue: 'open' },
+    )
+    .select(
+      'Labels',
+      'labels',
+      [
+        { value: 'frontend', label: 'Frontend' },
+        { value: 'backend', label: 'Backend' },
+        { value: 'docs', label: 'Documentation' },
+        { value: 'design-system', label: 'Design System' },
+      ] as const,
+      { multiple: true },
+    )
+    .select('Type', 'type', [
+      { value: 'feat', label: 'Feature' },
+      { value: 'fix', label: 'Fix' },
+      { value: 'docs', label: 'Docs' },
+      { value: 'refactor', label: 'Refactor' },
+    ] as const)
+    .combobox('Assignee', 'assignee', this.usersResourceFactory, {})
+    .calendar('Created after', 'createdAfter')
+    .input('Min comments', 'minComments', 'number', { placeholder: '0' })
+    .input('Contact e-mail', 'contactEmail', 'email')
+    .input('Price', 'price', 'currency')
+    .build();
 }
 ```
 
 ### TypeScript
 
 ```typescript
-import { Component, resource, signal, Signal } from '@angular/core';
-import { ComboboxOption } from '@/shared/components/combobox/combobox';
-import {
-  DEFAULT_FILTER_I18N,
-  Filter,
-  FilterDef,
-  FilterDefinition,
-  FilterI18n,
-  FilterValue,
-} from '@/shared/components/filter/filter';
+import { InlineFilter, InlineFilterBuilder } from '@/shared/components/inline-filter';
+import { Component, inject, Injector, resource, signal, Signal } from '@angular/core';
+import { KlArray } from '@koalarx/utils/KlArray';
+
+interface User {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  age: number;
+  gender: string;
+  phone: string;
+  eyeColor: string;
+}
 
 @Component({
   selector: 'app-filter-sample',
   templateUrl: './filter-sample.html',
-  imports: [Filter],
+  imports: [InlineFilter],
+  providers: [InlineFilterBuilder],
 })
-export class FilterSample {
-  readonly appliedFilters = signal<FilterValue[]>([]);
-
-  private toUserId(value: unknown): number | null {
-    const numeric = typeof value === 'number' ? value : Number(`${value}`);
-    return Number.isInteger(numeric) && numeric > 0 ? numeric : null;
-  }
-
-  private readonly statusOptions: ComboboxOption<string>[] = [
-    { value: 'open', label: 'Open' },
-    { value: 'closed', label: 'Closed' },
-    { value: 'draft', label: 'Draft' },
-  ];
-
-  private readonly labelOptions: ComboboxOption<string>[] = [
-    { value: 'frontend', label: 'Frontend' },
-    { value: 'backend', label: 'Backend' },
-    { value: 'docs', label: 'Documentation' },
-    { value: 'design-system', label: 'Design System' },
-  ];
-
-  private readonly typeOptions: ComboboxOption<string>[] = [
-    { value: 'feat', label: 'Feature' },
-    { value: 'fix', label: 'Fix' },
-    { value: 'docs', label: 'Docs' },
-    { value: 'refactor', label: 'Refactor' },
-  ];
-
-  private readonly usersResourceFactory = (values: Signal<unknown[]>, filter?: Signal<string>) =>
+export class InlineFilterSample {
+  private readonly usersResourceFactory = (
+    filter: Signal<string>,
+    values: Signal<number[]>,
+    injector: Injector,
+  ) =>
     resource({
+      injector,
       params: () => ({
         selectedValues: values(),
         filter: filter?.() ?? '',
       }),
       defaultValue: [],
       loader: async ({ params, abortSignal }) => {
-        const selectedIds = params.selectedValues
-          .map((value) => this.toUserId(value))
-          .filter((value): value is number => value !== null);
+        const sortBy = 'firstName';
+        const order = 'asc';
+        const selectedIds = params.selectedValues;
 
-        const query = params.filter.trim();
-        const endpoint = query
-          ? `https://dummyjson.com/users/search?q=${encodeURIComponent(query)}`
-          : 'https://dummyjson.com/users?limit=8';
+        const endpoint = `https://dummyjson.com/users?limit=300&sortBy=${sortBy}&order=${order}`;
 
-        const baseUsers = await fetch(endpoint, { signal: abortSignal })
-          .then((res) => res.json())
-          .then((data: { users: { id: number; firstName: string; lastName: string }[] }) =>
-            data.users.map(
-              (user) =>
-                ({
-                  label: `${user.firstName} ${user.lastName}`,
-                  value: user.id,
-                  data: user,
-                }) as ComboboxOption<number>,
-            ),
-          );
+        const response = await fetch(endpoint, { signal: abortSignal });
+        const data: { users: User[]; total: number } = await response.json();
 
-        const missingSelectedIds = selectedIds.filter(
-          (id) => !baseUsers.some((user) => Object.is(user.value, id)),
-        );
+        const users =
+          new KlArray<User>([
+            ...data.users.filter((item) => selectedIds.includes(item.id)),
+            ...data.users.filter((item) => !selectedIds.includes(item.id)),
+          ])
+            .orderBy('firstName', 'asc')
+            .split(30)[0] ?? [];
 
-        if (missingSelectedIds.length === 0) {
-          return baseUsers;
-        }
-
-        const selectedUsers = await Promise.all(
-          missingSelectedIds.map((id) =>
-            fetch(`https://dummyjson.com/users/${id}`, { signal: abortSignal })
-              .then((res) => (res.ok ? res.json() : null))
-              .then((user: { id: number; firstName: string; lastName: string } | null) =>
-                user
-                  ? ({
-                      label: `${user.firstName} ${user.lastName}`,
-                      value: user.id,
-                      data: user,
-                    } as ComboboxOption<number>)
-                  : null,
-              ),
-          ),
-        );
-
-        return [
-          ...baseUsers,
-          ...selectedUsers.filter((user): user is ComboboxOption<number> => !!user),
-        ];
+        return users.map((user) => ({
+          value: user.id,
+          label: `${user.firstName} ${user.lastName}`,
+          data: user,
+        }));
       },
     });
 
-  readonly filterI18n: FilterI18n = {
-    ...DEFAULT_FILTER_I18N,
-    placeholder: 'Choose a filter type',
-  };
+  readonly appliedFilters = signal<Record<string, any>>({});
 
-  readonly filterDefinitions: FilterDefinition[] = [
-    FilterDef.text('author', 'Author').placeholder('e.g. john').build(),
-    FilterDef.cpf('cpf', 'CPF').build(),
-    FilterDef.cnpj('cnpj', 'CNPJ').build(),
-    FilterDef.select('status', 'Status').options(this.statusOptions).build(),
-    FilterDef.selectMultiple('labels', 'Labels').options(this.labelOptions).build(),
-    FilterDef.combobox('type', 'Type').options(this.typeOptions).build(),
-    FilterDef.combobox('assignee', 'Assignee')
-      .placeholder('Search user...')
-      .resourceFactory(this.usersResourceFactory)
-      .build(),
-    FilterDef.date('created', 'Created after').build(),
-    FilterDef.number('min-comments', 'Min comments').placeholder('0').build(),
-    FilterDef.email('contact', 'Contact e-mail').build(),
-  ];
-
-  handleFiltersChange(filters: FilterValue[]) {
-    this.appliedFilters.set(filters);
-  }
+  readonly inlineFilterConfig = inject(InlineFilterBuilder)
+    .input('Author', 'author', 'text', { placeholder: 'e.g. John' })
+    .input('CPF', 'cpf', 'cpf')
+    .input('CNPJ', 'cnpj', 'cnpj')
+    .select(
+      'Status',
+      'status',
+      [
+        { value: 'open', label: 'Open' },
+        { value: 'closed', label: 'Closed' },
+        { value: 'draft', label: 'Draft' },
+      ] as const,
+      { defaultValue: 'open' },
+    )
+    .select(
+      'Labels',
+      'labels',
+      [
+        { value: 'frontend', label: 'Frontend' },
+        { value: 'backend', label: 'Backend' },
+        { value: 'docs', label: 'Documentation' },
+        { value: 'design-system', label: 'Design System' },
+      ] as const,
+      { multiple: true },
+    )
+    .select('Type', 'type', [
+      { value: 'feat', label: 'Feature' },
+      { value: 'fix', label: 'Fix' },
+      { value: 'docs', label: 'Docs' },
+      { value: 'refactor', label: 'Refactor' },
+    ] as const)
+    .combobox('Assignee', 'assignee', this.usersResourceFactory, {})
+    .calendar('Created after', 'createdAfter')
+    .input('Min comments', 'minComments', 'number', { placeholder: '0' })
+    .input('Contact e-mail', 'contactEmail', 'email')
+    .input('Price', 'price', 'currency')
+    .build();
 }
 ```
 
@@ -1863,8 +1805,8 @@ kl install input-cnpj
 
 ```typescript
 import { CnpjValidator } from '@/shared/validators/cnpj.validator';
-import { Fieldset } from '@/shared/components/fieldset/fieldset';
-import { Input } from '@/shared/components/input-field/input';
+import { Fieldset } from '@/shared/components/fieldset';
+import { Input } from '@/shared/components/input-field';
 import { ValidatorHint } from '@/shared/components/validator/validator-hint';
 import { Mask } from '@/shared/directives/mask.directive';
 import { Component } from '@angular/core';
@@ -1884,8 +1826,8 @@ export class InputCnpjSample {
 
 ```typescript
 import { CnpjValidator } from '@/shared/validators/cnpj.validator';
-import { Fieldset } from '@/shared/components/fieldset/fieldset';
-import { Input } from '@/shared/components/input-field/input';
+import { Fieldset } from '@/shared/components/fieldset';
+import { Input } from '@/shared/components/input-field';
 import { ValidatorHint } from '@/shared/components/validator/validator-hint';
 import { Mask } from '@/shared/directives/mask.directive';
 import { Component } from '@angular/core';
@@ -1936,8 +1878,8 @@ kl install input-cpf
 
 ```typescript
 import { CpfValidator } from '@/shared/validators/cpf.validator';
-import { Fieldset } from '@/shared/components/fieldset/fieldset';
-import { Input } from '@/shared/components/input-field/input';
+import { Fieldset } from '@/shared/components/fieldset';
+import { Input } from '@/shared/components/input-field';
 import { ValidatorHint } from '@/shared/components/validator/validator-hint';
 import { Mask } from '@/shared/directives/mask.directive';
 import { Component } from '@angular/core';
@@ -1957,8 +1899,8 @@ export class InputCpfSample {
 
 ```typescript
 import { CpfValidator } from '@/shared/validators/cpf.validator';
-import { Fieldset } from '@/shared/components/fieldset/fieldset';
-import { Input } from '@/shared/components/input-field/input';
+import { Fieldset } from '@/shared/components/fieldset';
+import { Input } from '@/shared/components/input-field';
 import { ValidatorHint } from '@/shared/components/validator/validator-hint';
 import { Mask } from '@/shared/directives/mask.directive';
 import { Component } from '@angular/core';
@@ -1981,7 +1923,7 @@ export class InputCpfSample {
 ## Installation
 
 ```bash
-kl install input-currency
+kl install currency
 ```
 
 ### HTML
@@ -1995,7 +1937,7 @@ kl install input-currency
     type="text"
     placeholder="Type here"
     [formControl]="currencyControl"
-    appMask="000.000.000-00"
+    appCurrency
   />
   @if (currencyControl.hasError('required')) {
     <span appValidatorHint>Currency is required</span>
@@ -2004,8 +1946,8 @@ kl install input-currency
 ```
 
 ```typescript
-import { Fieldset } from '@/shared/components/fieldset/fieldset';
-import { Input } from '@/shared/components/input-field/input';
+import { Fieldset } from '@/shared/components/fieldset';
+import { Input } from '@/shared/components/input-field';
 import { ValidatorHint } from '@/shared/components/validator/validator-hint';
 import { CurrencyMask } from '@/shared/directives/currency.directive';
 import { Component } from '@angular/core';
@@ -2024,8 +1966,8 @@ export class InputCurrencySample {
 ### TypeScript
 
 ```typescript
-import { Fieldset } from '@/shared/components/fieldset/fieldset';
-import { Input } from '@/shared/components/input-field/input';
+import { Fieldset } from '@/shared/components/fieldset';
+import { Input } from '@/shared/components/input-field';
 import { ValidatorHint } from '@/shared/components/validator/validator-hint';
 import { CurrencyMask } from '@/shared/directives/currency.directive';
 import { Component } from '@angular/core';
@@ -2063,7 +2005,7 @@ kl install input-field
 
 ```typescript
 import { Component } from '@angular/core';
-import { Input } from '@/shared/components/input-field/input';
+import { Input } from '@/shared/components/input-field';
 
 @Component({
   selector: 'app-input-field-sample',
@@ -2077,7 +2019,7 @@ export class InputFieldSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Input } from '@/shared/components/input-field/input';
+import { Input } from '@/shared/components/input-field';
 
 @Component({
   selector: 'app-input-field-sample',
@@ -2089,37 +2031,159 @@ export class InputFieldSample {}
 
 ---
 
-# ListBase
+# Loading
 
 ## Installation
 
 ```bash
-kl install list-base
+kl install loading
 ```
 
-## API
+### Ball
 
-### Attributes
-- **currentPage**: Signal that holds the current page number (pagination).
-- **pageSize**: Signal that holds the number of items per page.
-- **totalItems**: Signal that holds the total number of items.
-- **orderedBy**: Signal that holds the ordering criteria.
-- **filter**: Signal that holds the applied filter.
-- **skeletonItems**: Computed signal for displaying placeholders while loading.
-- **defaultList**: Default response for use in datalist.
-- **filterPayload**: Payload for filters.
-- **filterParams**: Parameters for filters.
-- **datalist**: Abstract reference to the data resource.
-- **reload**: Signal to reload the list.
+```html
+<app-loading variant="ball" size="xs">Extra Small</app-loading>
+<app-loading variant="ball" size="sm">Small</app-loading>
+<app-loading variant="ball" size="md">Medium</app-loading>
+<app-loading variant="ball" size="lg">Large</app-loading>
+<app-loading variant="ball" size="xl">Extra Large</app-loading>
+```
 
-### Methods
-- **reloadList**: Triggers list reload.
+```typescript
+import { Component } from '@angular/core';
+import { Loading } from '@/shared/components/loading';
 
-### Filter Definitions
-Define filters in the constructor of the class that extends ListBase.
+@Component({
+  selector: 'app-loading-sample',
+  templateUrl: './loading.sample.html',
+  imports: [Loading],
+})
+export class LoadingSample {}
+```
 
-## Usage
-See usage examples in the [Database Block](./database.md).
+### Bars
+
+```html
+<app-loading variant="bars" size="xs">Extra Small</app-loading>
+<app-loading variant="bars" size="sm">Small</app-loading>
+<app-loading variant="bars" size="md">Medium</app-loading>
+<app-loading variant="bars" size="lg">Large</app-loading>
+<app-loading variant="bars" size="xl">Extra Large</app-loading>
+```
+
+```typescript
+import { Component } from '@angular/core';
+import { Loading } from '@/shared/components/loading';
+
+@Component({
+  selector: 'app-loading-sample',
+  templateUrl: './loading.sample.html',
+  imports: [Loading],
+})
+export class LoadingSample {}
+```
+
+### Dots
+
+```html
+<app-loading variant="dots" size="xs">Extra Small</app-loading>
+<app-loading variant="dots" size="sm">Small</app-loading>
+<app-loading variant="dots" size="md">Medium</app-loading>
+<app-loading variant="dots" size="lg">Large</app-loading>
+<app-loading variant="dots" size="xl">Extra Large</app-loading>
+```
+
+```typescript
+import { Component } from '@angular/core';
+import { Loading } from '@/shared/components/loading';
+
+@Component({
+  selector: 'app-loading-sample',
+  templateUrl: './loading.sample.html',
+  imports: [Loading],
+})
+export class LoadingSample {}
+```
+
+### Infinity
+
+```html
+<app-loading variant="infinity" size="xs">Extra Small</app-loading>
+<app-loading variant="infinity" size="sm">Small</app-loading>
+<app-loading variant="infinity" size="md">Medium</app-loading>
+<app-loading variant="infinity" size="lg">Large</app-loading>
+<app-loading variant="infinity" size="xl">Extra Large</app-loading>
+```
+
+```typescript
+import { Component } from '@angular/core';
+import { Loading } from '@/shared/components/loading';
+
+@Component({
+  selector: 'app-loading-sample',
+  templateUrl: './loading.sample.html',
+  imports: [Loading],
+})
+export class LoadingSample {}
+```
+
+### Ring
+
+```html
+<app-loading variant="ring" size="xs">Extra Small</app-loading>
+<app-loading variant="ring" size="sm">Small</app-loading>
+<app-loading variant="ring" size="md">Medium</app-loading>
+<app-loading variant="ring" size="lg">Large</app-loading>
+<app-loading variant="ring" size="xl">Extra Large</app-loading>
+```
+
+```typescript
+import { Component } from '@angular/core';
+import { Loading } from '@/shared/components/loading';
+
+@Component({
+  selector: 'app-loading-sample',
+  templateUrl: './loading.sample.html',
+  imports: [Loading],
+})
+export class LoadingSample {}
+```
+
+### Spinner
+
+```html
+<app-loading variant="spinner" size="xs">Extra Small</app-loading>
+<app-loading variant="spinner" size="sm">Small</app-loading>
+<app-loading variant="spinner" size="md">Medium</app-loading>
+<app-loading variant="spinner" size="lg">Large</app-loading>
+<app-loading variant="spinner" size="xl">Extra Large</app-loading>
+```
+
+```typescript
+import { Component } from '@angular/core';
+import { Loading } from '@/shared/components/loading';
+
+@Component({
+  selector: 'app-loading-sample',
+  templateUrl: './loading.sample.html',
+  imports: [Loading],
+})
+export class LoadingSample {}
+```
+
+### TypeScript
+
+```typescript
+import { Component } from '@angular/core';
+import { Loading } from '@/shared/components/loading';
+
+@Component({
+  selector: 'app-loading-sample',
+  templateUrl: './loading.sample.html',
+  imports: [Loading],
+})
+export class LoadingSample {}
+```
 
 ---
 
@@ -2128,10 +2192,56 @@ See usage examples in the [Database Block](./database.md).
 ## Installation
 
 ```bash
-kl install login
+kl install fieldset,input-field,validator,button,loading,skeleton,auth
 ```
 
-### Login Form (HTML)
+### Logged Sample
+
+```html
+@if (authorization.loggedUser(); as loggedUser) {
+  <div class="flex flex-col items-center justify-center gap-4 py-20">
+    <div class="avatar">
+      @if (avatarLoading()) {
+        <app-skeleton variant="circle" class="w-24 h-24 absolute inset-0" />
+      }
+
+      <div
+        class="ring-primary ring-offset-base-100 w-24 rounded-full ring-2 ring-offset-2 relative transition-opacity duration-300"
+        [class.opacity-0]="avatarLoading()"
+      >
+        <img [src]="loggedUser.avatar" (load)="avatarLoading.set(false)" />
+      </div>
+    </div>
+
+    <span>{{ loggedUser.name }}</span>
+    <div class="join">
+      <button appButton btnVariant="primary" (click)="authorization.updateToken().subscribe()">
+        Refresh Token
+      </button>
+      <button appButton btnVariant="error" (click)="authorization.logout()">Logout</button>
+    </div>
+  </div>
+}
+```
+
+```typescript
+import { Component, inject, signal } from '@angular/core';
+import { AuthorizationService } from '@/core/security/authorization.service';
+import { Button } from '@/shared/components/button';
+import { Skeleton } from '@/shared/components/skeleton';
+
+@Component({
+  selector: 'app-logged-sample',
+  templateUrl: './logged-sample.html',
+  imports: [Button, Skeleton],
+})
+export class LoggedSample {
+  readonly avatarLoading = signal(true);
+  readonly authorization = inject(AuthorizationService);
+}
+```
+
+### Form
 
 ```html
 <form
@@ -2149,10 +2259,12 @@ kl install login
       placeholder="Enter your username"
       [formControl]="formCredentials.controls.username"
     />
+
     @if (formCredentials.controls.username.hasError('required')) {
       <span appValidatorHint>Username is required</span>
     }
   </app-fieldset>
+
   <app-fieldset class="w-full max-w-xs">
     <ng-container label>Password</ng-container>
     <input
@@ -2163,6 +2275,7 @@ kl install login
       type="password"
       [formControl]="formCredentials.controls.password"
     />
+
     <ng-container action>
       @if (inputPassword.type === 'password') {
         <button
@@ -2186,28 +2299,44 @@ kl install login
         </button>
       }
     </ng-container>
+
     @if (formCredentials.controls.password.hasError('required')) {
       <span appValidatorHint>Password is required</span>
     } @else if (formCredentials.controls.password.hasError('minlength')) {
       <span appValidatorHint>Password must be at least 8 characters</span>
     }
   </app-fieldset>
-  <button appButton type="submit" class="w-full max-w-xs mt-4">Login</button>
+
+  <div class="flex w-full max-w-xs">
+    @let logingIn = authorization.event()?.type === 'loginInProgress';
+
+    <button
+      type="submit"
+      appButton
+      btnVariant="primary"
+      class="w-full"
+      [disabled]="logingIn || formCredentials.invalid"
+    >
+      @if (logingIn) {
+        <app-loading size="sm"></app-loading>
+      }
+
+      Login
+    </button>
+  </div>
 </form>
 ```
-
-### Login Form (TypeScript)
 
 ```typescript
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Credentials } from '../../../core/models/credentials';
-import { AuthorizationService } from '../../../core/security/authorization.service';
-import { Button } from '../../../shared/components/button/button';
-import { Fieldset } from '../../../shared/components/fieldset/fieldset';
-import { Input } from '../../../shared/components/input-field/input';
-import { ValidatorHint } from '../../../shared/components/validator/validator-hint';
-import { Loading } from '../../../shared/components/loading/loading';
+import { Credentials } from '@/core/models/credentials';
+import { AuthorizationService } from '@/core/security/authorization.service';
+import { Button } from '@/shared/components/button';
+import { Fieldset } from '@/shared/components/fieldset';
+import { Input } from '@/shared/components/input-field';
+import { ValidatorHint } from '@/shared/components/validator/validator-hint';
+import { Loading } from '@/shared/components/loading';
 
 @Component({
   selector: 'app-login-form-sample',
@@ -2226,208 +2355,6 @@ export class LoginFormSample {
     this.authorization.auth(this.formCredentials.value as Credentials);
   }
 }
-```
-
-### Logged User (HTML)
-
-```html
-@if (authorization.loggedUser(); as loggedUser) {
-  <div class="flex flex-col items-center justify-center gap-4 py-20">
-    <div class="avatar">
-      @if (avatarLoading()) {
-        <app-skeleton variant="circle" class="w-24 h-24 absolute inset-0" />
-      }
-      <div
-        class="ring-primary ring-offset-base-100 w-24 rounded-full ring-2 ring-offset-2 relative transition-opacity duration-300"
-        [class.opacity-0]="avatarLoading()"
-      >
-        <img [src]="loggedUser.avatar" (load)="avatarLoading.set(false)" />
-      </div>
-    </div>
-    <span>{{ loggedUser.name }}</span>
-    <div class="join">
-      <button appButton btnVariant="primary" (click)="authorization.updateToken().subscribe()">
-        Refresh Token
-      </button>
-      <button appButton btnVariant="error" (click)="authorization.logout()">Logout</button>
-    </div>
-  </div>
-}
-```
-
-### Logged User (TypeScript)
-
-```typescript
-import { Component, inject, signal } from '@angular/core';
-import { AuthorizationService } from '../../../core/security/authorization.service';
-import { Button } from '../../../shared/components/button/button';
-import { Skeleton } from '../../../shared/components/skeleton/skeleton';
-
-@Component({
-  selector: 'app-logged-sample',
-  templateUrl: './logged-sample.html',
-  imports: [Button, Skeleton],
-})
-export class LoggedSample {
-  readonly avatarLoading = signal(true);
-  readonly authorization = inject(AuthorizationService);
-}
-```
-
----
-
-# Loading
-
-## Installation
-
-```bash
-kl install loading
-```
-
-### Ball
-
-```html
-<span appLoading variant="ball" size="xs">Extra Small</span>
-<span appLoading variant="ball" size="sm">Small</span>
-<span appLoading variant="ball" size="md">Medium</span>
-<span appLoading variant="ball" size="lg">Large</span>
-<span appLoading variant="ball" size="xl">Extra Large</span>
-```
-
-```typescript
-import { Component } from '@angular/core';
-import { Loading } from '@/shared/components/loading/loading';
-
-@Component({
-  selector: 'app-loading-sample',
-  templateUrl: './loading.sample.html',
-  imports: [Loading],
-})
-export class LoadingSample {}
-```
-
-### Bars
-
-```html
-<span appLoading variant="bars" size="xs">Extra Small</span>
-<span appLoading variant="bars" size="sm">Small</span>
-<span appLoading variant="bars" size="md">Medium</span>
-<span appLoading variant="bars" size="lg">Large</span>
-<span appLoading variant="bars" size="xl">Extra Large</span>
-```
-
-```typescript
-import { Component } from '@angular/core';
-import { Loading } from '@/shared/components/loading/loading';
-
-@Component({
-  selector: 'app-loading-sample',
-  templateUrl: './loading.sample.html',
-  imports: [Loading],
-})
-export class LoadingSample {}
-```
-
-### Dots
-
-```html
-<span appLoading variant="dots" size="xs">Extra Small</span>
-<span appLoading variant="dots" size="sm">Small</span>
-<span appLoading variant="dots" size="md">Medium</span>
-<span appLoading variant="dots" size="lg">Large</span>
-<span appLoading variant="dots" size="xl">Extra Large</span>
-```
-
-```typescript
-import { Component } from '@angular/core';
-import { Loading } from '@/shared/components/loading/loading';
-
-@Component({
-  selector: 'app-loading-sample',
-  templateUrl: './loading.sample.html',
-  imports: [Loading],
-})
-export class LoadingSample {}
-```
-
-### Infinity
-
-```html
-<span appLoading variant="infinity" size="xs">Extra Small</span>
-<span appLoading variant="infinity" size="sm">Small</span>
-<span appLoading variant="infinity" size="md">Medium</span>
-<span appLoading variant="infinity" size="lg">Large</span>
-<span appLoading variant="infinity" size="xl">Extra Large</span>
-```
-
-```typescript
-import { Component } from '@angular/core';
-import { Loading } from '@/shared/components/loading/loading';
-
-@Component({
-  selector: 'app-loading-sample',
-  templateUrl: './loading.sample.html',
-  imports: [Loading],
-})
-export class LoadingSample {}
-```
-
-### Ring
-
-```html
-<span appLoading variant="ring" size="xs">Extra Small</span>
-<span appLoading variant="ring" size="sm">Small</span>
-<span appLoading variant="ring" size="md">Medium</span>
-<span appLoading variant="ring" size="lg">Large</span>
-<span appLoading variant="ring" size="xl">Extra Large</span>
-```
-
-```typescript
-import { Component } from '@angular/core';
-import { Loading } from '@/shared/components/loading/loading';
-
-@Component({
-  selector: 'app-loading-sample',
-  templateUrl: './loading.sample.html',
-  imports: [Loading],
-})
-export class LoadingSample {}
-```
-
-### Spinner
-
-```html
-<span appLoading variant="spinner" size="xs">Extra Small</span>
-<span appLoading variant="spinner" size="sm">Small</span>
-<span appLoading variant="spinner" size="md">Medium</span>
-<span appLoading variant="spinner" size="lg">Large</span>
-<span appLoading variant="spinner" size="xl">Extra Large</span>
-```
-
-```typescript
-import { Component } from '@angular/core';
-import { Loading } from '@/shared/components/loading/loading';
-
-@Component({
-  selector: 'app-loading-sample',
-  templateUrl: './loading.sample.html',
-  imports: [Loading],
-})
-export class LoadingSample {}
-```
-
-### TypeScript
-
-```typescript
-import { Component } from '@angular/core';
-import { Loading } from '@/shared/components/loading/loading';
-
-@Component({
-  selector: 'app-loading-sample',
-  templateUrl: './loading.sample.html',
-  imports: [Loading],
-})
-export class LoadingSample {}
 ```
 
 ---
@@ -2451,9 +2378,8 @@ kl install modal
 
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { ModalContainer } from '@/shared/components/modal/modal-container';
-import { ModalRef } from '@/shared/components/modal/modal-ref';
+import { Button } from '@/shared/components/button';
+import { ModalContainer, ModalRef } from '@/shared/components/modal';
 
 @Component({
   selector: 'app-modal-dialog-alert-sample',
@@ -2479,9 +2405,8 @@ export class ModalDialogAlertSample {
 
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { ModalContainer } from '@/shared/components/modal/modal-container';
-import { ModalRef } from '@/shared/components/modal/modal-ref';
+import { Button } from '@/shared/components/button';
+import { ModalContainer, ModalRef } from '@/shared/components/modal';
 
 @Component({
   selector: 'app-modal-dialog-close-corner-sample',
@@ -2507,9 +2432,8 @@ export class ModalDialogCloseCornerSample {
 
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { ModalContainer } from '@/shared/components/modal/modal-container';
-import { ModalRef } from '@/shared/components/modal/modal-ref';
+import { Button } from '@/shared/components/button';
+import { ModalContainer, ModalRef } from '@/shared/components/modal';
 
 @Component({
   selector: 'app-modal-dialog-custom-width-sample',
@@ -2535,9 +2459,8 @@ export class ModalDialogCustomWidthSample {
 
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { ModalContainer } from '@/shared/components/modal/modal-container';
-import { ModalRef } from '@/shared/components/modal/modal-ref';
+import { Button } from '@/shared/components/button';
+import { ModalContainer, ModalRef } from '@/shared/components/modal';
 
 @Component({
   selector: 'app-modal-dialog-sample',
@@ -2559,8 +2482,8 @@ export class ModalDialogSample {
 
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { Modal, ModalConfig } from '@/shared/components/modal/modal';
+import { Button } from '@/shared/components/button';
+import { Modal, ModalConfig } from '@/shared/components/modal';
 import { ModalDialogCustomWidthSample } from './modal-dialog-custom-width-sample';
 
 @Component({
@@ -2586,8 +2509,8 @@ export class ModalTriggerDialogCustomWidthSample {
 
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { Modal, ModalConfig } from '@/shared/components/modal/modal';
+import { Button } from '@/shared/components/button';
+import { Modal, ModalConfig } from '@/shared/components/modal';
 import { ModalDialogAlertSample } from './modal-dialog-alert-sample';
 
 @Component({
@@ -2613,8 +2536,8 @@ export class ModalTriggerDialogAlertSample {
 
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { Modal, ModalConfig } from '@/shared/components/modal/modal';
+import { Button } from '@/shared/components/button';
+import { Modal, ModalConfig } from '@/shared/components/modal';
 import { ModalDialogCloseCornerSample } from './modal-dialog-close-corner-sample';
 
 @Component({
@@ -2640,8 +2563,8 @@ export class ModalTriggerDialogCloseCornerSample {
 
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { Modal, ModalConfig } from '@/shared/components/modal/modal';
+import { Button } from '@/shared/components/button';
+import { Modal, ModalConfig } from '@/shared/components/modal';
 import { ModalDialogSample } from './modal-dialog-sample';
 
 @Component({
@@ -2684,7 +2607,7 @@ kl install pagination
 ```
 
 ```typescript
-import { Pagination } from '@/shared/components/pagination/pagination';
+import { Pagination } from '@/shared/components/pagination';
 import { Component, inject } from '@angular/core';
 
 @Component({
@@ -2698,7 +2621,7 @@ export class PaginationSample {}
 ### TypeScript
 
 ```typescript
-import { Pagination } from '@/shared/components/pagination/pagination';
+import { Pagination } from '@/shared/components/pagination';
 import { Component, inject } from '@angular/core';
 
 @Component({
@@ -2728,7 +2651,7 @@ kl install radio
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Radio } from '@/shared/components/radio/radio';
+import { Radio } from '@/shared/components/radio';
 
 @Component({
   selector: 'app-radio-sample',
@@ -2753,7 +2676,7 @@ export class RadioSample {
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Radio } from '@/shared/components/radio/radio';
+import { Radio } from '@/shared/components/radio';
 
 @Component({
   selector: 'app-radio-sample',
@@ -2817,7 +2740,7 @@ export class RadioSample {
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Radio } from '@/shared/components/radio/radio';
+import { Radio } from '@/shared/components/radio';
 
 @Component({
   selector: 'app-radio-sample',
@@ -2834,7 +2757,7 @@ export class RadioSample {
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Radio } from '@/shared/components/radio/radio';
+import { Radio } from '@/shared/components/radio';
 
 @Component({
   selector: 'app-radio-sample',
@@ -2865,7 +2788,7 @@ kl install range
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Range } from '@/shared/components/range/range';
+import { Range } from '@/shared/components/range';
 
 @Component({
   selector: 'app-range-sample',
@@ -2890,7 +2813,7 @@ export class RangeSample {
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Range } from '@/shared/components/range/range';
+import { Range } from '@/shared/components/range';
 
 @Component({
   selector: 'app-range-sample',
@@ -2918,7 +2841,7 @@ export class RangeSample {
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Range } from '@/shared/components/range/range';
+import { Range } from '@/shared/components/range';
 
 @Component({
   selector: 'app-range-sample',
@@ -2935,7 +2858,7 @@ export class RangeSample {
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Range } from '@/shared/components/range/range';
+import { Range } from '@/shared/components/range';
 
 @Component({
   selector: 'app-range-sample',
@@ -2966,10 +2889,7 @@ kl install select
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import {
-  Select,
-  SelectOption,
-} from '@/shared/components/select/select';
+import { Select, SelectOption } from '@/shared/components/select';
 
 @Component({
   selector: 'app-select-sample',
@@ -3004,10 +2924,7 @@ export class SelectSample {
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import {
-  Select,
-  SelectOption,
-} from '@/shared/components/select/select';
+import { Select, SelectOption } from '@/shared/components/select';
 
 @Component({
   selector: 'app-select-sample',
@@ -3041,10 +2958,7 @@ export class SelectSample {
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import {
-  Select,
-  SelectOption,
-} from '@/shared/components/select/select';
+import { Select, SelectOption } from '@/shared/components/select';
 
 @Component({
   selector: 'app-select-sample',
@@ -3077,10 +2991,7 @@ export class SelectSample {
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import {
-  Select,
-  SelectOption,
-} from '@/shared/components/select/select';
+import { Select, SelectOption } from '@/shared/components/select';
 
 @Component({
   selector: 'app-select-sample',
@@ -3105,10 +3016,7 @@ export class SelectSample {
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import {
-  Select,
-  SelectOption,
-} from '@/shared/components/select/select';
+import { Select, SelectOption } from '@/shared/components/select';
 
 @Component({
   selector: 'app-select-sample',
@@ -3152,9 +3060,8 @@ kl install side-window
 
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { SideWindowContainer } from '@/shared/components/side-window/side-window-container';
-import { SideWindowRef } from '@/shared/components/side-window/side-window-ref';
+import { Button } from '@/shared/components/button';
+import { SideWindowContainer, SideWindowRef } from '@/shared/components/side-window';
 
 @Component({
   selector: 'app-side-window-close-corner-sample',
@@ -3180,9 +3087,8 @@ export class SideWindowCloseCornerSample {
 
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { SideWindowContainer } from '@/shared/components/side-window/side-window-container';
-import { SideWindowRef } from '@/shared/components/side-window/side-window-ref';
+import { Button } from '@/shared/components/button';
+import { SideWindowContainer, SideWindowRef } from '@/shared/components/side-window';
 
 @Component({
   selector: 'app-side-window-sample',
@@ -3202,9 +3108,9 @@ export class SideWindowSample {
 
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { SideWindow } from '@/shared/components/side-window/side-window';
-import { SideWindowSample } from './modal-dialog-sample';
+import { Button } from '@/shared/components/button';
+import { SideWindow } from '@/shared/components/side-window';
+import { SideWindowSample } from './side-window-dialog-sample';
 
 @Component({
   selector: 'app-side-window-trigger-sample',
@@ -3212,10 +3118,10 @@ import { SideWindowSample } from './modal-dialog-sample';
   imports: [Button],
 })
 export class SideWindowTriggerSample {
-  private readonly modal = inject(Modal);
+  private readonly sideWindow = inject(SideWindow);
 
   openModal() {
-    this.modal.open(SideWindowSample, {
+    this.sideWindow.open(SideWindowSample, {
       closeOptions: {
         pressEscape: true,
         clickOutside: false,
@@ -3229,9 +3135,9 @@ export class SideWindowTriggerSample {
 
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { SideWindow } from '@/shared/components/side-window/side-window';
-import { SideWindowCloseCornerSample } from './modal-dialog-close-corner-sample';
+import { Button } from '@/shared/components/button';
+import { SideWindow } from '@/shared/components/side-window';
+import { SideWindowCloseCornerSample } from './side-window-dialog-close-corner-sample';
 
 @Component({
   selector: 'app-side-window-trigger-close-corner-sample',
@@ -3239,10 +3145,10 @@ import { SideWindowCloseCornerSample } from './modal-dialog-close-corner-sample'
   imports: [Button],
 })
 export class SideWindowTriggerCloseCornerSample {
-  private readonly modal = inject(SideWindow);
+  private readonly sideWindow = inject(SideWindow);
 
   openModal() {
-    this.modal.open(SideWindowCloseCornerSample, {
+    this.sideWindow.open(SideWindowCloseCornerSample, {
       closeOptions: {
         pressEscape: true,
         clickOutside: false,
@@ -3270,7 +3176,7 @@ kl install skeleton
 
 ```typescript
 import { Component } from '@angular/core';
-import { Skeleton } from '@/shared/components/skeleton/skeleton';
+import { Skeleton } from '@/shared/components/skeleton';
 
 @Component({
   selector: 'app-tabs-sample',
@@ -3304,7 +3210,7 @@ export class SkeletonSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Skeleton } from '@/shared/components/skeleton/skeleton';
+import { Skeleton } from '@/shared/components/skeleton';
 
 @Component({
   selector: 'app-tabs-sample',
@@ -3322,7 +3228,7 @@ export class SkeletonSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Skeleton } from '@/shared/components/skeleton/skeleton';
+import { Skeleton } from '@/shared/components/skeleton';
 
 @Component({
   selector: 'app-tabs-sample',
@@ -3340,7 +3246,7 @@ export class SkeletonSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Skeleton } from '@/shared/components/skeleton/skeleton';
+import { Skeleton } from '@/shared/components/skeleton';
 
 @Component({
   selector: 'app-tabs-sample',
@@ -3354,7 +3260,7 @@ export class SkeletonSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Skeleton } from '@/shared/components/skeleton/skeleton';
+import { Skeleton } from '@/shared/components/skeleton';
 
 @Component({
   selector: 'app-tabs-sample',
@@ -3427,7 +3333,7 @@ kl install stepper
 
 ```typescript
 import { Component } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
+import { Button } from '@/shared/components/button';
 import { Stepper } from '@/shared/components/stepper';
 
 @Component({
@@ -3442,7 +3348,7 @@ export class StepperSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
+import { Button } from '@/shared/components/button';
 import { Stepper } from '@/shared/components/stepper';
 
 @Component({
@@ -3492,9 +3398,8 @@ kl install table
 
 ```typescript
 import { Component, effect, signal } from '@angular/core';
-import { Table } from '@/shared/components/table';
+import { OrderBy, Table } from '@/shared/components/table';
 import { KlArray } from '@koalarx/utils/KlArray';
-import { OrderBy } from '@/shared/components/table/ordered-header-col';
 
 interface OrderedTableData {
   name: string;
@@ -3878,7 +3783,7 @@ export class TableSample {}
 ## Installation
 
 ```bash
-kl install tabs
+kl install -n tabs
 ```
 
 ### HTML
@@ -3951,7 +3856,7 @@ kl install textarea
 
 ```typescript
 import { Component } from '@angular/core';
-import { Textarea } from '@/shared/components/textarea/textarea';
+import { Textarea } from '@/shared/components/textarea';
 
 @Component({
   selector: 'app-textarea-sample',
@@ -3965,7 +3870,7 @@ export class TextareaSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Textarea } from '@/shared/components/textarea/textarea';
+import { Textarea } from '@/shared/components/textarea';
 
 @Component({
   selector: 'app-textarea-sample',
@@ -3995,8 +3900,8 @@ kl install toast
 ```
 
 ```typescript
-import { Button } from '@/shared/components/button/button';
-import { Toast, ToastType } from '@/shared/components/toast/toast';
+import { Button } from '@/shared/components/button';
+import { Toast, ToastType } from '@/shared/components/toast';
 import { Component, inject } from '@angular/core';
 
 @Component({
@@ -4029,8 +3934,8 @@ export class ToastSample {
 ### TypeScript
 
 ```typescript
-import { Button } from '@/shared/components/button/button';
-import { Toast, ToastType } from '@/shared/components/toast/toast';
+import { Button } from '@/shared/components/button';
+import { Toast, ToastType } from '@/shared/components/toast';
 import { Component, inject } from '@angular/core';
 
 @Component({
@@ -4079,7 +3984,7 @@ kl install toggle
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Toggle } from '@/shared/components/toggle/toggle';
+import { Toggle } from '@/shared/components/toggle';
 
 @Component({
   selector: 'app-toggle-sample',
@@ -4104,7 +4009,7 @@ export class ToggleSample {
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Toggle } from '@/shared/components/toggle/toggle';
+import { Toggle } from '@/shared/components/toggle';
 
 @Component({
   selector: 'app-toggle-sample',
@@ -4132,7 +4037,7 @@ export class ToggleSample {
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Toggle } from '@/shared/components/toggle/toggle';
+import { Toggle } from '@/shared/components/toggle';
 
 @Component({
   selector: 'app-toggle-sample',
@@ -4149,7 +4054,7 @@ export class ToggleSample {
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Toggle } from '@/shared/components/toggle/toggle';
+import { Toggle } from '@/shared/components/toggle';
 
 @Component({
   selector: 'app-toggle-sample',
@@ -4182,8 +4087,8 @@ kl install tooltip
 
 ```typescript
 import { Component } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { Tooltip } from '@/shared/components/tooltip/tooltip';
+import { Button } from '@/shared/components/button';
+import { Tooltip } from '@/shared/components/tooltip';
 
 @Component({
   selector: 'app-tooltip-sample',
@@ -4217,8 +4122,8 @@ export class TooltipSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { Tooltip } from '@/shared/components/tooltip/tooltip';
+import { Button } from '@/shared/components/button';
+import { Tooltip } from '@/shared/components/tooltip';
 
 @Component({
   selector: 'app-tooltip-sample',
@@ -4232,8 +4137,8 @@ export class TooltipSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { Tooltip } from '@/shared/components/tooltip/tooltip';
+import { Button } from '@/shared/components/button';
+import { Tooltip } from '@/shared/components/tooltip';
 
 @Component({
   selector: 'app-tooltip-sample',
@@ -4298,3 +4203,81 @@ export class ValidatorSample {
   readonly emailControl = new FormControl<string>('', [Validators.required, Validators.email]);
 }
 ```
+
+---
+
+# List Base
+
+## Installation
+
+```bash
+kl install list-base
+```
+
+### Md
+
+ListBase is an abstraction resource for datatable lists, providing a default structure and functionalities for listing data. It serves as a base component that can be extended to create specific list implementations, such as user lists, product lists, etc.
+
+## API
+
+### Attributes
+
+- **currentPage**: Signal that holds the current page number (pagination).
+- **pageSize**: Signal that holds the number of items per page.
+- **totalItems**: Signal that holds the total number of items.
+- **orderedBy**: Signal that holds the ordering criteria.
+- **filter**: Signal that holds the applied filter.
+- **skeletonItems**: Computed signal for displaying placeholders while loading.
+- **defaultList**: Default response for use in datalist.
+- **filterPayload**: Payload for filters.
+- **filterParams**: Parameters for filters.
+- **datalist**: Abstract reference to the data resource.
+- **reload**: Signal to reload the list.
+
+### Methods
+
+- **reloadList**: Triggers list reload.
+
+### Filter Definitions
+
+Define filters in the constructor of the class that extends ListBase.
+
+## Usage
+
+See usage examples in the [Database Block](./database.md).
+
+---
+
+# Auth
+
+## Installation
+
+```bash
+kl install auth
+```
+
+### Md
+
+This resource provides interceptor, guard and service for authentication in your application. It can be used to protect routes, manage user sessions, and handle authentication-related tasks.
+
+## API
+
+### Signals and Properties
+
+- **loggedUser**: Signal holding the currently authenticated user (or undefined).
+- **event**: Signal that emits authentication events (login, failure, loading, etc).
+- **hasToken**: Computed signal indicating if an access token is present.
+- **accessToken**: Getter for the current access token.
+- **refreshToken**: Getter for the current refresh token.
+- **isAuthenticated**: Computed signal indicating if a user is authenticated.
+
+### Methods
+
+- **auth(credentials: Credentials)**: Performs login with the provided credentials.
+- **logout()**: Logs out, clearing tokens and user state.
+- **updateToken()**: Updates the access token using the refresh token.
+- **isExpired()**: Returns true if the access token is expired.
+
+## Usage
+
+See usage examples in the [Login Block](./login.md).

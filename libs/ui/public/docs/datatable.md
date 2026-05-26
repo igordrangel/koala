@@ -1,20 +1,15 @@
-# Data Table
+# DataTable
 
 ## Installation
 
 ```bash
-kl install datatable
+kl install inline-filter,table,pagination,skeleton,button,loading,list
 ```
 
 ### HTML
 
 ```html
 <div class="flex items-center gap-1 w-full">
-  <app-filter
-    class="w-full"
-    [definitions]="filterDefinitions"
-    (filtersChange)="filter.set($event)"
-  />
   <button
     appButton
     btnVariant="ghost"
@@ -28,6 +23,8 @@ kl install datatable
       <i class="fa-solid fa-arrow-rotate-right"></i>
     }
   </button>
+
+  <app-inline-filter class="w-full" [config]="filterConfig" (payload)="filter.set($event)" />
 </div>
 <app-table striped pinnedHeader class="w-full max-h-96 border border-base-200 rounded-lg">
   <ng-container header>
@@ -41,7 +38,7 @@ kl install datatable
     </tr>
   </ng-container>
   <ng-container body>
-    @if (datalist.error()) {
+    @if (!datalist.isLoading() && datalist.error()) {
       <tr>
         <td class="text-center text-error" colspan="6">Failed to load data. Please try again.</td>
       </tr>
@@ -119,11 +116,11 @@ import { Component, resource } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { KlArray } from '@koalarx/utils/KlArray';
 import { ListBase } from '@/shared/base/list.base';
-import { Button } from '@/shared/components/button/button';
-import { Filter, FilterDef } from '@/shared/components/filter/filter';
-import { Loading } from '@/shared/components/loading/loading';
-import { Pagination } from '@/shared/components/pagination/pagination';
-import { Skeleton } from '@/shared/components/skeleton/skeleton';
+import { Button } from '@/shared/components/button';
+import { InlineFilter, InlineFilterBuilder } from '@/shared/components/inline-filter';
+import { Loading } from '@/shared/components/loading';
+import { Pagination } from '@/shared/components/pagination';
+import { Skeleton } from '@/shared/components/skeleton';
 import { Table } from '@/shared/components/table';
 
 interface User {
@@ -137,29 +134,20 @@ interface User {
   eyeColor: string;
 }
 
+interface UserFilter {
+  name?: string;
+  email?: string;
+}
+
 @Component({
   selector: 'app-datatable-sample',
   templateUrl: './datatable-sample.html',
-  imports: [Filter, Table, Pagination, Skeleton, Button, Loading],
+  imports: [InlineFilter, Table, Pagination, Skeleton, Button, Loading],
+  providers: [InlineFilterBuilder],
 })
-export class DatatableSample extends ListBase<User> {
-  constructor() {
-    super([
-      FilterDef.text('name', 'Name').build(),
-      FilterDef.text('email', 'Email').validators(Validators.email).build(),
-    ]);
-
-    this.orderedBy.set({ field: 'firstName', direction: 'asc' });
-  }
-
+export class DatatableSample extends ListBase<User, UserFilter> {
   protected override datalist = resource({
-    params: () => ({
-      filter: this.filter(),
-      page: this.currentPage(),
-      pageSize: this.pageSize(),
-      sortBy: this.orderedBy()?.field,
-      order: this.orderedBy()?.direction,
-    }),
+    params: () => this.filterParams,
     defaultValue: this.defaultList,
     loader: async ({ params, abortSignal }) => {
       const page = params.page ?? 1;
@@ -171,26 +159,22 @@ export class DatatableSample extends ListBase<User> {
       const response = await fetch(endpoint, { signal: abortSignal });
       const data: { users: User[]; total: number } = await response.json();
 
-      function getFilter(key: string) {
-        return params.filter?.find((f) => f.key === key);
-      }
-
       const users = new KlArray<User>(
         data.users.filter((item) => {
-          const nameFilter = getFilter('name');
-          const emailFilter = getFilter('email');
+          const nameFilter = params.filter.name;
+          const emailFilter = params.filter.email;
 
           return (
             (!nameFilter ||
-              item.firstName.includes(nameFilter.value as string) ||
-              item.lastName.includes(nameFilter.value as string)) &&
-            (!emailFilter || item.email === (emailFilter.value as string))
+              item.firstName.toLowerCase().includes(nameFilter.toLowerCase()) ||
+              item.lastName.toLowerCase().includes(nameFilter.toLowerCase())) &&
+            (!emailFilter || item.email.toLowerCase() === emailFilter.toLowerCase())
           );
         }),
       );
 
       const totalItems = users.length;
-      const limitedItems = users.split(params.pageSize ?? 10)[page - 1];
+      const limitedItems = users.split(params.pageSize)[page - 1] ?? [];
 
       this.totalItems.set(totalItems);
 
@@ -200,6 +184,17 @@ export class DatatableSample extends ListBase<User> {
       };
     },
   });
+
+  readonly filterConfig = inject(InlineFilterBuilder)
+    .input('Name', 'name')
+    .input('Email', 'email', 'email')
+    .build();
+
+  constructor() {
+    super();
+
+    this.orderedBy.set({ field: 'firstName', direction: 'asc' });
+  }
 }
 ```
 
@@ -210,11 +205,11 @@ import { Component, resource } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { KlArray } from '@koalarx/utils/KlArray';
 import { ListBase } from '@/shared/base/list.base';
-import { Button } from '@/shared/components/button/button';
-import { Filter, FilterDef } from '@/shared/components/filter/filter';
-import { Loading } from '@/shared/components/loading/loading';
-import { Pagination } from '@/shared/components/pagination/pagination';
-import { Skeleton } from '@/shared/components/skeleton/skeleton';
+import { Button } from '@/shared/components/button';
+import { InlineFilter, InlineFilterBuilder } from '@/shared/components/inline-filter';
+import { Loading } from '@/shared/components/loading';
+import { Pagination } from '@/shared/components/pagination';
+import { Skeleton } from '@/shared/components/skeleton';
 import { Table } from '@/shared/components/table';
 
 interface User {
@@ -228,29 +223,20 @@ interface User {
   eyeColor: string;
 }
 
+interface UserFilter {
+  name?: string;
+  email?: string;
+}
+
 @Component({
   selector: 'app-datatable-sample',
   templateUrl: './datatable-sample.html',
-  imports: [Filter, Table, Pagination, Skeleton, Button, Loading],
+  imports: [InlineFilter, Table, Pagination, Skeleton, Button, Loading],
+  providers: [InlineFilterBuilder],
 })
-export class DatatableSample extends ListBase<User> {
-  constructor() {
-    super([
-      FilterDef.text('name', 'Name').build(),
-      FilterDef.text('email', 'Email').validators(Validators.email).build(),
-    ]);
-
-    this.orderedBy.set({ field: 'firstName', direction: 'asc' });
-  }
-
+export class DatatableSample extends ListBase<User, UserFilter> {
   protected override datalist = resource({
-    params: () => ({
-      filter: this.filter(),
-      page: this.currentPage(),
-      pageSize: this.pageSize(),
-      sortBy: this.orderedBy()?.field,
-      order: this.orderedBy()?.direction,
-    }),
+    params: () => this.filterParams,
     defaultValue: this.defaultList,
     loader: async ({ params, abortSignal }) => {
       const page = params.page ?? 1;
@@ -262,26 +248,22 @@ export class DatatableSample extends ListBase<User> {
       const response = await fetch(endpoint, { signal: abortSignal });
       const data: { users: User[]; total: number } = await response.json();
 
-      function getFilter(key: string) {
-        return params.filter?.find((f) => f.key === key);
-      }
-
       const users = new KlArray<User>(
         data.users.filter((item) => {
-          const nameFilter = getFilter('name');
-          const emailFilter = getFilter('email');
+          const nameFilter = params.filter.name;
+          const emailFilter = params.filter.email;
 
           return (
             (!nameFilter ||
-              item.firstName.includes(nameFilter.value as string) ||
-              item.lastName.includes(nameFilter.value as string)) &&
-            (!emailFilter || item.email === (emailFilter.value as string))
+              item.firstName.toLowerCase().includes(nameFilter.toLowerCase()) ||
+              item.lastName.toLowerCase().includes(nameFilter.toLowerCase())) &&
+            (!emailFilter || item.email.toLowerCase() === emailFilter.toLowerCase())
           );
         }),
       );
 
       const totalItems = users.length;
-      const limitedItems = users.split(params.pageSize ?? 10)[page - 1];
+      const limitedItems = users.split(params.pageSize)[page - 1] ?? [];
 
       this.totalItems.set(totalItems);
 
@@ -291,5 +273,16 @@ export class DatatableSample extends ListBase<User> {
       };
     },
   });
+
+  readonly filterConfig = inject(InlineFilterBuilder)
+    .input('Name', 'name')
+    .input('Email', 'email', 'email')
+    .build();
+
+  constructor() {
+    super();
+
+    this.orderedBy.set({ field: 'firstName', direction: 'asc' });
+  }
 }
 ```

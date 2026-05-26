@@ -22,11 +22,14 @@ export class Input {
   }
 
   readonly size = input<InputSize>('sm');
-  readonly bare = input(false);
+  readonly inline = input(false);
 
   constructor() {
     afterRenderEffect(() => {
-      if (this.bare()) return;
+      if (this.inline()) {
+        this.elementRef.nativeElement.classList.add('outline-none');
+        return;
+      }
       this.elementRef.nativeElement.classList.add('input', 'validator', this.inputSizeClass);
     });
   }

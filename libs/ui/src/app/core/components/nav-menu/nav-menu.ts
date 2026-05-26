@@ -54,6 +54,7 @@ export class NavMenu {
         { name: 'Dropdown', routerLink: 'components/dropdown' },
         { name: 'Modal', routerLink: 'components/modal' },
         { name: 'Side Window', routerLink: 'components/side-window' },
+        { name: 'Bottom Sheet', routerLink: 'components/bottom-sheet' },
       ]).orderBy('name'),
     },
     {
@@ -96,7 +97,7 @@ export class NavMenu {
         { name: 'Combobox', routerLink: 'components/combobox' },
         { name: 'Toggle', routerLink: 'components/toggle' },
         { name: 'Textarea', routerLink: 'components/textarea' },
-        { name: 'Filter', routerLink: 'components/filter' },
+        { name: 'Inline Filter', routerLink: 'components/inline-filter' },
         { name: 'Input Field', routerLink: 'components/input-field' },
         { name: 'Validator', routerLink: 'components/validator' },
         { name: 'Fieldset', routerLink: 'components/fieldset' },

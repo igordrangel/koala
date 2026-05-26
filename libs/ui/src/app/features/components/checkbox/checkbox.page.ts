@@ -1,8 +1,8 @@
+import { Section } from '@/core/components/section';
+import { Checkbox } from '@/shared/components/checkbox';
 import { Tabs } from '@/shared/components/tabs';
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Section } from '../../../core/components/section';
-import { Checkbox } from '../../../shared/components/checkbox/checkbox';
 
 @Component({
   selector: 'app-checkbox-page',

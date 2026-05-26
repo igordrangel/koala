@@ -18,7 +18,7 @@ kl install textarea
 
 ```typescript
 import { Component } from '@angular/core';
-import { Textarea } from '@/shared/components/textarea/textarea';
+import { Textarea } from '@/shared/components/textarea';
 
 @Component({
   selector: 'app-textarea-sample',
@@ -32,7 +32,7 @@ export class TextareaSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Textarea } from '@/shared/components/textarea/textarea';
+import { Textarea } from '@/shared/components/textarea';
 
 @Component({
   selector: 'app-textarea-sample',

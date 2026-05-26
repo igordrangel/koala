@@ -1,6 +1,6 @@
 ```typescript
-import { Fieldset } from '@/shared/components/fieldset/fieldset';
-import { Input } from '@/shared/components/input-field/input';
+import { Fieldset } from '@/shared/components/fieldset';
+import { Input } from '@/shared/components/input-field';
 import { ValidatorHint } from '@/shared/components/validator/validator-hint';
 import { CurrencyMask } from '@/shared/directives/currency.directive';
 import { Component } from '@angular/core';

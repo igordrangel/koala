@@ -70,7 +70,7 @@ const COMPONENTS = [
 
   // components
   { name: 'alert', label: 'Alert' },
-  { name: 'auth', label: 'Auth' },
+  { name: 'bottom-sheet', label: 'Bottom Sheet' },
   { name: 'breadcrumb', label: 'Breadcrumb' },
   { name: 'button', label: 'Button' },
   { name: 'calendar', label: 'Calendar' },
@@ -81,12 +81,11 @@ const COMPONENTS = [
   { name: 'datatable', label: 'DataTable' },
   { name: 'dropdown', label: 'Dropdown' },
   { name: 'fieldset', label: 'Fieldset' },
-  { name: 'filter', label: 'Filter' },
+  { name: 'inline-filter', label: 'Inline Filter' },
   { name: 'input-cnpj', label: 'Input CNPJ' },
   { name: 'input-cpf', label: 'Input CPF' },
   { name: 'input-currency', label: 'Input Currency' },
   { name: 'input-field', label: 'Input Field' },
-  { name: 'list-base', label: 'ListBase' },
   { name: 'loading', label: 'Loading' },
   { name: 'login', label: 'Login' },
   { name: 'modal', label: 'Modal' },
@@ -104,6 +103,10 @@ const COMPONENTS = [
   { name: 'toggle', label: 'Toggle' },
   { name: 'tooltip', label: 'Tooltip' },
   { name: 'validator', label: 'Validator' },
+
+  // resources
+  { name: 'list-base', label: 'List Base' },
+  { name: 'auth', label: 'Auth' },
 ];
 
 // ---------------------------------------------------------------------------

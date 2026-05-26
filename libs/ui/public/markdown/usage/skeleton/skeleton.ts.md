@@ -1,6 +1,6 @@
 ```typescript
 import { Component } from '@angular/core';
-import { Skeleton } from '@/shared/components/skeleton/skeleton';
+import { Skeleton } from '@/shared/components/skeleton';
 
 @Component({
   selector: 'app-tabs-sample',

@@ -1,6 +1,5 @@
 import { Component, inject, OnDestroy } from '@angular/core';
-import { SIDE_WINDOW_CONFIG, SideWindowConfig } from './side-window';
-import { SideWindowRef } from './side-window-ref';
+import { SIDE_WINDOW_CONFIG, SideWindowConfig, SideWindowRef } from '.';
 
 @Component({
   selector: 'app-side-window',

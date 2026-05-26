@@ -5,15 +5,14 @@ import { getProjectPath } from './project-path';
 const originPath = path.join(__dirname, '../../');
 
 export const InstallUtilFlagsList = [
-  'string-mask',
   'currency-mask',
-  'find-item-by-value',
-  'has-item-with-value',
-  'remove-item-by-value',
-  'toggle-item-by-value',
-  'map-items-by-values',
-  'are-items-equal-by-value',
-  'toggle-primitive-value',
+  'download-buff-file',
+  'is-mobile',
+  'make-breadcrumbs',
+  'mime-type-by-extension',
+  'string-mask',
+  'scroll-into-view',
+  'control-changes',
 ] as const;
 export type InstallUtilFlags = (typeof InstallUtilFlagsList)[number];
 

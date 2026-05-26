@@ -4,7 +4,7 @@ export type LoadingVariant = 'spinner' | 'dots' | 'ring' | 'ball' | 'bars' | 'in
 
 export type LoadingSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
-@Directive({ selector: '[appLoading]' })
+@Directive({ selector: 'app-loading, [appLoading]' })
 export class Loading {
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef<HTMLElement>);
 

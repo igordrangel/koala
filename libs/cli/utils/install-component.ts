@@ -42,9 +42,10 @@ export const InstallComponentFlagsList = [
   'range',
   'select',
   'combobox',
-  'filter',
+  'inline-filter',
   'list-base',
   'auth',
+  'bottom-sheet',
 ] as const;
 export type InstallComponentFlags = (typeof InstallComponentFlagsList)[number];
 
@@ -121,33 +122,25 @@ export function installComponent(projectName: string, component: InstallComponen
       utilDeps.push('currency-mask');
       break;
     case 'combobox':
-      libDeps.push('@angular/aria');
-      utilDeps.push(
-        'find-item-by-value',
-        'has-item-with-value',
-        'remove-item-by-value',
-        'toggle-item-by-value',
-        'map-items-by-values',
-        'are-items-equal-by-value',
-      );
-      componentDeps.push('loading');
-      break;
     case 'select':
-      utilDeps.push('find-item-by-value', 'toggle-primitive-value');
+      libDeps.push('@angular/aria');
+      utilDeps.push('scroll-into-view');
+      componentDeps.push('dropdown', 'input-field', 'loading');
       break;
-    case 'filter':
+    case 'inline-filter':
+      utilDeps.push('is-mobile', 'scroll-into-view');
       componentDeps.push(
+        'combobox',
+        'select',
         'button',
         'tooltip',
         'dropdown',
-        'combobox',
-        'select',
-        'loading',
-        'calendar',
-        'input-field',
         'input-cpf',
         'input-cnpj',
         'currency',
+        'calendar',
+        'loading',
+        'bottom-sheet',
       );
       break;
     case 'pagination':
@@ -155,7 +148,7 @@ export function installComponent(projectName: string, component: InstallComponen
       break;
     case 'list-base':
       baseDeps.push('list');
-      componentDeps.push('filter', 'table');
+      componentDeps.push('table');
       break;
     case 'auth':
       libDeps.push('jwt-decode');
@@ -169,6 +162,9 @@ export function installComponent(projectName: string, component: InstallComponen
         'utils/authentication',
         'utils/routes-registre',
       );
+      break;
+    case 'dropdown':
+      utilDeps.push('is-mobile');
       break;
   }
 

@@ -1,6 +1,6 @@
 ```typescript
-import { Alert, AlertType } from '@/shared/components/alert/alert';
-import { Button } from '@/shared/components/button/button';
+import { Alert, AlertType } from '@/shared/components/alert';
+import { Button } from '@/shared/components/button';
 import { Component, inject } from '@angular/core';
 
 @Component({

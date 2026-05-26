@@ -73,7 +73,7 @@
       [disabled]="logingIn || formCredentials.invalid"
     >
       @if (logingIn) {
-        <span appLoading size="sm"></span>
+        <app-loading size="sm"></app-loading>
       }
 
       Login

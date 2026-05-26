@@ -1,6 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { Tooltip } from '../../../shared/components/tooltip/tooltip';
+import { Tooltip } from '@/shared/components/tooltip';
 
 @Component({
   selector: 'app-section-container',

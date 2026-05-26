@@ -1,9 +1,8 @@
+import { Section } from '@/core/components/section';
+import { OrderBy, Table } from '@/shared/components/table';
+import { Tabs } from '@/shared/components/tabs';
 import { Component, effect, signal } from '@angular/core';
-import { Section } from '../../../core/components/section';
-import { Table } from '../../../shared/components/table';
-import { Tabs } from '../../../shared/components/tabs';
 import { KlArray } from '@koalarx/utils/KlArray';
-import { OrderBy } from '@/shared/components/table/ordered-header-col';
 
 interface OrderedTableData {
   name: string;

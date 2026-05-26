@@ -14,7 +14,7 @@ kl install calendar
 
 ```typescript
 import { Component } from '@angular/core';
-import { Calendar } from '@/shared/components/calendar/calendar';
+import { Calendar } from '@/shared/components/calendar';
 
 @Component({
   selector: 'app-calendar-sample',
@@ -56,7 +56,7 @@ export class CalendarSample {}
 
 ```typescript
 import { Component, signal } from '@angular/core';
-import { InputCalendar } from '@/shared/components/calendar/input-calendar';
+import { InputCalendar } from '@/shared/components/calendar';
 
 @Component({
   selector: 'app-input-calendar-sample',
@@ -75,7 +75,7 @@ export class CalendarSample {
 
 ```typescript
 import { Component } from '@angular/core';
-import { Calendar } from '@/shared/components/calendar/calendar';
+import { Calendar } from '@/shared/components/calendar';
 
 @Component({
   selector: 'app-calendar-sample',

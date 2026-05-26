@@ -1,7 +1,7 @@
 ```html
-<span appLoading variant="infinity" size="xs">Extra Small</span>
-<span appLoading variant="infinity" size="sm">Small</span>
-<span appLoading variant="infinity" size="md">Medium</span>
-<span appLoading variant="infinity" size="lg">Large</span>
-<span appLoading variant="infinity" size="xl">Extra Large</span>
+<app-loading variant="infinity" size="xs">Extra Small</app-loading>
+<app-loading variant="infinity" size="sm">Small</app-loading>
+<app-loading variant="infinity" size="md">Medium</app-loading>
+<app-loading variant="infinity" size="lg">Large</app-loading>
+<app-loading variant="infinity" size="xl">Extra Large</app-loading>
 ```

@@ -1,8 +1,8 @@
-import { Button } from '@/shared/components/button/button';
-import { Modal, ModalConfig } from '@/shared/components/modal/modal';
+import { Section } from '@/core/components/section';
+import { Button } from '@/shared/components/button';
+import { Modal, ModalConfig } from '@/shared/components/modal';
 import { Tabs } from '@/shared/components/tabs';
 import { Component, inject } from '@angular/core';
-import { Section } from '../../../core/components/section';
 import { ModalSample } from './modal-sample';
 
 @Component({

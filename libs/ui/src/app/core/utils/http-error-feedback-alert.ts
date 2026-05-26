@@ -1,4 +1,4 @@
-import { Toast } from '@/shared/components/toast/toast';
+import { Toast } from '@/shared/components/toast';
 import { HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { HttpErrorMiddleware } from '../middlewares/http-errors.midleware';

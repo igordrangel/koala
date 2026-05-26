@@ -25,51 +25,52 @@ kl new example --pm pnpm
 
 ```bash
 kl install button,dropdown,modal
+
+# target a specific project
+kl install modal --project my-angular-app
 ```
 
-## 4. Initialize an existing Angular project (optional)
+## 4. Add resources (optional)
 
 ```bash
 kl init --project my-angular-app
 ```
 
-## 5. Check CLI version
-
-```bash
-kl version
-```
-
 ## Available components
 
-- **Alert** – `kl install alert`
-- **Breadcrumb** – `kl install breadcrumb`
-- **Button** – `kl install button`
-- **Calendar** – `kl install calendar`
-- **Checkbox** – `kl install checkbox`
-- **Collapse** – `kl install collapse`
-- **Combobox** – `kl install combobox`
-- **Confirm** – `kl install confirm`
-- **Data Table** – `kl install datatable`
-- **Dropdown** – `kl install dropdown`
-- **Fieldset** – `kl install fieldset`
-- **Filter** – `kl install filter`
-- **Input CNPJ** – `kl install input-cnpj`
-- **Input CPF** – `kl install input-cpf`
-- **Input Currency** – `kl install input-currency`
-- **Input Field** – `kl install input-field`
-- **Loading** – `kl install loading`
-- **Modal** – `kl install modal`
-- **Pagination** – `kl install pagination`
-- **Radio** – `kl install radio`
-- **Range** – `kl install range`
-- **Select** – `kl install select`
-- **Side Window** – `kl install side-window`
-- **Skeleton** – `kl install skeleton`
-- **Stepper** – `kl install stepper`
-- **Table** – `kl install table`
-- **Tabs** – `kl install tabs`
-- **Textarea** – `kl install textarea`
-- **Toast** – `kl install toast`
-- **Toggle** – `kl install toggle`
-- **Tooltip** – `kl install tooltip`
-- **Validator** – `kl install validator`
+- **Alert** – `kl install -n alert`
+- **Bottom Sheet** – `kl install -n bottom-sheet`
+- **Breadcrumb** – `kl install -n breadcrumb`
+- **Button** – `kl install -n button`
+- **Calendar** – `kl install -n calendar`
+- **Checkbox** – `kl install -n checkbox`
+- **Collapse** – `kl install -n collapse`
+- **Combobox** – `kl install -n combobox`
+- **Confirm** – `kl install -n confirm`
+- **DataTable** – `kl install -n datatable`
+- **Dropdown** – `kl install -n dropdown`
+- **Fieldset** – `kl install -n fieldset`
+- **Inline Filter** – `kl install -n inline-filter`
+- **Input CNPJ** – `kl install -n input-cnpj`
+- **Input CPF** – `kl install -n input-cpf`
+- **Input Currency** – `kl install -n input-currency`
+- **Input Field** – `kl install -n input-field`
+- **Loading** – `kl install -n loading`
+- **Login** – `kl install -n login`
+- **Modal** – `kl install -n modal`
+- **Pagination** – `kl install -n pagination`
+- **Radio** – `kl install -n radio`
+- **Range** – `kl install -n range`
+- **Select** – `kl install -n select`
+- **Side Window** – `kl install -n side-window`
+- **Skeleton** – `kl install -n skeleton`
+- **Stepper** – `kl install -n stepper`
+- **Table** – `kl install -n table`
+- **Tabs** – `kl install -n tabs`
+- **Textarea** – `kl install -n textarea`
+- **Toast** – `kl install -n toast`
+- **Toggle** – `kl install -n toggle`
+- **Tooltip** – `kl install -n tooltip`
+- **Validator** – `kl install -n validator`
+- **List Base** – `kl install -n list-base`
+- **Auth** – `kl install -n auth`

@@ -1,7 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { TOAST_CONFIG, ToastConfig } from './toast';
-import { ToastRef } from './toast-ref';
-import { Button } from '../button/button';
+import { TOAST_CONFIG, ToastConfig, ToastRef } from '.';
+import { Button } from '../button';
 
 @Component({
   selector: 'app-toast-alert',

@@ -1,7 +1,7 @@
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Checkbox } from '@/shared/components/checkbox/checkbox';
+import { Checkbox } from '@/shared/components/checkbox';
 
 @Component({
   selector: 'app-checkbox-sample',

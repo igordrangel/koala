@@ -3,7 +3,7 @@
 ## Installation
 
 ```bash
-kl install tabs
+kl install -n tabs
 ```
 
 ### HTML

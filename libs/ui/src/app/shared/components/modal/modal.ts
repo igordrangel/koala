@@ -9,7 +9,7 @@ import {
   Type,
 } from '@angular/core';
 import { randomString } from '@koalarx/utils/KlString';
-import { MODAL_REF_TOKEN, ModalRef } from './modal-ref';
+import { MODAL_REF_TOKEN, ModalRef } from '.';
 
 export type ModalAfterCloseTrigger = string | Record<string, any>;
 export type ModalAfterCloseTriggerFn = (trigger: ModalAfterCloseTrigger) => void;

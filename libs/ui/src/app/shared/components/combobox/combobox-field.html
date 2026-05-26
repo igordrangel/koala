@@ -1,0 +1,151 @@
+<div class="relative flex-1 w-full">
+  <div
+    class="relative flex flex-wrap gap-1 w-full h-auto bg-transparent"
+    [class.input]="!inline()"
+    [class.validator]="!inline()"
+    [class]="'text-' + size()"
+  >
+    <div
+      #selectedOptionContent
+      role="selectedContent"
+      class="inset-y-0 left-0 py-1.5 flex flex-wrap items-center gap-1 empty:hidden"
+      [class.hidden]="!multiple() && dropdownOpened()"
+      [class.w-full]="!multiple()"
+      [class.pr-7]="!multiple()"
+      [class.p-0!]="inline()"
+    >
+      @if (selectedOptions().length > 0) {
+        @if (multiple()) {
+          @for (item of selectedOptions(); track $index) {
+            <span class="badge badge-success badge-soft badge-sm">
+              {{ item.label }}
+              <button
+                type="button"
+                class="text-neutral-content opacity-40 hover:opacity-70 transition-opacity duration-100 cursor-pointer top-[0.05rem] relative"
+                (click)="removeOption(item.value)"
+              >
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </span>
+          }
+        } @else {
+          @let option = selectedOptions()[0];
+
+          <div class="flex items-center justify-between gap-2 w-full cursor-text">
+            <span>{{ option.label }}</span>
+
+            <button
+              type="button"
+              class="text-neutral-content opacity-40 hover:opacity-70 transition-opacity duration-100 cursor-pointer top-[0.05rem] relative"
+              (click)="removeOption(option.value)"
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+        }
+      }
+    </div>
+
+    @let placeholderText =
+      !multiple() && selectedOptions().length > 0 ? selectedOptions()[0].label : placeholder();
+
+    <input
+      #inputFilter
+      role="inputFilter"
+      type="text"
+      class="relative flex-1 outline-0 w-full min-w-20 pr-10"
+      [class.hidden]="!multiple() && selectedOptions().length > 0 && !dropdownOpened()"
+      [class.border-0]="inline()"
+      [class.h-8]="!inline()"
+      [class.py-2]="!inline()"
+      [class.py-0]="inline()"
+      [attr.list]="listElementId"
+      [placeholder]="placeholderText"
+      [disabled]="isDisabled()"
+      [(ngModel)]="filter"
+      (click)="toggleDropdown()"
+    />
+
+    @if (!inline()) {
+      <div class="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
+        @if (filteredOptions()?.isLoading()) {
+          <span appLoading size="xs"></span>
+        } @else {
+          <i
+            class="fa-solid fa-angle-down opacity-70 pointer-events-none transition duration-100"
+            [class.rotate-180]="dropdownOpened()"
+          ></i>
+        }
+      </div>
+    }
+  </div>
+
+  @let inputWidth = (inputFilter.getClientRects()[0]?.width || 0) + 20;
+
+  <app-dropdown
+    class="absolute bottom-1 left-0 -z-1 w-full"
+    [insideClick]="multiple()"
+    (closed)="dropdownOpened.set(false)"
+    [disabled]="isDisabled()"
+  >
+    <button #triggerOptions type="button" class="flex-1 h-fit invisible" trigger>
+      Filter Trigger
+    </button>
+    <div
+      #filterOptions
+      class="flex flex-col"
+      [class.w-50]="inline()"
+      [class.w-full]="!inline()"
+      [style.min-width.px]="inputWidth"
+      options
+    >
+      <span
+        class="flex items-center text-neutral-500 h-8 px-4 text-xs border-b border-base-200 w-full"
+      >
+        @if (filter(); as filterValue) {
+          Results for "{{ filterValue }}"
+        } @else {
+          Select an option
+        }
+      </span>
+
+      <ul class="w-full max-h-40 overflow-y-auto p-1">
+        @if (filteredOptions()?.isLoading() && !filteredOptions()?.error()) {
+          <li
+            class="flex items-center justify-center gap-2 pointer-events-none py-3 text-neutral-500"
+          >
+            <span appLoading size="xs"></span> Loading...
+          </li>
+        } @else if (filteredOptions()?.error()) {
+          <li class="flex items-center justify-center pointer-events-none py-3 text-neutral-500">
+            Error loading data
+          </li>
+        } @else {
+          @for (option of filteredOptions()?.value(); track $index) {
+            <li
+              class="data-[active=true]:bg-neutral-800 rounded cursor-pointer text-left w-full group"
+              [attr.data-value]="option.value"
+              [attr.data-selected]="selectedValues().includes(option.value)"
+              (click)="toggleOption(option)"
+            >
+              <div class="flex items-center justify-between">
+                <div class="flex flex-col gap-1">
+                  <span>{{ option.label }}</span>
+                  <span class="empty:hidden">{{ option.description }}</span>
+                </div>
+
+                <i
+                  class="fa-solid fa-check text-success invisible group-data-[selected=true]:visible"
+                ></i>
+              </div>
+            </li>
+          } @empty {
+            <li class="flex items-center justify-center pointer-events-none py-3 text-neutral-500">
+              No data found
+            </li>
+          }
+        }
+      </ul>
+    </div>
+  </app-dropdown>
+</div>

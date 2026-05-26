@@ -7,6 +7,7 @@ import { getProjectPath } from './project-path';
 import { runCommand } from './run-command';
 import { setupGlobalTests } from './setup-global-tests';
 import { validateAngularProject } from './validate-project';
+import { installUtil } from './install-util';
 
 const originPath = path.join(__dirname, '../../');
 
@@ -93,7 +94,7 @@ export async function setupExistingProject(projectName: string, verbose = false)
     }
   }
 
-  mkdirSync(`${projectPath}/src/public/assets/icons`, { recursive: true });
+  mkdirSync(`${projectPath}/public/assets/icons`, { recursive: true });
 
   const generateIconsPath = `${projectPath}/generate-icons.js`;
   if (!existsSync(generateIconsPath)) {
@@ -129,6 +130,10 @@ export async function setupExistingProject(projectName: string, verbose = false)
     dependencies?: Record<string, string>;
     devDependencies?: Record<string, string>;
   };
+
+  if (!packageJson.scripts) {
+    packageJson.scripts = {};
+  }
 
   if (!packageJson.scripts.prestart) {
     packageJson.scripts.prestart = 'node generate-icons.js';
@@ -205,6 +210,8 @@ export async function setupExistingProject(projectName: string, verbose = false)
   } else if (existsSync(vscodeSettingsPath)) {
     logSuccess(logger, 'VS Code já configurado');
   }
+
+  installUtil(projectName, 'control-changes');
 
   logSuccess(logger, 'Setup concluído com sucesso!');
 }

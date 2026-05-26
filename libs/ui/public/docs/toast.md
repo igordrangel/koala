@@ -16,8 +16,8 @@ kl install toast
 ```
 
 ```typescript
-import { Button } from '@/shared/components/button/button';
-import { Toast, ToastType } from '@/shared/components/toast/toast';
+import { Button } from '@/shared/components/button';
+import { Toast, ToastType } from '@/shared/components/toast';
 import { Component, inject } from '@angular/core';
 
 @Component({
@@ -50,8 +50,8 @@ export class ToastSample {
 ### TypeScript
 
 ```typescript
-import { Button } from '@/shared/components/button/button';
-import { Toast, ToastType } from '@/shared/components/toast/toast';
+import { Button } from '@/shared/components/button';
+import { Toast, ToastType } from '@/shared/components/toast';
 import { Component, inject } from '@angular/core';
 
 @Component({

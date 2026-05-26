@@ -52,55 +52,60 @@ export class SideWindow {
 
   open(component: Type<any>, config?: SideWindowConfig) {
     const body = document.body;
+    const elementId = this.generateElementId();
+    const container = body.appendChild(document.createElement('div'));
 
-    if (body) {
-      const elementId = this.generateElementId();
-      const container = body.appendChild(document.createElement('div'));
+    container.id = elementId;
+    container.classList.add(
+      'fixed',
+      'top-0',
+      'right-0',
+      'w-auto',
+      'h-full',
+      'py-2',
+      'pr-2',
+      'z-10000',
+    );
 
-      body.classList.add('flex', 'overflow-x-hidden');
-
-      container.id = elementId;
-
-      const componentRef = createComponent(component, {
-        environmentInjector: this.injector,
-        hostElement: container,
-        elementInjector: Injector.create({
-          providers: [
-            { provide: SIDE_WINDOW_CONFIG, useValue: config },
-            { provide: SIDE_WINDOW_APP_REF, useValue: this.appRef },
-            {
-              provide: SIDE_WINDOW_REF_TOKEN,
-              useValue: () => componentRef,
+    const componentRef = createComponent(component, {
+      environmentInjector: this.injector,
+      hostElement: container,
+      elementInjector: Injector.create({
+        providers: [
+          { provide: SIDE_WINDOW_CONFIG, useValue: config },
+          { provide: SIDE_WINDOW_APP_REF, useValue: this.appRef },
+          {
+            provide: SIDE_WINDOW_REF_TOKEN,
+            useValue: () => componentRef,
+          },
+          { provide: SIDE_WINDOW_DATA, useValue: config?.data },
+          {
+            provide: SIDE_WINDOW_AFTER_CLOSE_TRIGGER,
+            useValue: (trigger: SideWindowAfterCloseTrigger) => {
+              if (
+                config?.closeOptions &&
+                (config.closeOptions.trigger === trigger || typeof trigger === 'object')
+              ) {
+                config.afterClosed?.(trigger);
+              }
             },
-            { provide: SIDE_WINDOW_DATA, useValue: config?.data },
-            {
-              provide: SIDE_WINDOW_AFTER_CLOSE_TRIGGER,
-              useValue: (trigger: SideWindowAfterCloseTrigger) => {
-                if (
-                  config?.closeOptions &&
-                  (config.closeOptions.trigger === trigger || typeof trigger === 'object')
-                ) {
-                  config.afterClosed?.(trigger);
-                }
-              },
-            },
-            {
-              provide: SideWindowRef,
-              deps: [
-                SIDE_WINDOW_CONFIG,
-                SIDE_WINDOW_APP_REF,
-                SIDE_WINDOW_REF_TOKEN,
-                SIDE_WINDOW_AFTER_CLOSE_TRIGGER,
-                SIDE_WINDOW_DATA,
-              ],
-            },
-          ],
-        }),
-      });
+          },
+          {
+            provide: SideWindowRef,
+            deps: [
+              SIDE_WINDOW_CONFIG,
+              SIDE_WINDOW_APP_REF,
+              SIDE_WINDOW_REF_TOKEN,
+              SIDE_WINDOW_AFTER_CLOSE_TRIGGER,
+              SIDE_WINDOW_DATA,
+            ],
+          },
+        ],
+      }),
+    });
 
-      this.appRef.attachView(componentRef.hostView);
+    this.appRef.attachView(componentRef.hostView);
 
-      componentRef.changeDetectorRef.detectChanges();
-    }
+    componentRef.changeDetectorRef.detectChanges();
   }
 }

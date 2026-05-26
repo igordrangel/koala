@@ -35,9 +35,8 @@ kl install table
 
 ```typescript
 import { Component, effect, signal } from '@angular/core';
-import { Table } from '@/shared/components/table';
+import { OrderBy, Table } from '@/shared/components/table';
 import { KlArray } from '@koalarx/utils/KlArray';
-import { OrderBy } from '@/shared/components/table/ordered-header-col';
 
 interface OrderedTableData {
   name: string;

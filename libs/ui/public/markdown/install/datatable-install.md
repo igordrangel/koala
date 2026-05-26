@@ -1,3 +1,3 @@
 ```bash
-kl install filter,table,pagination,skeleton,button,loading,list
+kl install inline-filter,table,pagination,skeleton,button,loading,list
 ```

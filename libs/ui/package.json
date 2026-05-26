@@ -13,7 +13,7 @@
     "test": "ng test",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
-    "e2e": "playwright test",
+    "e2e": "playwright test --pass-with-no-tests",
     "e2e:headed": "playwright test --headed",
     "e2e:ui": "playwright test --ui"
   },

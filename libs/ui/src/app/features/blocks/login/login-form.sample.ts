@@ -1,12 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Credentials } from '../../../core/models/credentials';
-import { AuthorizationService } from '../../../core/security/authorization.service';
-import { Button } from '../../../shared/components/button/button';
-import { Fieldset } from '../../../shared/components/fieldset/fieldset';
-import { Input } from '../../../shared/components/input-field/input';
-import { ValidatorHint } from '../../../shared/components/validator/validator-hint';
-import { Loading } from '../../../shared/components/loading/loading';
+import { Credentials } from '@/core/models/credentials';
+import { AuthorizationService } from '@/core/security/authorization.service';
+import { Button } from '@/shared/components/button';
+import { Fieldset } from '@/shared/components/fieldset';
+import { Input } from '@/shared/components/input-field';
+import { ValidatorHint } from '@/shared/components/validator/validator-hint';
+import { Loading } from '@/shared/components/loading';
 
 @Component({
   selector: 'app-login-form-sample',

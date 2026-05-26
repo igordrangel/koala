@@ -1,8 +1,7 @@
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { SideWindowContainer } from '@/shared/components/side-window/side-window-container';
-import { SideWindowRef } from '@/shared/components/side-window/side-window-ref';
+import { Button } from '@/shared/components/button';
+import { SideWindowContainer, SideWindowRef } from '@/shared/components/side-window';
 
 @Component({
   selector: 'app-side-window-close-corner-sample',

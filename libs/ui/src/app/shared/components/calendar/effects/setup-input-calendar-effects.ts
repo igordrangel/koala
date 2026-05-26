@@ -1,6 +1,6 @@
 import { effect, Signal } from '@angular/core';
+import { InputCalendarFormat, InputCalendarType } from '..';
 import { parseMonthValue } from '../input-calendar.helpers';
-import { InputCalendarFormat, InputCalendarType } from '../input-calendar.types';
 
 interface SetupTriggerLabelEffectParams {
   value: Signal<string>;

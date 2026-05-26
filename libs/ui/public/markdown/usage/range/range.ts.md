@@ -1,7 +1,7 @@
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Range } from '@/shared/components/range/range';
+import { Range } from '@/shared/components/range';
 
 @Component({
   selector: 'app-range-sample',

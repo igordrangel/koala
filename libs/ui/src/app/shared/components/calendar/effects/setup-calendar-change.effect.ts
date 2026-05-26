@@ -1,6 +1,6 @@
 import { effect, ElementRef } from '@angular/core';
 import { KlDate } from '@koalarx/utils/light/KlDate';
-import type { CalendarType } from '../calendar';
+import type { CalendarType } from '..';
 
 interface SetupCalendarChangeEffectParams {
   calendar: () => ElementRef<HTMLElement & { value?: string }> | undefined;

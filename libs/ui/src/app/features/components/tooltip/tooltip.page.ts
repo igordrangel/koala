@@ -1,8 +1,8 @@
-import { Button } from '@/shared/components/button/button';
+import { Section } from '@/core/components/section';
+import { Button } from '@/shared/components/button';
 import { Tabs } from '@/shared/components/tabs';
+import { Tooltip } from '@/shared/components/tooltip';
 import { Component } from '@angular/core';
-import { Section } from '../../../core/components/section';
-import { Tooltip } from '@/shared/components/tooltip/tooltip';
 
 @Component({
   selector: 'app-tooltip-page',

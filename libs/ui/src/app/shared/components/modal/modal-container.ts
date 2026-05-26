@@ -1,6 +1,5 @@
 import { Component, inject, OnDestroy } from '@angular/core';
-import { MODAL_CONFIG, ModalConfig } from './modal';
-import { ModalRef } from './modal-ref';
+import { MODAL_CONFIG, ModalConfig, ModalRef } from '.';
 
 @Component({
   selector: 'app-modal',

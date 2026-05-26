@@ -17,8 +17,8 @@ kl install tooltip
 
 ```typescript
 import { Component } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { Tooltip } from '@/shared/components/tooltip/tooltip';
+import { Button } from '@/shared/components/button';
+import { Tooltip } from '@/shared/components/tooltip';
 
 @Component({
   selector: 'app-tooltip-sample',
@@ -52,8 +52,8 @@ export class TooltipSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { Tooltip } from '@/shared/components/tooltip/tooltip';
+import { Button } from '@/shared/components/button';
+import { Tooltip } from '@/shared/components/tooltip';
 
 @Component({
   selector: 'app-tooltip-sample',
@@ -67,8 +67,8 @@ export class TooltipSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { Tooltip } from '@/shared/components/tooltip/tooltip';
+import { Button } from '@/shared/components/button';
+import { Tooltip } from '@/shared/components/tooltip';
 
 @Component({
   selector: 'app-tooltip-sample',

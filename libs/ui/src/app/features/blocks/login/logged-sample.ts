@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
-import { AuthorizationService } from '../../../core/security/authorization.service';
-import { Button } from '../../../shared/components/button/button';
-import { Skeleton } from '../../../shared/components/skeleton/skeleton';
+import { AuthorizationService } from '@/core/security/authorization.service';
+import { Button } from '@/shared/components/button';
+import { Skeleton } from '@/shared/components/skeleton';
 
 @Component({
   selector: 'app-logged-sample',
