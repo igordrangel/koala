@@ -15,7 +15,7 @@ interface MenuOptions {
   items: MenuOption[];
 }
 
-type ModulePage = 'get-started' | 'components' | 'blocks' | 'resources';
+type ModulePage = 'getting-started' | 'components' | 'blocks' | 'resources';
 
 @Component({
   selector: 'app-nav-menu',
@@ -34,15 +34,20 @@ export class NavMenu {
   );
   readonly currentModulePage = computed<ModulePage | null>(() => {
     const url = this.currentPage()?.[0];
-    if (url === 'get-started' || url === 'components' || url === 'blocks' || url === 'resources') {
+    if (
+      url === 'getting-started' ||
+      url === 'components' ||
+      url === 'blocks' ||
+      url === 'resources'
+    ) {
       return url;
     }
     return null;
   });
 
-  readonly getStarted = new KlArray<MenuOption>([
-    { name: 'Introduction', routerLink: 'get-started/introduction' },
-    { name: 'Installation', routerLink: 'get-started/installation' },
+  readonly gettingStarted = new KlArray<MenuOption>([
+    { name: 'Introduction', routerLink: 'getting-started/introduction' },
+    { name: 'Installation', routerLink: 'getting-started/installation' },
   ]).orderBy('name');
 
   readonly components = new KlArray<MenuOptions>([

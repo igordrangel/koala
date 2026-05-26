@@ -1,14 +1,14 @@
 import { Routes } from '@angular/router';
+import { HomePage } from './features/home/home.page';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'get-started/introduction',
-    pathMatch: 'full',
+    component: HomePage,
   },
   {
-    path: 'get-started',
-    redirectTo: 'get-started/introduction',
+    path: 'getting-started',
+    redirectTo: 'getting-started/introduction',
     pathMatch: 'full',
   },
   {
@@ -27,8 +27,8 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'get-started',
-    loadChildren: () => import('./features/get-started/routes').then((m) => m.ROUTES),
+    path: 'getting-started',
+    loadChildren: () => import('./features/getting-started/routes').then((m) => m.ROUTES),
   },
   {
     path: 'components',
