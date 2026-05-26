@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- UI - Get Started -->
-  <url><loc>https://ui.koalarx.com/#/get-started/installation</loc></url>
-  <url><loc>https://ui.koalarx.com/#/get-started/introduction</loc></url>
+  <url><loc>https://ui.koalarx.com/#/getting-started/installation</loc></url>
+  <url><loc>https://ui.koalarx.com/#/getting-started/introduction</loc></url>
   <!-- UI - Components - Actions -->
   <url><loc>https://ui.koalarx.com/#/components/bottom-sheet</loc></url>
   <url><loc>https://ui.koalarx.com/#/components/button</loc></url>
