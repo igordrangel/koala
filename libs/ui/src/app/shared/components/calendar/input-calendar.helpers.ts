@@ -1,5 +1,5 @@
 import { KlDate } from '@koalarx/utils/light/KlDate';
-import { InputCalendarFormat, InputCalendarType } from './input-calendar.types';
+import { InputCalendarFormat, InputCalendarType } from '.';
 
 export interface CalendarMonthValue {
   year: number;
@@ -55,7 +55,7 @@ function toKlDate(value: string): KlDate | undefined {
 
 function formatDate(value: string, format: InputCalendarFormat): string {
   const dateValue = toKlDate(value);
-  return dateValue ? dateValue.format(format) : value;
+  return dateValue && dateValue.toString() !== 'Invalid Date' ? dateValue.format(format) : value;
 }
 
 function formatDateTime(value: string, format: InputCalendarFormat): string {

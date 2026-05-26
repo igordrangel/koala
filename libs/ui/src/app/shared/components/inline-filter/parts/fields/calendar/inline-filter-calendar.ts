@@ -1,4 +1,4 @@
-import { InputCalendar } from '@/shared/components/calendar/input-calendar';
+import { InputCalendar } from '@/shared/components/calendar';
 import { Component, effect, OnInit, viewChild } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { KlDate } from '@koalarx/utils/light/KlDate';

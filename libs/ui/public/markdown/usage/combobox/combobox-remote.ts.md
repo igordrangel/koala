@@ -1,11 +1,7 @@
 ```typescript
 import { Component, Injector, resource, Signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import {
-  Combobox,
-  ComboboxOption,
-  ComboboxResourceFactory,
-} from '@/shared/components/combobox/combobox';
+import { Combobox, ComboboxOption, ComboboxResourceFactory } from '@/shared/components/combobox';
 import { KlArray } from '@koalarx/utils/KlArray';
 
 @Component({

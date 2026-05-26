@@ -30,7 +30,7 @@ kl install collapse
 
 ```typescript
 import { Component } from '@angular/core';
-import { Collapse } from '@/shared/components/collapse/collapse';
+import { Collapse } from '@/shared/components/collapse';
 
 @Component({
   selector: 'app-accordion-sample',
@@ -52,7 +52,7 @@ export class AccordionSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Collapse } from '@/shared/components/collapse/collapse';
+import { Collapse } from '@/shared/components/collapse';
 
 @Component({
   selector: 'app-collapse-sample',
@@ -66,7 +66,7 @@ export class CollapseSample {}
 
 ```typescript
 import { Component } from '@angular/core';
-import { Collapse } from '@/shared/components/collapse/collapse';
+import { Collapse } from '@/shared/components/collapse';
 
 @Component({
   selector: 'app-collapse-sample',

@@ -1,17 +1,25 @@
-<app-dropdown class="relative w-full" [insideClick]="multiple()" (isOpen)="toggleDropdown($event)">
+<app-dropdown
+  class="relative w-full"
+  [insideClick]="multiple()"
+  (isOpen)="toggleDropdown($event)"
+  [disabled]="isDisabled()"
+>
+  @let textSizeClass = 'text-' + size();
+  @let inputSizeClass = 'input-' + size();
+  @let sizeClass = inputSizeClass + ' ' + textSizeClass;
+
   <button
     #triggerOptions
     type="button"
-    class="relative bg-transparent flex items-center justify-between text-left flex-1 outline-0 w-full min-w-20 h-auto pr-10 cursor-pointer gap-2"
+    [class]="
+      'relative bg-transparent flex items-center justify-between text-left outline-0 w-full h-auto py-0.5 pr-10 gap-2 cursor-pointer ' +
+      sizeClass
+    "
+    [class.pr-5]="hideClear()"
     [class.input]="!inline()"
     [class.validator]="!inline()"
-    [class.min-h-9]="!inline()"
-    [class.text-xs]="size() === 'xs'"
-    [class.text-sm]="size() === 'sm'"
-    [class.text-base]="size() === 'md'"
-    [class.text-lg]="size() === 'lg'"
-    [class.text-xl]="size() === 'xl'"
     [attr.list]="listElementId"
+    [disabled]="isDisabled()"
     trigger
   >
     @let placeholderText =
@@ -21,13 +29,15 @@
     @if (!multiple() && option) {
       <span>{{ option.label }}</span>
 
-      <button
-        type="button"
-        class="text-neutral-content opacity-40 hover:opacity-70 transition-opacity duration-100 cursor-pointer"
-        (click)="removeOption(option.value)"
-      >
-        <i class="fa-solid fa-xmark"></i>
-      </button>
+      @if (!hideClear()) {
+        <button
+          type="button"
+          class="text-neutral-content opacity-40 hover:opacity-70 transition-opacity duration-100 cursor-pointer"
+          (click)="removeOption(option.value)"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      }
     } @else if (multiple()) {
       <div
         class="inset-y-0 left-0 py-1.5 flex flex-wrap items-center gap-1 w-full pr-2"
@@ -58,7 +68,7 @@
           <span appLoading class="relative top-[-0.15rem]" size="xs"></span>
         } @else {
           <i
-            class="fa-solid fa-angle-down opacity-70 pointer-events-none transition duration-100"
+            class="fa-solid fa-angle-down opacity-70 pointer-events-none transition duration-100 text-inherit"
             [class.rotate-180]="dropdownOpened()"
           ></i>
         }
@@ -66,12 +76,15 @@
     }
   </button>
 
+  @let inputWidth = (triggerOptions.getClientRects()[0]?.width || 0) - 5;
+
   <ul
     #filterOptions
     class="p-1"
     [class.w-50]="inline()"
     [class.w-full]="!inline()"
     [class.opened]="dropdownOpened()"
+    [style.min-width.px]="inputWidth"
     options
   >
     @if (filteredOptions()?.isLoading() && !filteredOptions()?.error()) {

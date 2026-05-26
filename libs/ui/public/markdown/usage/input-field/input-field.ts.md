@@ -1,6 +1,6 @@
 ```typescript
 import { Component } from '@angular/core';
-import { Input } from '@/shared/components/input-field/input';
+import { Input } from '@/shared/components/input-field';
 
 @Component({
   selector: 'app-input-field-sample',

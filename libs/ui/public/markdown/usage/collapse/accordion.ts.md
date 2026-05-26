@@ -1,6 +1,6 @@
 ```typescript
 import { Component } from '@angular/core';
-import { Collapse } from '@/shared/components/collapse/collapse';
+import { Collapse } from '@/shared/components/collapse';
 
 @Component({
   selector: 'app-accordion-sample',

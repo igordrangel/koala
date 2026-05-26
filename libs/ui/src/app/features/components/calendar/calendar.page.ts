@@ -1,7 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { Section } from '@/core/components/section';
-import { Calendar } from '@/shared/components/calendar/calendar';
-import { InputCalendar } from '@/shared/components/calendar/input-calendar';
+import { InputCalendar, Calendar } from '@/shared/components/calendar';
 import { Tabs } from '@/shared/components/tabs';
 
 @Component({

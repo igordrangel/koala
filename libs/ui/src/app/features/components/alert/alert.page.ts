@@ -1,6 +1,6 @@
 import { Section } from '@/core/components/section';
-import { Alert, AlertType } from '@/shared/components/alert/alert';
-import { Button } from '@/shared/components/button/button';
+import { Alert, AlertType } from '@/shared/components/alert';
+import { Button } from '@/shared/components/button';
 import { Tabs } from '@/shared/components/tabs';
 import { Component, inject } from '@angular/core';
 

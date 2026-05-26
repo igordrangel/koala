@@ -17,9 +17,8 @@ kl install modal
 
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { ModalContainer } from '@/shared/components/modal/modal-container';
-import { ModalRef } from '@/shared/components/modal/modal-ref';
+import { Button } from '@/shared/components/button';
+import { ModalContainer, ModalRef } from '@/shared/components/modal';
 
 @Component({
   selector: 'app-modal-dialog-alert-sample',
@@ -45,9 +44,8 @@ export class ModalDialogAlertSample {
 
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { ModalContainer } from '@/shared/components/modal/modal-container';
-import { ModalRef } from '@/shared/components/modal/modal-ref';
+import { Button } from '@/shared/components/button';
+import { ModalContainer, ModalRef } from '@/shared/components/modal';
 
 @Component({
   selector: 'app-modal-dialog-close-corner-sample',
@@ -73,9 +71,8 @@ export class ModalDialogCloseCornerSample {
 
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { ModalContainer } from '@/shared/components/modal/modal-container';
-import { ModalRef } from '@/shared/components/modal/modal-ref';
+import { Button } from '@/shared/components/button';
+import { ModalContainer, ModalRef } from '@/shared/components/modal';
 
 @Component({
   selector: 'app-modal-dialog-custom-width-sample',
@@ -101,9 +98,8 @@ export class ModalDialogCustomWidthSample {
 
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { ModalContainer } from '@/shared/components/modal/modal-container';
-import { ModalRef } from '@/shared/components/modal/modal-ref';
+import { Button } from '@/shared/components/button';
+import { ModalContainer, ModalRef } from '@/shared/components/modal';
 
 @Component({
   selector: 'app-modal-dialog-sample',
@@ -125,8 +121,8 @@ export class ModalDialogSample {
 
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { Modal, ModalConfig } from '@/shared/components/modal/modal';
+import { Button } from '@/shared/components/button';
+import { Modal, ModalConfig } from '@/shared/components/modal';
 import { ModalDialogCustomWidthSample } from './modal-dialog-custom-width-sample';
 
 @Component({
@@ -152,8 +148,8 @@ export class ModalTriggerDialogCustomWidthSample {
 
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { Modal, ModalConfig } from '@/shared/components/modal/modal';
+import { Button } from '@/shared/components/button';
+import { Modal, ModalConfig } from '@/shared/components/modal';
 import { ModalDialogAlertSample } from './modal-dialog-alert-sample';
 
 @Component({
@@ -179,8 +175,8 @@ export class ModalTriggerDialogAlertSample {
 
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { Modal, ModalConfig } from '@/shared/components/modal/modal';
+import { Button } from '@/shared/components/button';
+import { Modal, ModalConfig } from '@/shared/components/modal';
 import { ModalDialogCloseCornerSample } from './modal-dialog-close-corner-sample';
 
 @Component({
@@ -206,8 +202,8 @@ export class ModalTriggerDialogCloseCornerSample {
 
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { Modal, ModalConfig } from '@/shared/components/modal/modal';
+import { Button } from '@/shared/components/button';
+import { Modal, ModalConfig } from '@/shared/components/modal';
 import { ModalDialogSample } from './modal-dialog-sample';
 
 @Component({

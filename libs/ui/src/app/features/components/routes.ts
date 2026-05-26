@@ -124,4 +124,8 @@ export const ROUTES: Routes = [
     loadComponent: () =>
       import('./inline-filter/inline-filter.page').then((m) => m.InlineFilterPage),
   },
+  {
+    path: 'bottom-sheet',
+    loadComponent: () => import('./bottom-sheet/bottom-sheet.page').then((m) => m.BottomSheetPage),
+  },
 ];

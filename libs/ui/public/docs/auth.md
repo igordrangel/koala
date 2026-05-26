@@ -1,12 +1,14 @@
 # Auth
 
-This resource provides interceptor, guard and service for authentication in your application. It can be used to protect routes, manage user sessions, and handle authentication-related tasks.
-
 ## Installation
 
 ```bash
 kl install auth
 ```
+
+### Md
+
+This resource provides interceptor, guard and service for authentication in your application. It can be used to protect routes, manage user sessions, and handle authentication-related tasks.
 
 ## API
 

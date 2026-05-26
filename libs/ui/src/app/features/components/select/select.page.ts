@@ -19,9 +19,9 @@ export class SelectPage {
   readonly multipleValueChanges = controlChanges(this.multipleControl);
 
   readonly options: SelectOption[] = [
-    { value: 'option1', label: 'Option 1', data: undefined },
-    { value: 'option2', label: 'Option 2', data: undefined },
-    { value: 'option3', label: 'Option 3', data: undefined },
-    { value: 'option4', label: 'Option 4', data: undefined },
+    { value: 'option1', label: 'Option 1' },
+    { value: 'option2', label: 'Option 2' },
+    { value: 'option3', label: 'Option 3' },
+    { value: 'option4', label: 'Option 4' },
   ];
 }

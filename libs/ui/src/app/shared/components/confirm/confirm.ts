@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { Modal } from '../modal/modal';
+import { Modal } from '../modal';
 import { ConfirmModal } from './confirm.modal';
 
 export interface ConfirmData {

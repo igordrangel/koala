@@ -1,7 +1,7 @@
 ```html
-<span appLoading variant="ball" size="xs">Extra Small</span>
-<span appLoading variant="ball" size="sm">Small</span>
-<span appLoading variant="ball" size="md">Medium</span>
-<span appLoading variant="ball" size="lg">Large</span>
-<span appLoading variant="ball" size="xl">Extra Large</span>
+<app-loading variant="ball" size="xs">Extra Small</app-loading>
+<app-loading variant="ball" size="sm">Small</app-loading>
+<app-loading variant="ball" size="md">Medium</app-loading>
+<app-loading variant="ball" size="lg">Large</app-loading>
+<app-loading variant="ball" size="xl">Extra Large</app-loading>
 ```

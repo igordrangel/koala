@@ -1,8 +1,8 @@
-import { Button } from '@/shared/components/button/button';
-import { Tabs } from '@/shared/components/tabs';
-import { Toast, ToastType } from '@/shared/components/toast/toast';
-import { Component, inject } from '@angular/core';
 import { Section } from '@/core/components/section';
+import { Button } from '@/shared/components/button';
+import { Tabs } from '@/shared/components/tabs';
+import { Toast, ToastType } from '@/shared/components/toast';
+import { Component, inject } from '@angular/core';
 
 @Component({
   selector: 'app-toast-page',

@@ -1,8 +1,8 @@
-import { Button } from '@/shared/components/button/button';
+import { Section } from '@/core/components/section';
+import { Button } from '@/shared/components/button';
+import { Confirm } from '@/shared/components/confirm';
 import { Tabs } from '@/shared/components/tabs';
 import { Component, inject } from '@angular/core';
-import { Section } from '@/core/components/section';
-import { Confirm } from '@/shared/components/confirm/confirm';
 
 @Component({
   selector: 'app-confirm-page',

@@ -17,7 +17,6 @@ export class Tooltip {
   private readonly elementRef = inject<ElementRef<HTMLButtonElement>>(
     ElementRef<HTMLButtonElement>,
   );
-  private readonly initialClasses = this.elementRef.nativeElement.className;
 
   readonly appTooltip = input.required<string>();
   readonly tooltipVariant = input<TooltipVariant>('neutral');

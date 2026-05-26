@@ -18,8 +18,8 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Dropdown } from '../dropdown';
-import { InputSize } from '../input-field/input';
-import { Loading } from '../loading/loading';
+import { InputSize } from '../input-field';
+import { Loading } from '../loading';
 import { handleAccessibility } from './accessibility/handle-accessibility';
 import { ListConfig, SelectOption, SelectOptions } from './config';
 import { handleResourceOptions } from './utils/handle-resource-options';
@@ -48,7 +48,7 @@ export class SelectField implements OnInit, ControlValueAccessor {
   private firstLoad = true;
 
   protected readonly listElementId = `select-list-${Math.random().toString(16).slice(2)}`;
-  protected disabled = false;
+  protected isDisabled = signal(false);
 
   readonly triggerOptionsElement = viewChild<ElementRef<HTMLButtonElement>>('triggerOptions');
 
@@ -57,6 +57,8 @@ export class SelectField implements OnInit, ControlValueAccessor {
   readonly options = input.required<SelectOptions>();
   readonly size = input<InputSize>('md');
   readonly multiple = input(false, { transform: booleanAttribute });
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly hideClear = input(false, { transform: booleanAttribute });
 
   readonly selected = output<SelectOption[]>();
   readonly selectedOptions = signal<SelectOption[]>([]);
@@ -68,6 +70,15 @@ export class SelectField implements OnInit, ControlValueAccessor {
   readonly dropdownOpened = signal(false);
 
   constructor() {
+    effect(() => {
+      if (this.disabled()) {
+        this.isDisabled.set(true);
+        this.selectedOptions.set([]);
+      } else {
+        this.isDisabled.set(false);
+      }
+    });
+
     effect(() => {
       const selectedOptions = this.selectedOptions();
       const multiple = this.multiple();
@@ -177,10 +188,14 @@ export class SelectField implements OnInit, ControlValueAccessor {
   }
 
   setDisabledState?(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+    this.isDisabled.set(isDisabled);
   }
 
   toggleDropdown(opened: boolean) {
+    if (this.isDisabled()) {
+      return;
+    }
+
     setTimeout(() => this.dropdownOpened.set(opened), 150);
   }
 

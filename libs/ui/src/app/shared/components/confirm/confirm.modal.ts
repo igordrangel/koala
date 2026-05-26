@@ -1,8 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { ModalContainer } from '../modal/modal-container';
-import { Button } from '../button/button';
-import { ModalRef } from '../modal/modal-ref';
-import { MODAL_DATA } from '../modal/modal';
+import { Button } from '../button';
+import { MODAL_DATA, ModalContainer, ModalRef } from '../modal';
 import { ConfirmData } from './confirm';
 
 @Component({

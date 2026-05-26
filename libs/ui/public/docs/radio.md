@@ -15,7 +15,7 @@ kl install radio
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Radio } from '@/shared/components/radio/radio';
+import { Radio } from '@/shared/components/radio';
 
 @Component({
   selector: 'app-radio-sample',
@@ -40,7 +40,7 @@ export class RadioSample {
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Radio } from '@/shared/components/radio/radio';
+import { Radio } from '@/shared/components/radio';
 
 @Component({
   selector: 'app-radio-sample',
@@ -104,7 +104,7 @@ export class RadioSample {
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Radio } from '@/shared/components/radio/radio';
+import { Radio } from '@/shared/components/radio';
 
 @Component({
   selector: 'app-radio-sample',
@@ -121,7 +121,7 @@ export class RadioSample {
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Radio } from '@/shared/components/radio/radio';
+import { Radio } from '@/shared/components/radio';
 
 @Component({
   selector: 'app-radio-sample',

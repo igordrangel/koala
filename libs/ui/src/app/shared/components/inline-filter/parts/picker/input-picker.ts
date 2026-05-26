@@ -1,5 +1,5 @@
 import { Dropdown } from '@/shared/components/dropdown';
-import { Tooltip } from '@/shared/components/tooltip/tooltip';
+import { Tooltip } from '@/shared/components/tooltip';
 import { Combobox } from '@angular/aria/combobox';
 import {
   Component,

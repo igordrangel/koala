@@ -7,7 +7,7 @@
 
 - [Get Started](https://koalarx.com/docs/get-started.md): Installation and setup
 - [Alert](https://koalarx.com/docs/alert.md): Alert component
-- [Auth](https://koalarx.com/docs/auth.md): Auth resource
+- [Bottom Sheet](https://koalarx.com/docs/bottom-sheet.md): Bottom Sheet component
 - [Breadcrumb](https://koalarx.com/docs/breadcrumb.md): Breadcrumb component
 - [Button](https://koalarx.com/docs/button.md): Button component
 - [Calendar](https://koalarx.com/docs/calendar.md): Calendar component
@@ -15,17 +15,16 @@
 - [Collapse](https://koalarx.com/docs/collapse.md): Collapse component
 - [Combobox](https://koalarx.com/docs/combobox.md): Combobox component
 - [Confirm](https://koalarx.com/docs/confirm.md): Confirm component
-- [Data Table](https://koalarx.com/docs/datatable.md): Data Table component
+- [DataTable](https://koalarx.com/docs/datatable.md): DataTable component
 - [Dropdown](https://koalarx.com/docs/dropdown.md): Dropdown component
 - [Fieldset](https://koalarx.com/docs/fieldset.md): Fieldset component
-- [Inline Filter](https://koalarx.com/docs/inline-filter.md): Filter component
+- [Inline Filter](https://koalarx.com/docs/inline-filter.md): Inline Filter component
 - [Input CNPJ](https://koalarx.com/docs/input-cnpj.md): Input CNPJ component
 - [Input CPF](https://koalarx.com/docs/input-cpf.md): Input CPF component
 - [Input Currency](https://koalarx.com/docs/input-currency.md): Input Currency component
 - [Input Field](https://koalarx.com/docs/input-field.md): Input Field component
-- [ListBase](https://koalarx.com/docs/list-base.md): ListBase resource
 - [Loading](https://koalarx.com/docs/loading.md): Loading component
-- [Login](https://koalarx.com/docs/login.md): Login block
+- [Login](https://koalarx.com/docs/login.md): Login component
 - [Modal](https://koalarx.com/docs/modal.md): Modal component
 - [Pagination](https://koalarx.com/docs/pagination.md): Pagination component
 - [Radio](https://koalarx.com/docs/radio.md): Radio component
@@ -41,6 +40,8 @@
 - [Toggle](https://koalarx.com/docs/toggle.md): Toggle component
 - [Tooltip](https://koalarx.com/docs/tooltip.md): Tooltip component
 - [Validator](https://koalarx.com/docs/validator.md): Validator component
+- [List Base](https://koalarx.com/docs/list-base.md): List Base component
+- [Auth](https://koalarx.com/docs/auth.md): Auth component
 
 ## CLI
 

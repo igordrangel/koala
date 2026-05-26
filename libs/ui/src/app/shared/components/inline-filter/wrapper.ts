@@ -1,4 +1,4 @@
-import { Button } from '@/shared/components/button/button';
+import { Button } from '@/shared/components/button';
 import { isMobile } from '@/shared/utils/is-mobile';
 import { Component, inject, input, OnInit, output, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';

@@ -1,12 +1,12 @@
+import { Button } from '@/shared/components/button';
 import {
   SIDE_WINDOW_CONFIG,
   SIDE_WINDOW_DATA,
   SideWindowConfig,
-} from '@/shared/components/side-window/side-window';
+  SideWindowContainer,
+  SideWindowRef,
+} from '@/shared/components/side-window';
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { SideWindowContainer } from '@/shared/components/side-window/side-window-container';
-import { SideWindowRef } from '@/shared/components/side-window/side-window-ref';
 
 @Component({
   selector: 'app-side-window-sample',

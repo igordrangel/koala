@@ -1,6 +1,6 @@
 ```typescript
 import { Component } from '@angular/core';
-import { Calendar } from '@/shared/components/calendar/calendar';
+import { Calendar } from '@/shared/components/calendar';
 
 @Component({
   selector: 'app-calendar-sample',

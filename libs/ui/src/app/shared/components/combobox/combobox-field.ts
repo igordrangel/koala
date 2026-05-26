@@ -23,8 +23,8 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { Dropdown } from '../dropdown';
-import { InputSize } from '../input-field/input';
-import { Loading } from '../loading/loading';
+import { InputSize } from '../input-field';
+import { Loading } from '../loading';
 import { handleAccessibility } from './accessibility/handle-accessibility';
 import { AsyncComboboxOptions, ComboboxOption, ComboboxOptions, ListConfig } from './config';
 import { handleResourceOptions } from './utils/handle-resource-options';
@@ -59,7 +59,7 @@ export class ComboboxField implements OnInit, ControlValueAccessor {
   private firstLoad = true;
 
   protected readonly listElementId = `combobox-list-${Math.random().toString(16).slice(2)}`;
-  protected disabled = false;
+  protected isDisabled = signal(false);
 
   readonly placeholder = input('Select an option');
   readonly inline = input(false, { transform: booleanAttribute });
@@ -67,6 +67,7 @@ export class ComboboxField implements OnInit, ControlValueAccessor {
   readonly size = input<InputSize>('md');
   readonly openOnType = input(false, { transform: booleanAttribute });
   readonly multiple = input(false, { transform: booleanAttribute });
+  readonly disabled = input(false, { transform: booleanAttribute });
 
   readonly selected = output<ComboboxOption[]>();
 
@@ -213,10 +214,14 @@ export class ComboboxField implements OnInit, ControlValueAccessor {
   }
 
   setDisabledState?(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+    this.isDisabled.set(isDisabled);
   }
 
   toggleDropdown() {
+    if (this.isDisabled()) {
+      return;
+    }
+
     if (!this.openOnType()) {
       this.triggerOptionsElement()?.nativeElement.click();
       this.dropdownOpened.set(true);

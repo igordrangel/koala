@@ -1,6 +1,6 @@
 import { ValidatorFn } from '@angular/forms';
 import { ComboboxOptions } from '../combobox';
-import { SelectOptions } from '../select/config';
+import { SelectOptions } from '../select';
 
 export type InlineFilterFieldType = 'input' | 'calendar' | 'select' | 'combobox';
 export type InlineFilterInputType =

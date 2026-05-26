@@ -48,6 +48,7 @@ export class DropdownContainer implements OnInit, OnDestroy {
     lowercase: false,
   });
   readonly insideClick = input(false, { transform: booleanAttribute });
+  readonly disabled = input(false, { transform: booleanAttribute });
 
   readonly opened = output<void>();
   readonly closed = output<void>();

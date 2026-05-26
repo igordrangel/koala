@@ -61,6 +61,7 @@
       [class.py-0]="inline()"
       [attr.list]="listElementId"
       [placeholder]="placeholderText"
+      [disabled]="isDisabled()"
       [(ngModel)]="filter"
       (click)="toggleDropdown()"
     />
@@ -79,10 +80,13 @@
     }
   </div>
 
+  @let inputWidth = (inputFilter.getClientRects()[0]?.width || 0) + 20;
+
   <app-dropdown
     class="absolute bottom-1 left-0 -z-1 w-full"
     [insideClick]="multiple()"
     (closed)="dropdownOpened.set(false)"
+    [disabled]="isDisabled()"
   >
     <button #triggerOptions type="button" class="flex-1 h-fit invisible" trigger>
       Filter Trigger
@@ -92,6 +96,7 @@
       class="flex flex-col"
       [class.w-50]="inline()"
       [class.w-full]="!inline()"
+      [style.min-width.px]="inputWidth"
       options
     >
       <span

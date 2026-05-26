@@ -1,8 +1,8 @@
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { SideWindow } from '@/shared/components/side-window/side-window';
-import { SideWindowCloseCornerSample } from './modal-dialog-close-corner-sample';
+import { Button } from '@/shared/components/button';
+import { SideWindow } from '@/shared/components/side-window';
+import { SideWindowCloseCornerSample } from './side-window-dialog-close-corner-sample';
 
 @Component({
   selector: 'app-side-window-trigger-close-corner-sample',
@@ -10,10 +10,10 @@ import { SideWindowCloseCornerSample } from './modal-dialog-close-corner-sample'
   imports: [Button],
 })
 export class SideWindowTriggerCloseCornerSample {
-  private readonly modal = inject(SideWindow);
+  private readonly sideWindow = inject(SideWindow);
 
   openModal() {
-    this.modal.open(SideWindowCloseCornerSample, {
+    this.sideWindow.open(SideWindowCloseCornerSample, {
       closeOptions: {
         pressEscape: true,
         clickOutside: false,

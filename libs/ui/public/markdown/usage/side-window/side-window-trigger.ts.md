@@ -1,8 +1,8 @@
 ```typescript
 import { Component, inject } from '@angular/core';
-import { Button } from '@/shared/components/button/button';
-import { SideWindow } from '@/shared/components/side-window/side-window';
-import { SideWindowSample } from './modal-dialog-sample';
+import { Button } from '@/shared/components/button';
+import { SideWindow } from '@/shared/components/side-window';
+import { SideWindowSample } from './side-window-dialog-sample';
 
 @Component({
   selector: 'app-side-window-trigger-sample',
@@ -10,10 +10,10 @@ import { SideWindowSample } from './modal-dialog-sample';
   imports: [Button],
 })
 export class SideWindowTriggerSample {
-  private readonly modal = inject(Modal);
+  private readonly sideWindow = inject(SideWindow);
 
   openModal() {
-    this.modal.open(SideWindowSample, {
+    this.sideWindow.open(SideWindowSample, {
       closeOptions: {
         pressEscape: true,
         clickOutside: false,

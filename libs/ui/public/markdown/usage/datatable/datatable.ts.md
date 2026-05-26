@@ -3,11 +3,11 @@ import { Component, resource } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { KlArray } from '@koalarx/utils/KlArray';
 import { ListBase } from '@/shared/base/list.base';
-import { Button } from '@/shared/components/button/button';
+import { Button } from '@/shared/components/button';
 import { InlineFilter, InlineFilterBuilder } from '@/shared/components/inline-filter';
-import { Loading } from '@/shared/components/loading/loading';
-import { Pagination } from '@/shared/components/pagination/pagination';
-import { Skeleton } from '@/shared/components/skeleton/skeleton';
+import { Loading } from '@/shared/components/loading';
+import { Pagination } from '@/shared/components/pagination';
+import { Skeleton } from '@/shared/components/skeleton';
 import { Table } from '@/shared/components/table';
 
 interface User {

@@ -1,6 +1,5 @@
 import { Component, inject, OnDestroy } from '@angular/core';
-import { BottomSheetRef } from './bottom-sheet-ref';
-import { BOTTOM_SHEET_CONFIG, BottomSheetConfig } from './bottom-sheet';
+import { BOTTOM_SHEET_CONFIG, BottomSheetConfig, BottomSheetRef } from '.';
 
 @Component({
   selector: 'app-bottom-sheet',

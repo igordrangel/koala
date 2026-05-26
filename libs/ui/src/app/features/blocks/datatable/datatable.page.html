@@ -32,8 +32,8 @@
               [disabled]="datalist.isLoading()"
               (click)="datalist.reload()"
             >
-              @if (!datalist.error() && datalist.isLoading()) {
-                <span appLoading variant="spinner"></span>
+              @if (datalist.isLoading()) {
+                <app-loading variant="spinner" />
               } @else {
                 <i class="fa-solid fa-arrow-rotate-right"></i>
               }

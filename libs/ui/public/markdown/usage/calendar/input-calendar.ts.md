@@ -1,6 +1,6 @@
 ```typescript
 import { Component, signal } from '@angular/core';
-import { InputCalendar } from '@/shared/components/calendar/input-calendar';
+import { InputCalendar } from '@/shared/components/calendar';
 
 @Component({
   selector: 'app-input-calendar-sample',

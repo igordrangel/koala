@@ -1,10 +1,7 @@
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import {
-  Select,
-  SelectOption,
-} from '@/shared/components/select/select';
+import { Select, SelectOption } from '@/shared/components/select';
 
 @Component({
   selector: 'app-select-sample',

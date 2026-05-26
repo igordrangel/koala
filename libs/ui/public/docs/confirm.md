@@ -13,9 +13,9 @@ kl install confirm
 ```
 
 ```typescript
-import { Button } from '@/shared/components/button/button';
+import { Button } from '@/shared/components/button';
 import { Component, inject } from '@angular/core';
-import { Confirm } from '@/shared/components/confirm/confirm';
+import { Confirm } from '@/shared/components/confirm';
 
 @Component({
   selector: 'app-confirm-sample',
@@ -44,9 +44,9 @@ export class ConfirmSample {
 ### TypeScript
 
 ```typescript
-import { Button } from '@/shared/components/button/button';
+import { Button } from '@/shared/components/button';
 import { Component, inject } from '@angular/core';
-import { Confirm } from '@/shared/components/confirm/confirm';
+import { Confirm } from '@/shared/components/confirm';
 
 @Component({
   selector: 'app-confirm-sample',

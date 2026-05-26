@@ -1,10 +1,10 @@
-import { Tabs } from '@/shared/components/tabs';
-import { Component, Injector, resource, Signal } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { KlArray } from '@koalarx/utils/KlArray';
 import { Section } from '@/core/components/section';
 import { AsyncComboboxOptions, Combobox, ComboboxOption } from '@/shared/components/combobox';
+import { Tabs } from '@/shared/components/tabs';
+import { Component, Injector, resource, Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { KlArray } from '@koalarx/utils/KlArray';
 
 interface User {
   id: number;

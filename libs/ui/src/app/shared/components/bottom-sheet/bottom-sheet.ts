@@ -9,7 +9,7 @@ import {
   Type,
 } from '@angular/core';
 import { randomString } from '@koalarx/utils/KlString';
-import { BOTTOM_SHEET_REF_TOKEN, BottomSheetRef } from './bottom-sheet-ref';
+import { BOTTOM_SHEET_REF_TOKEN, BottomSheetRef } from '.';
 
 export type BottomSheetAfterCloseTrigger = string | Record<string, any>;
 export type BottomSheetAfterCloseTriggerFn = (trigger: BottomSheetAfterCloseTrigger) => void;

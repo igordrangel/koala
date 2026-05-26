@@ -11,26 +11,24 @@ import {
 } from '@angular/core';
 import { KlDate } from '@koalarx/utils/light/KlDate';
 import 'cally';
-import { Input } from '../input-field/input';
-import type { InputSize } from '../input-field/input';
+import { Calendar } from '.';
 import { Mask } from '../../directives/mask.directive';
-import { Calendar } from './calendar';
+import type { InputSize } from '../input-field';
+import { Input } from '../input-field';
+import { setupMonthDisplayYearEffect } from './effects/setup-input-calendar-effects';
 import {
   createMonthOptions,
   getDatePart,
   getDisplayValue,
   getInputMask,
+  getTimePart,
   normalizeInputText,
   parseInputValue,
-  getTimePart,
   toSelectedDateValue,
 } from './input-calendar.helpers';
+import { InputCalendarFormat, InputCalendarType } from './input-calendar.types';
 import { InputCalendarMonthPickerComponent } from './parts/input-calendar-month-picker.component';
 import { InputCalendarTimeRowComponent } from './parts/input-calendar-time-row.component';
-import { setupMonthDisplayYearEffect } from './effects/setup-input-calendar-effects';
-import { InputCalendarFormat, InputCalendarType } from './input-calendar.types';
-
-export type { InputCalendarFormat, InputCalendarType } from './input-calendar.types';
 
 const RANGE_SEPARATOR = ' - ';
 

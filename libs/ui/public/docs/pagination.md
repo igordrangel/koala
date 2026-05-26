@@ -17,7 +17,7 @@ kl install pagination
 ```
 
 ```typescript
-import { Pagination } from '@/shared/components/pagination/pagination';
+import { Pagination } from '@/shared/components/pagination';
 import { Component, inject } from '@angular/core';
 
 @Component({
@@ -31,7 +31,7 @@ export class PaginationSample {}
 ### TypeScript
 
 ```typescript
-import { Pagination } from '@/shared/components/pagination/pagination';
+import { Pagination } from '@/shared/components/pagination';
 import { Component, inject } from '@angular/core';
 
 @Component({

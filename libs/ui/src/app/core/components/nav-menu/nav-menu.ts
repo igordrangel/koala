@@ -54,6 +54,7 @@ export class NavMenu {
         { name: 'Dropdown', routerLink: 'components/dropdown' },
         { name: 'Modal', routerLink: 'components/modal' },
         { name: 'Side Window', routerLink: 'components/side-window' },
+        { name: 'Bottom Sheet', routerLink: 'components/bottom-sheet' },
       ]).orderBy('name'),
     },
     {

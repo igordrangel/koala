@@ -11,7 +11,7 @@ import {
   MODAL_APP_REF,
   ModalAfterCloseTrigger,
   ModalAfterCloseTriggerFn,
-} from './modal';
+} from '.';
 
 export const MODAL_REF_TOKEN = new InjectionToken('ModalRefToken');
 

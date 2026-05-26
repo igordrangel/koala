@@ -25,8 +25,8 @@ kl install fieldset
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Fieldset } from '@/shared/components/fieldset/fieldset';
-import { Input } from '@/shared/components/input-field/input';
+import { Fieldset } from '@/shared/components/fieldset';
+import { Input } from '@/shared/components/input-field';
 import { ValidatorHint } from '@/shared/components/validator/validator-hint';
 
 @Component({
@@ -112,9 +112,9 @@ export class FieldsetSample {
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Button } from '@/shared/components/button/button';
-import { Fieldset } from '@/shared/components/fieldset/fieldset';
-import { Input } from '@/shared/components/input-field/input';
+import { Button } from '@/shared/components/button';
+import { Fieldset } from '@/shared/components/fieldset';
+import { Input } from '@/shared/components/input-field';
 import { ValidatorHint } from '@/shared/components/validator/validator-hint';
 
 @Component({
@@ -135,8 +135,8 @@ export class LoginSample {
 ```typescript
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Fieldset } from '@/shared/components/fieldset/fieldset';
-import { Input } from '@/shared/components/input-field/input';
+import { Fieldset } from '@/shared/components/fieldset';
+import { Input } from '@/shared/components/input-field';
 import { ValidatorHint } from '@/shared/components/validator/validator-hint';
 
 @Component({

@@ -1,10 +1,10 @@
 import { Section } from '@/core/components/section';
 import { ListBase } from '@/shared/base/list.base';
-import { Button } from '@/shared/components/button/button';
+import { Button } from '@/shared/components/button';
 import { InlineFilter, InlineFilterBuilder } from '@/shared/components/inline-filter';
-import { Loading } from '@/shared/components/loading/loading';
-import { Pagination } from '@/shared/components/pagination/pagination';
-import { Skeleton } from '@/shared/components/skeleton/skeleton';
+import { Loading } from '@/shared/components/loading';
+import { Pagination } from '@/shared/components/pagination';
+import { Skeleton } from '@/shared/components/skeleton';
 import { Table } from '@/shared/components/table';
 import { Tabs } from '@/shared/components/tabs';
 import { Component, inject, resource } from '@angular/core';

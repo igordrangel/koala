@@ -8,8 +8,7 @@ import {
   Injector,
 } from '@angular/core';
 import { randomString } from '@koalarx/utils/KlString';
-import { ToastAlert } from './toast-alert';
-import { TOAST_REF_TOKEN, ToastRef } from './toast-ref';
+import { TOAST_REF_TOKEN, ToastAlert, ToastRef } from '.';
 
 export type ToastType = 'success' | 'error' | 'info' | 'warning' | 'default';
 export const TOAST_CONFIG = new InjectionToken('ToastConfig');

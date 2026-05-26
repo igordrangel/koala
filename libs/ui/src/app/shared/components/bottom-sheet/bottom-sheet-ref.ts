@@ -11,7 +11,7 @@ import {
   BOTTOM_SHEET_APP_REF,
   BottomSheetAfterCloseTrigger,
   BottomSheetAfterCloseTriggerFn,
-} from './bottom-sheet';
+} from '.';
 
 export const BOTTOM_SHEET_REF_TOKEN = new InjectionToken('BottomSheetRefToken');
 

@@ -45,6 +45,7 @@ export const InstallComponentFlagsList = [
   'inline-filter',
   'list-base',
   'auth',
+  'bottom-sheet',
 ] as const;
 export type InstallComponentFlags = (typeof InstallComponentFlagsList)[number];
 
@@ -139,6 +140,7 @@ export function installComponent(projectName: string, component: InstallComponen
         'currency',
         'calendar',
         'loading',
+        'bottom-sheet',
       );
       break;
     case 'pagination':

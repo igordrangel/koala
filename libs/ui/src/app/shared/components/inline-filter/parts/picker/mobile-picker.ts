@@ -3,11 +3,11 @@ import {
   BottomSheetContainer,
   BottomSheetRef,
 } from '@/shared/components/bottom-sheet';
-import { Button } from '@/shared/components/button/button';
-import { InputCalendar } from '@/shared/components/calendar/input-calendar';
+import { Button } from '@/shared/components/button';
+import { InputCalendar } from '@/shared/components/calendar';
 import { Combobox, ComboboxOptions } from '@/shared/components/combobox';
-import { Fieldset } from '@/shared/components/fieldset/fieldset';
-import { Input } from '@/shared/components/input-field/input';
+import { Fieldset } from '@/shared/components/fieldset';
+import { Input } from '@/shared/components/input-field';
 import { Select, SelectOption } from '@/shared/components/select';
 import { ValidatorHint } from '@/shared/components/validator/validator-hint';
 import { CurrencyMask } from '@/shared/directives/currency.directive';
