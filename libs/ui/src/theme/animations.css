@@ -1,6 +1,8 @@
 @theme {
   --animate-slide-in-left: slide-in-left 0.2s ease-in-out;
   --animate-slide-out-right: slide-out-right 0.2s ease-in-out;
+  --animate-slide-in-up: slide-in-up 0.2s ease-in-out;
+  --animate-slide-out-down: slide-out-down 0.2s ease-in-out;
   --animate-zoom-out: animate-zoom-out 0.2s ease-in-out;
   --animate-zoom-in: animate-zoom-in 0.2s ease-in-out;
   --animate-fade-out: animate-fade-out 0.2s ease-in-out;
@@ -21,6 +23,24 @@
     }
     100% {
       transform: translateX(100%);
+    }
+  }
+
+  @keyframes slide-in-up {
+    0% {
+      transform: translateY(100%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slide-out-down {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(100%);
     }
   }
 

@@ -1,6 +1,6 @@
 <div class="relative flex-1 w-full">
   <div
-    class="relative flex flex-wrap gap-1 w-full h-auto"
+    class="relative flex flex-wrap gap-1 w-full h-auto bg-transparent"
     [class.input]="!inline()"
     [class.validator]="!inline()"
     [class]="'text-' + size()"
@@ -68,7 +68,7 @@
     @if (!inline()) {
       <div class="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
         @if (filteredOptions()?.isLoading()) {
-          <span appLoading class="relative top-[-0.15rem]" size="xs"></span>
+          <span appLoading size="xs"></span>
         } @else {
           <i
             class="fa-solid fa-angle-down opacity-70 pointer-events-none transition duration-100"

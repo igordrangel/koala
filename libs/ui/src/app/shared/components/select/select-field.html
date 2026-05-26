@@ -2,7 +2,7 @@
   <button
     #triggerOptions
     type="button"
-    class="relative flex items-center justify-between text-left flex-1 outline-0 w-full min-w-20 h-auto pr-10 cursor-pointer gap-2"
+    class="relative bg-transparent flex items-center justify-between text-left flex-1 outline-0 w-full min-w-20 h-auto pr-10 cursor-pointer gap-2"
     [class.input]="!inline()"
     [class.validator]="!inline()"
     [class.min-h-9]="!inline()"
@@ -45,11 +45,11 @@
             </button>
           </span>
         } @empty {
-          {{ placeholderText }}
+          <span class="opacity-50">{{ placeholderText }}</span>
         }
       </div>
     } @else {
-      {{ placeholderText }}
+      <span class="opacity-50">{{ placeholderText }}</span>
     }
 
     @if (!inline()) {

@@ -1,3 +1,4 @@
+import { isMobile } from '@/shared/utils/is-mobile';
 import { Directive, effect, input, model, output } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl } from '@angular/forms';
@@ -6,7 +7,7 @@ import { InlineFilterField } from '../../config';
 @Directive()
 export abstract class FieldBase {
   readonly config = input.required<InlineFilterField>();
-  readonly data = output<any>();
+  readonly isMobile = isMobile();
 
   readonly templateValue = model<any>('');
   readonly value = model<any>(null);
@@ -16,6 +17,7 @@ export abstract class FieldBase {
   });
 
   readonly isInvalid = output<boolean>();
+  readonly data = output<any>();
 
   constructor() {
     effect(() => {

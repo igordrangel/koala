@@ -7,7 +7,7 @@
         [(value)]="value"
         [placeholder]="config.placeholder ?? 'Select a date'"
         (valueChange)="valueControl.setValue($event)"
-        inline
+        [inline]="!isMobile"
       />
     }
   }

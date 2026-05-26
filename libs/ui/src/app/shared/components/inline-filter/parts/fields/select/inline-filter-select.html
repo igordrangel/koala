@@ -8,8 +8,8 @@
         [placeholder]="config.placeholder || 'Select an option'"
         [multiple]="config.multiple"
         [formControl]="valueControl"
+        [inline]="!isMobile"
         hideClear
-        inline
       />
     }
   }

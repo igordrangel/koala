@@ -9,21 +9,21 @@ import {
   Type,
 } from '@angular/core';
 import { randomString } from '@koalarx/utils/KlString';
-import { SIDE_WINDOW_REF_TOKEN, SideWindowRef } from './side-window-ref';
+import { BOTTOM_SHEET_REF_TOKEN, BottomSheetRef } from './bottom-sheet-ref';
 
-export type SideWindowAfterCloseTrigger = string | Record<string, any>;
-export type SideWindowAfterCloseTriggerFn = (trigger: SideWindowAfterCloseTrigger) => void;
-export const SIDE_WINDOW_CONFIG = new InjectionToken('SideWindowConfig');
-export const SIDE_WINDOW_DATA = new InjectionToken('SideWindowData');
-export const SIDE_WINDOW_APP_REF = new InjectionToken('SideWindowAppRef');
-export const SIDE_WINDOW_AFTER_CLOSE_TRIGGER = new InjectionToken<SideWindowAfterCloseTriggerFn>(
-  'SideWindowAfterCloseTrigger',
+export type BottomSheetAfterCloseTrigger = string | Record<string, any>;
+export type BottomSheetAfterCloseTriggerFn = (trigger: BottomSheetAfterCloseTrigger) => void;
+export const BOTTOM_SHEET_CONFIG = new InjectionToken('BottomSheetConfig');
+export const BOTTOM_SHEET_DATA = new InjectionToken('BottomSheetData');
+export const BOTTOM_SHEET_APP_REF = new InjectionToken('BottomSheetAppRef');
+export const BOTTOM_SHEET_AFTER_CLOSE_TRIGGER = new InjectionToken<BottomSheetAfterCloseTriggerFn>(
+  'BottomSheetAfterCloseTrigger',
 );
 
-export interface SideWindowConfig {
+export interface BottomSheetConfig {
   data?: any;
   closeOptions?: {
-    trigger?: SideWindowAfterCloseTrigger;
+    trigger?: BottomSheetAfterCloseTrigger;
     pressEscape?: boolean;
     clickOutside?: boolean;
   };
@@ -31,7 +31,7 @@ export interface SideWindowConfig {
 }
 
 @Injectable({ providedIn: 'root' })
-export class SideWindow {
+export class BottomSheet {
   private readonly appRef = inject(ApplicationRef);
   private readonly injector = inject(EnvironmentInjector);
 
@@ -50,38 +50,29 @@ export class SideWindow {
     return elementId;
   }
 
-  open(component: Type<any>, config?: SideWindowConfig) {
+  open(component: Type<any>, config?: BottomSheetConfig) {
     const body = document.body;
     const elementId = this.generateElementId();
     const container = body.appendChild(document.createElement('div'));
 
     container.id = elementId;
-    container.classList.add(
-      'fixed',
-      'top-0',
-      'right-0',
-      'w-auto',
-      'h-full',
-      'py-2',
-      'pr-2',
-      'z-10000',
-    );
+    container.classList.add('fixed', 'bottom-0', 'right-0', 'w-screen', 'h-auto', 'z-10000');
 
     const componentRef = createComponent(component, {
       environmentInjector: this.injector,
       hostElement: container,
       elementInjector: Injector.create({
         providers: [
-          { provide: SIDE_WINDOW_CONFIG, useValue: config },
-          { provide: SIDE_WINDOW_APP_REF, useValue: this.appRef },
+          { provide: BOTTOM_SHEET_CONFIG, useValue: config },
+          { provide: BOTTOM_SHEET_APP_REF, useValue: this.appRef },
           {
-            provide: SIDE_WINDOW_REF_TOKEN,
+            provide: BOTTOM_SHEET_REF_TOKEN,
             useValue: () => componentRef,
           },
-          { provide: SIDE_WINDOW_DATA, useValue: config?.data },
+          { provide: BOTTOM_SHEET_DATA, useValue: config?.data },
           {
-            provide: SIDE_WINDOW_AFTER_CLOSE_TRIGGER,
-            useValue: (trigger: SideWindowAfterCloseTrigger) => {
+            provide: BOTTOM_SHEET_AFTER_CLOSE_TRIGGER,
+            useValue: (trigger: BottomSheetAfterCloseTrigger) => {
               if (
                 config?.closeOptions &&
                 (config.closeOptions.trigger === trigger || typeof trigger === 'object')
@@ -91,13 +82,13 @@ export class SideWindow {
             },
           },
           {
-            provide: SideWindowRef,
+            provide: BottomSheetRef,
             deps: [
-              SIDE_WINDOW_CONFIG,
-              SIDE_WINDOW_APP_REF,
-              SIDE_WINDOW_REF_TOKEN,
-              SIDE_WINDOW_AFTER_CLOSE_TRIGGER,
-              SIDE_WINDOW_DATA,
+              BOTTOM_SHEET_CONFIG,
+              BOTTOM_SHEET_APP_REF,
+              BOTTOM_SHEET_REF_TOKEN,
+              BOTTOM_SHEET_AFTER_CLOSE_TRIGGER,
+              BOTTOM_SHEET_DATA,
             ],
           },
         ],
