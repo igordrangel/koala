@@ -1,10 +1,12 @@
 <ng-template #logotype>
-  <span class="flex items-center gap-3 mr-6">
-    <i class="app-icon kl-logotype size-6!"></i>
-    <span class="badge badge-sm badge-soft bg-neutral-800 font-semibold sm:inline-flex">
-      {{ version }}
+  <a routerLink="/">
+    <span class="flex items-center gap-3 mr-6">
+      <i class="app-icon kl-logotype size-6!"></i>
+      <span class="badge badge-sm badge-soft bg-neutral-800 font-semibold sm:inline-flex">
+        {{ version }}
+      </span>
     </span>
-  </span>
+  </a>
 </ng-template>
 
 <ng-template #navButtons>
@@ -13,10 +15,10 @@
     appButton
     btnSize="sm"
     btnVariant="ghost"
-    routerLink="get-started"
+    routerLink="getting-started"
     routerLinkActive="opacity-100"
   >
-    Get Started
+    Getting Started
   </a>
 
   <a
