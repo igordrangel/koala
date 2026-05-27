@@ -16,11 +16,18 @@ export class ToastRef {
   private readonly componentRef = inject<() => ComponentRef<Type<any>>>(TOAST_REF_TOKEN);
 
   dismiss() {
-    this.componentRef().location.nativeElement.classList.add('animate-zoom-out');
+    if (this.componentRef().location.nativeElement.style.opacity !== '0') {
+      const hasMultipleChildren =
+        this.componentRef().location.nativeElement.parentElement.children.length > 1;
+
+      const animationClass = hasMultipleChildren ? 'animate-fade-out' : 'animate-fade-down-out';
+
+      this.componentRef().location.nativeElement.classList.add(animationClass);
+    }
 
     setTimeout(() => {
       this.componentRef().destroy();
       this.appRef.detachView(this.componentRef().hostView);
-    }, 100);
+    }, 190);
   }
 }
