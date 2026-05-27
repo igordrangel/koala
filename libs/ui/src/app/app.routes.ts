@@ -1,10 +1,12 @@
 import { Routes } from '@angular/router';
 import { HomePage } from './features/home/home.page';
+import { generateTitle } from './core/utils/generate-title';
 
 export const routes: Routes = [
   {
     path: '',
     component: HomePage,
+    title: generateTitle('The Next Level for Your Angular Projects'),
   },
   {
     path: 'getting-started',
