@@ -7,6 +7,7 @@ import { InstallDirectiveFlags } from './install-directive';
 import { InstallUtilFlags } from './install-util';
 import { InstallBaseFlags } from './install-base';
 import { InstallCoreResourceFlags } from './install-core-resource';
+import { InstallCssFlags } from './install-css';
 
 const originPath = path.join(__dirname, '../../');
 
@@ -90,6 +91,7 @@ export function installComponent(projectName: string, component: InstallComponen
   const utilDeps: InstallUtilFlags[] = [];
   const baseDeps: InstallBaseFlags[] = [];
   const coreResourceDeps: InstallCoreResourceFlags[] = [];
+  const cssDeps: InstallCssFlags[] = [];
 
   switch (component) {
     case 'confirm':
@@ -98,6 +100,7 @@ export function installComponent(projectName: string, component: InstallComponen
       break;
     case 'toast':
       componentDeps.push('button');
+      cssDeps.push('toast');
       break;
     case 'calendar':
       libDeps.push('cally');
@@ -166,6 +169,18 @@ export function installComponent(projectName: string, component: InstallComponen
     case 'dropdown':
       utilDeps.push('is-mobile');
       break;
+    case 'side-window':
+      cssDeps.push('side-window');
+      break;
+    case 'table':
+      cssDeps.push('table');
+      break;
+    case 'bottom-sheet':
+      cssDeps.push('bottom-sheet');
+      break;
+    case 'modal':
+      cssDeps.push('modal');
+      break;
   }
 
   if (existsSync(componentOriginPath)) {
@@ -186,5 +201,6 @@ export function installComponent(projectName: string, component: InstallComponen
     utilDeps,
     baseDeps,
     coreResourceDeps,
+    cssDeps,
   };
 }

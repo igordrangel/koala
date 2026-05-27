@@ -50,18 +50,28 @@ export class Toast {
     const body = document.body;
 
     if (body) {
-      if (!document.querySelector(`.toast`)) {
-        const toastContainer = document.createElement('div');
-        toastContainer.classList.add('toast', 'toast-top', 'toast-center', 'z-10000');
+      let toastContainer = document.querySelector('.toast-container') as HTMLElement;
+
+      if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.classList.add(
+          'toast-container',
+          'toast',
+          'toast-center',
+          'toast-top',
+          'z-[10000]',
+          'group',
+        );
+
         body.appendChild(toastContainer);
       }
 
       const elementId = this.generateElementId();
-      const container = document
-        .querySelector(`.toast`)!
-        .appendChild(document.createElement('div'));
+      const container = document.createElement('div');
 
       container.id = elementId;
+
+      toastContainer.insertBefore(container, toastContainer.firstChild);
 
       const componentRef = createComponent(ToastAlert, {
         environmentInjector: this.injector,
@@ -83,7 +93,6 @@ export class Toast {
       });
 
       this.appRef.attachView(componentRef.hostView);
-
       componentRef.changeDetectorRef.detectChanges();
     }
   }

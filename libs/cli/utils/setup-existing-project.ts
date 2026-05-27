@@ -2,7 +2,7 @@ import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node
 import path from 'node:path';
 import { logStep, logSuccess, logWarning } from './cli-ui';
 import { detectTestFramework } from './detect-test-framework';
-import { detectPackageManager, getPmCommands } from './package-manager';
+import { detectPackageManager, getPmCommands, getProjectExecCommand } from './package-manager';
 import { getProjectPath } from './project-path';
 import { runCommand } from './run-command';
 import { setupGlobalTests } from './setup-global-tests';
@@ -12,25 +12,25 @@ import { installUtil } from './install-util';
 const originPath = path.join(__dirname, '../../');
 
 /**
- * Realiza setup adaptativo de um projeto Angular pré-existente
+ * Performs adaptive setup of a pre-existing Angular project
  */
 export async function setupExistingProject(projectName: string, verbose = false): Promise<void> {
   const logger = console.log;
   const projectPath = getProjectPath(projectName);
 
-  // Validar projeto
-  logStep(logger, 'Validando projeto Angular...');
+  // Validate project
+  logStep(logger, 'Validating Angular project...');
   const validation = validateAngularProject(projectName);
 
   if (!validation.isValid) {
     const errorMsg = validation.errors.join('\n  - ');
-    throw new Error(`Projeto inválido:\n  - ${errorMsg}`);
+    throw new Error(`Invalid project:\n  - ${errorMsg}`);
   }
 
-  logSuccess(logger, 'Projeto Angular válido');
+  logSuccess(logger, 'Valid Angular project');
 
-  // Criar estrutura de pastas compartilhada
-  logStep(logger, 'Criando estrutura de pastas...');
+  // Create shared folder structure
+  logStep(logger, 'Creating folder structure...');
   const requiredDirs = ['src/app/shared', 'src/theme/icons'];
 
   for (const dir of requiredDirs) {
@@ -40,10 +40,10 @@ export async function setupExistingProject(projectName: string, verbose = false)
     }
   }
 
-  logSuccess(logger, 'Estrutura de pastas criada/verificada');
+  logSuccess(logger, 'Folder structure created/verified');
 
-  // Copiar temas e ícones se não existirem
-  logStep(logger, 'Configurando temas...');
+  // Copy themes and icons if they do not exist
+  logStep(logger, 'Configuring themes...');
   const themeIconsPath = `${projectPath}/src/theme/icons`;
   const originIconsPath = `${originPath}/ui/theme/icons`;
 
@@ -51,9 +51,9 @@ export async function setupExistingProject(projectName: string, verbose = false)
     if (existsSync(originIconsPath)) {
       try {
         cpSync(`${originIconsPath}`, `${themeIconsPath}`, { recursive: true });
-        logSuccess(logger, 'Ícones copiados');
+        logSuccess(logger, 'Icons copied');
       } catch {
-        logWarning(logger, 'Falha ao copiar ícones - continue manualmente se necessário');
+        logWarning(logger, 'Failed to copy icons - continue manually if necessary');
       }
     }
   }
@@ -65,7 +65,7 @@ export async function setupExistingProject(projectName: string, verbose = false)
       try {
         cpSync(originGridPath, gridPath);
       } catch {
-        logWarning(logger, 'Falha ao copiar grid.css');
+        logWarning(logger, 'Failed to copy grid.css');
       }
     }
   }
@@ -77,7 +77,7 @@ export async function setupExistingProject(projectName: string, verbose = false)
       try {
         cpSync(originAnimationsPath, animationsPath);
       } catch {
-        logWarning(logger, 'Falha ao copiar animations.css');
+        logWarning(logger, 'Failed to copy animations.css');
       }
     }
   }
@@ -89,7 +89,7 @@ export async function setupExistingProject(projectName: string, verbose = false)
       try {
         cpSync(originTablePath, tablePath);
       } catch {
-        logWarning(logger, 'Falha ao copiar table.css');
+        logWarning(logger, 'Failed to copy table.css');
       }
     }
   }
@@ -103,27 +103,27 @@ export async function setupExistingProject(projectName: string, verbose = false)
       try {
         cpSync(originGenerateIconsPath, generateIconsPath);
       } catch {
-        logWarning(logger, 'Falha ao copiar generate-icons.js');
+        logWarning(logger, 'Failed to copy generate-icons.js');
       }
     }
   }
 
-  // Detectar testes já configurados
-  logStep(logger, 'Detectando testes já configurados...');
+  // Detect already configured tests
+  logStep(logger, 'Detecting already configured tests...');
   const testConfig = detectTestFramework(projectName);
 
   if (testConfig.unit !== 'none' || testConfig.e2e !== 'none') {
-    logSuccess(logger, `Testes encontrados: Unit=${testConfig.unit}, E2E=${testConfig.e2e}`);
+    logSuccess(logger, `Tests found: Unit=${testConfig.unit}, E2E=${testConfig.e2e}`);
   } else {
-    logWarning(logger, 'Nenhum teste configurado encontrado. Configurando testes padrão...');
+    logWarning(logger, 'No test configuration found. Setting up default tests...');
 
-    // Instalar dependências de teste
+    // Install test dependencies
     await setupGlobalTests(projectName, verbose);
-    logSuccess(logger, 'Testes configurados');
+    logSuccess(logger, 'Tests configured');
   }
 
-  // Verificar e instalar dependências base
-  logStep(logger, 'Verificando dependências...');
+  // Check and install base dependencies
+  logStep(logger, 'Checking dependencies...');
   const packageJsonPath = `${projectPath}/package.json`;
   const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8')) as {
     scripts: Record<string, string>;
@@ -164,37 +164,37 @@ export async function setupExistingProject(projectName: string, verbose = false)
   const missingDeps = requiredDeps.filter((dep) => !allDeps[dep]);
 
   if (missingDeps.length > 0) {
-    logStep(logger, `Instalando dependências base: ${missingDeps.join(', ')}...`);
+    logStep(logger, `Installing base dependencies: ${missingDeps.join(', ')}...`);
     const pm = getPmCommands(detectPackageManager(projectName));
     await runCommand(`${pm.install} ${missingDeps.join(' ')}`, {
       cwd: projectPath,
       verbose,
-      loaderText: 'Instalando dependências base',
+      loaderText: 'Installing base dependencies',
     });
-    logSuccess(logger, 'Dependências base instaladas');
+    logSuccess(logger, 'Base dependencies installed');
   } else {
-    logSuccess(logger, 'Todas as dependências base já estão instaladas');
+    logSuccess(logger, 'All base dependencies are already installed');
   }
 
-  // Verificar ESLint
-  logStep(logger, 'Verificando configuração de linting...');
+  // Check ESLint
+  logStep(logger, 'Checking linting configuration...');
   const eslintConfigPath = `${projectPath}/eslint.config.mts`;
   if (!existsSync(eslintConfigPath)) {
     const originEslintPath = `${originPath}/ui/eslint.config.mts`;
     if (existsSync(originEslintPath)) {
       try {
         cpSync(originEslintPath, eslintConfigPath);
-        logSuccess(logger, 'Configuração ESLint copiada');
+        logSuccess(logger, 'ESLint configuration copied');
       } catch {
-        logWarning(logger, 'Falha ao copiar eslint.config.mts');
+        logWarning(logger, 'Failed to copy eslint.config.mts');
       }
     }
   } else {
-    logSuccess(logger, 'ESLint já configurado');
+    logSuccess(logger, 'ESLint already configured');
   }
 
-  // Configurar VS Code settings
-  logStep(logger, 'Verificando configuração VS Code...');
+  // Configure VS Code settings
+  logStep(logger, 'Checking VS Code configuration...');
   const vscodeDir = `${projectPath}/.vscode`;
   const vscodeSettingsPath = `${vscodeDir}/settings.json`;
   const originVscodeSettingsPath = `${originPath}/ui/.vscode/settings.json`;
@@ -203,15 +203,28 @@ export async function setupExistingProject(projectName: string, verbose = false)
     try {
       mkdirSync(vscodeDir, { recursive: true });
       cpSync(originVscodeSettingsPath, vscodeSettingsPath);
-      logSuccess(logger, 'Configuração VS Code copiada');
+      logSuccess(logger, 'VS Code configuration copied');
     } catch {
-      logWarning(logger, 'Falha ao copiar settings.json do VS Code');
+      logWarning(logger, 'Failed to copy VS Code settings.json');
     }
   } else if (existsSync(vscodeSettingsPath)) {
-    logSuccess(logger, 'VS Code já configurado');
+    logSuccess(logger, 'VS Code already configured');
   }
 
   installUtil(projectName, 'control-changes');
 
-  logSuccess(logger, 'Setup concluído com sucesso!');
+  const pm = detectPackageManager(projectName);
+
+  await runCommand(getProjectExecCommand(pm, 'eslint . --fix'), {
+    cwd: projectName,
+    verbose,
+    loaderText: 'Linting project',
+  });
+  await runCommand(getProjectExecCommand(pm, 'prettier . --write'), {
+    cwd: projectName,
+    verbose,
+    loaderText: 'Formatting project',
+  });
+
+  logSuccess(logger, 'Setup completed successfully!');
 }

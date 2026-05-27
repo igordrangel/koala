@@ -1,10 +1,15 @@
 @import 'tailwindcss';
+
+@import './theme/icons.css';
 @import './theme/grid.css';
-@import './theme/animations.css';
-@import './theme/table.css';
 
 /* --start-internal-- */
-@import './theme/icons.css';
+@import './theme/table.css';
+@import './theme/toast.css';
+@import './theme/modal.css';
+@import './theme/side-window.css';
+@import './theme/bottom-sheet.css';
+
 @import 'prism-themes/themes/prism-atom-dark.min.css';
 @import 'prismjs/plugins/line-numbers/prism-line-numbers.min.css';
 @import 'prismjs/plugins/line-highlight/prism-line-highlight.min.css';

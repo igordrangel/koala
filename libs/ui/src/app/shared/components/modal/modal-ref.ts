@@ -36,6 +36,6 @@ export class ModalRef {
       if (afterCloseTrigger) {
         this.afterCloseTrigger(afterCloseTrigger);
       }
-    }, 200);
+    }, 190);
   }
 }
