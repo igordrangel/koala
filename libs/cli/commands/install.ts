@@ -55,4 +55,9 @@ export async function runInstallCommand(args: InstallArgs): Promise<void> {
     verbose,
     loaderText: 'Linting project',
   });
+  await runCommand(getProjectExecCommand(pm, 'prettier --write .'), {
+    cwd: getProjectPath(projectName),
+    verbose,
+    loaderText: 'Formatting project',
+  });
 }

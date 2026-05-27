@@ -40,22 +40,26 @@ export function logList(log: Logger, label: string, values: string[]) {
 }
 
 const SECTION_ICONS: Record<string, string> = {
-  libs:       '📦',
+  libs: '📦',
   directives: '🔧',
   validators: '✅',
-  utils:      '🛠️ ',
-  base:       '🧱',
+  utils: '🛠️ ',
+  base: '🧱',
   components: '🧩',
+  css: '🎨',
+  coreResources: '🔑',
 };
 
 export function logInstallSummary(log: Logger, component: string, result: InstallResult) {
   const sections: Array<{ key: keyof Omit<InstallResult, 'missingLibs'>; label: string }> = [
-    { key: 'libs',       label: 'libs' },
+    { key: 'libs', label: 'libs' },
     { key: 'directives', label: 'directives' },
     { key: 'validators', label: 'validators' },
-    { key: 'utils',      label: 'utils' },
-    { key: 'base',       label: 'base' },
+    { key: 'utils', label: 'utils' },
+    { key: 'base', label: 'base' },
     { key: 'components', label: 'components' },
+    { key: 'css', label: 'css' },
+    { key: 'coreResources', label: 'core resources' },
   ];
 
   const filled = sections.filter((s) => result[s.key].length > 0);
@@ -69,7 +73,12 @@ export function logInstallSummary(log: Logger, component: string, result: Instal
 
   log('');
   log(chalk.dim(`  ┌${line}┐`));
-  log(chalk.dim(`  │`) + chalk.bold(`  ${component}`) + chalk.dim(' installed the following:').padEnd(width - component.length - 2) + chalk.dim('│'));
+  log(
+    chalk.dim(`  │`) +
+      chalk.bold(`  ${component}`) +
+      chalk.dim(' installed the following:').padEnd(width - component.length - 2) +
+      chalk.dim('│'),
+  );
   log(chalk.dim(`  ├${line}┤`));
 
   for (const section of filled) {

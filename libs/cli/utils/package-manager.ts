@@ -8,6 +8,7 @@ export type PackageManager = 'bun' | 'npm' | 'yarn' | 'pnpm';
 export interface PmCommands {
   dlx: string;
   exec: string;
+  run: string;
   install: string;
   installDev: string;
   add: string;
@@ -19,6 +20,7 @@ export function getPmCommands(pm: PackageManager): PmCommands {
       return {
         dlx: 'npx --yes',
         exec: 'npx',
+        run: 'npm run',
         install: 'npm install',
         installDev: 'npm install -D',
         add: 'npm install',
@@ -27,6 +29,7 @@ export function getPmCommands(pm: PackageManager): PmCommands {
       return {
         dlx: 'yarn dlx',
         exec: 'yarn',
+        run: 'yarn run',
         install: 'yarn add',
         installDev: 'yarn add -D',
         add: 'yarn add',
@@ -35,6 +38,7 @@ export function getPmCommands(pm: PackageManager): PmCommands {
       return {
         dlx: 'pnpm dlx',
         exec: 'pnpm exec',
+        run: 'pnpm run',
         install: 'pnpm add',
         installDev: 'pnpm add -D',
         add: 'pnpm add',
@@ -44,6 +48,7 @@ export function getPmCommands(pm: PackageManager): PmCommands {
       return {
         dlx: 'bunx',
         exec: 'bunx',
+        run: 'bun run',
         install: 'bun add',
         installDev: 'bun add -D',
         add: 'bun add',

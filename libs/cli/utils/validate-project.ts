@@ -11,18 +11,18 @@ export interface ProjectValidation {
 }
 
 /**
- * Valida se o projeto é um projeto Angular válido
+ * Validates if the project is a valid Angular project
  */
 export function validateAngularProject(projectName: string): ProjectValidation {
   const projectPath = getProjectPath(projectName);
   const errors: string[] = [];
 
-  // Verificar package.json
+  // Check package.json
   const packageJsonPath = `${projectPath}/package.json`;
   const hasPackageJson = existsSync(packageJsonPath);
 
   if (!hasPackageJson) {
-    errors.push('package.json não encontrado');
+    errors.push('package.json is not found');
     return {
       isValid: false,
       isAngular: false,
@@ -34,10 +34,11 @@ export function validateAngularProject(projectName: string): ProjectValidation {
   }
 
   let packageJson;
+
   try {
     packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
-  } catch (err) {
-    errors.push('Erro ao ler package.json');
+  } catch {
+    errors.push('Error reading package.json');
     return {
       isValid: false,
       isAngular: false,
@@ -48,7 +49,7 @@ export function validateAngularProject(projectName: string): ProjectValidation {
     };
   }
 
-  // Verificar se tem Angular
+  // Check if Angular is present
   const allDeps = {
     ...packageJson.dependencies,
     ...packageJson.devDependencies,
@@ -57,33 +58,33 @@ export function validateAngularProject(projectName: string): ProjectValidation {
   const isAngular = !!allDeps['@angular/core'];
 
   if (!isAngular) {
-    errors.push('@angular/core não encontrado em dependências');
+    errors.push('@angular/core not found in dependencies');
   }
 
-  // Verificar tsconfig.json
+  // Check tsconfig.json
   const tsconfigPath = `${projectPath}/tsconfig.json`;
   const hasTsConfig = existsSync(tsconfigPath);
 
   if (!hasTsConfig) {
-    errors.push('tsconfig.json não encontrado');
+    errors.push('tsconfig.json not found');
   }
 
-  // Verificar src/main.ts
+  // Check src/main.ts
   const mainTsPath = `${projectPath}/src/main.ts`;
   const hasMainTs = existsSync(mainTsPath);
 
   if (!hasMainTs) {
-    errors.push('src/main.ts não encontrado');
+    errors.push('src/main.ts not found');
   }
 
-  // Detectar se é standalone (verificar bootstrapApplication vs bootstrapModule)
+  // Detect if the project is standalone (check for bootstrapApplication vs bootstrapModule)
   let isStandalone = false;
   if (hasMainTs) {
     try {
       const mainContent = readFileSync(mainTsPath, 'utf-8');
       isStandalone = mainContent.includes('bootstrapApplication');
     } catch {
-      // ignorar erro ao ler
+      // ignore error while reading main.ts, fallback to false
     }
   }
 

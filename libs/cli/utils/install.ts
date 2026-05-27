@@ -8,6 +8,7 @@ import { setupComponentTests } from './setup-component-tests';
 import { installUtil, InstallUtilFlags } from './install-util';
 import { installValidator, InstallValidatorFlags } from './install-validator';
 import { installCoreResource, InstallCoreResourceFlags } from './install-core-resource';
+import { installCss, InstallCssFlags } from './install-css';
 
 export async function install(
   projectName: string,
@@ -22,6 +23,7 @@ export async function install(
   const installedUtilDeps: InstallUtilFlags[] = [];
   const installedBaseDeps: InstallBaseFlags[] = [];
   const installedCoreResourceDeps: InstallCoreResourceFlags[] = [];
+  const installedCssDeps: InstallCssFlags[] = [];
 
   const deps = installComponent(projectName, component);
 
@@ -60,6 +62,11 @@ export async function install(
     installedCoreResourceDeps.push(dep);
   }
 
+  for (const dep of getNotInstalled(projectName, 'css', deps.cssDeps)) {
+    installCss(projectName, dep);
+    installedCssDeps.push(dep);
+  }
+
   for (const component of getNotInstalled(projectName, 'component', deps.componentDeps)) {
     const result = await install(projectName, component, verbose);
     installedComponentDeps.push(...result.components, component);
@@ -82,6 +89,7 @@ export async function install(
     utils: [...new Set(installedUtilDeps)],
     base: [...new Set(installedBaseDeps)],
     coreResources: [...new Set(installedCoreResourceDeps)],
+    css: [...new Set(installedCssDeps)],
     missingLibs: [...new Set(missingLibDeps)],
   };
 }

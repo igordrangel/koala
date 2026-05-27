@@ -33,6 +33,6 @@ export class BottomSheetRef {
       if (afterCloseTrigger) {
         this.afterCloseTrigger(afterCloseTrigger);
       }
-    }, 100);
+    }, 190);
   }
 }

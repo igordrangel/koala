@@ -52,9 +52,13 @@ async function createAngularProject(
   writeFileSync(`${name}/angular.json`, JSON.stringify(angularJson, null, 2));
   cpSync(`${originPath}/ui/theme/icons`, `${name}/src/theme/icons`, { recursive: true });
   cpSync(`${originPath}/ui/theme/grid.css`, `${name}/src/theme/grid.css`);
-  cpSync(`${originPath}/ui/theme/animations.css`, `${name}/src/theme/animations.css`);
-  cpSync(`${originPath}/ui/theme/table.css`, `${name}/src/theme/table.css`);
   cpSync(`${originPath}/ui/generate-icons.js`, `${name}/generate-icons.js`);
+
+  runCommand(`${pm.run} generate-icons.js`, {
+    cwd: name,
+    verbose,
+    loaderText: 'Generating icons',
+  });
 
   const vscodeSettingsPath = `${originPath}/ui/.vscode/settings.json`;
   if (existsSync(vscodeSettingsPath)) {
@@ -148,6 +152,11 @@ export async function runNewCommand(args: NewArgs): Promise<void> {
     cwd: name,
     verbose,
     loaderText: 'Linting project',
+  });
+  await runCommand(getProjectExecCommand(pmName, 'prettier . --write'), {
+    cwd: name,
+    verbose,
+    loaderText: 'Formatting project',
   });
 
   installUtil(name, 'control-changes');

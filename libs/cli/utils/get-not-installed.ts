@@ -1,11 +1,12 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { InstallBaseFlags } from './install-base';
 import { InstallComponentFlags } from './install-component';
+import { InstallCoreResourceFlags } from './install-core-resource';
+import { InstallCssFlags } from './install-css';
 import { InstallDirectiveFlags } from './install-directive';
 import { InstallUtilFlags } from './install-util';
 import { InstallValidatorFlags } from './install-validator';
 import { getProjectPath } from './project-path';
-import { InstallCoreResourceFlags } from './install-core-resource';
 
 export type PackageType =
   | 'component'
@@ -14,7 +15,8 @@ export type PackageType =
   | 'utils'
   | 'lib'
   | 'base'
-  | 'core-resource';
+  | 'core-resource'
+  | 'css';
 
 export function getNotInstalled(
   projectName: string,
@@ -51,6 +53,12 @@ export function getNotInstalled(
   type: 'core-resource',
   deps: InstallCoreResourceFlags[],
 ): InstallCoreResourceFlags[];
+
+export function getNotInstalled(
+  projectName: string,
+  type: 'css',
+  deps: InstallCssFlags[],
+): InstallCssFlags[];
 
 export function getNotInstalled(projectName: string, type: 'lib', deps: string[]): string[];
 
@@ -124,6 +132,16 @@ export function getNotInstalled(projectName: string, type: PackageType, deps: st
 
       for (const dep of deps) {
         if (!existsSync(`${projectFolder}/src/app/core/${dep}`)) {
+          notInstalled.push(dep);
+        }
+      }
+      break;
+    }
+    case 'css': {
+      const projectFolder = getProjectPath(projectName);
+
+      for (const dep of deps) {
+        if (!existsSync(`${projectFolder}/src/theme/${dep}`)) {
           notInstalled.push(dep);
         }
       }

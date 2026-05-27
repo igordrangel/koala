@@ -23,7 +23,7 @@ describe('validateAngularProject', () => {
 
     expect(result.isValid).toBe(false);
     expect(result.hasPackageJson).toBe(false);
-    expect(result.errors).toContain('package.json não encontrado');
+    expect(result.errors).toContain('package.json is not found');
   });
 
   it('should return error if package.json cannot be read', () => {
@@ -38,7 +38,7 @@ describe('validateAngularProject', () => {
 
     expect(result.isValid).toBe(false);
     expect(result.hasPackageJson).toBe(true);
-    expect(result.errors).toContain('Erro ao ler package.json');
+    expect(result.errors).toContain('Error reading package.json');
   });
 
   it('should return error if @angular/core is not found', () => {
@@ -57,7 +57,7 @@ describe('validateAngularProject', () => {
 
     expect(result.isValid).toBe(false);
     expect(result.isAngular).toBe(false);
-    expect(result.errors).toContain('@angular/core não encontrado em dependências');
+    expect(result.errors).toContain('@angular/core not found in dependencies');
   });
 
   it('should return error if tsconfig.json does not exist', () => {
@@ -87,7 +87,7 @@ describe('validateAngularProject', () => {
 
     expect(result.isValid).toBe(false);
     expect(result.hasTsConfig).toBe(false);
-    expect(result.errors).toContain('tsconfig.json não encontrado');
+    expect(result.errors).toContain('tsconfig.json not found');
   });
 
   it('should return error if src/main.ts does not exist', () => {
@@ -113,7 +113,7 @@ describe('validateAngularProject', () => {
     const result = validateAngularProject('test-project');
 
     expect(result.isValid).toBe(false);
-    expect(result.errors).toContain('src/main.ts não encontrado');
+    expect(result.errors).toContain('src/main.ts not found');
   });
 
   it('should validate a correct standalone Angular project', () => {

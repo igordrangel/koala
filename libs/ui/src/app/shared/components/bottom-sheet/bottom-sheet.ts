@@ -56,7 +56,7 @@ export class BottomSheet {
     const container = body.appendChild(document.createElement('div'));
 
     container.id = elementId;
-    container.classList.add('fixed', 'bottom-0', 'right-0', 'w-screen', 'h-auto', 'z-10000');
+    container.classList.add('fixed', 'bottom-0', 'w-screen', 'lg:w-full', 'h-auto', 'z-10000');
 
     const componentRef = createComponent(component, {
       environmentInjector: this.injector,

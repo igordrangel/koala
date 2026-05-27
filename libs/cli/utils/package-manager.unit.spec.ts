@@ -28,6 +28,7 @@ describe('Package Manager Utils', () => {
         install: 'npm install',
         installDev: 'npm install -D',
         add: 'npm install',
+        run: 'npm run',
       });
     });
 
@@ -40,6 +41,7 @@ describe('Package Manager Utils', () => {
         install: 'yarn add',
         installDev: 'yarn add -D',
         add: 'yarn add',
+        run: 'yarn run',
       });
     });
 
@@ -52,6 +54,7 @@ describe('Package Manager Utils', () => {
         install: 'pnpm add',
         installDev: 'pnpm add -D',
         add: 'pnpm add',
+        run: 'pnpm run',
       });
     });
 
@@ -64,6 +67,7 @@ describe('Package Manager Utils', () => {
         install: 'bun add',
         installDev: 'bun add -D',
         add: 'bun add',
+        run: 'bun run',
       });
     });
   });

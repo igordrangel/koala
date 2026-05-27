@@ -13,5 +13,6 @@ export interface InstallResult {
   base: InstallBaseFlags[];
   coreResources: InstallCoreResourceFlags[];
   libs: string[];
+  css: string[];
   missingLibs: string[];
 }

@@ -26,10 +26,10 @@ describe('setupExistingProject', () => {
       isStandalone: false,
       hasPackageJson: false,
       hasTsConfig: false,
-      errors: ['package.json não encontrado'],
+      errors: ['package.json is not found'],
     });
 
-    await expect(setupExistingProject('test-project')).rejects.toThrow('Projeto inválido');
+    await expect(setupExistingProject('test-project')).rejects.toThrow('Invalid project');
   });
 
   it('should create required directory structure', async () => {
