@@ -21,7 +21,17 @@
   </app-section-content>
 
   <app-section-content class="block mt-10">
-    <ng-container title>Adding resources</ng-container>
-    <app-code-viewer language="bash" name="kl" src="markdown/install/add-resources.md" />
+    <ng-container title>Adding initial structure</ng-container>
+    <ng-container description>
+      Koala UI applies an initial structure to an existing project, with predefined folders and
+      files, to help organize the project efficiently.
+    </ng-container>
+
+    <app-code-viewer language="bash" name="kl" src="markdown/install/init.md" />
+
+    <div role="alert" class="alert alert-warning alert-dash mt-2">
+      <i class="fa-solid fa-circle-info"></i>
+      <span>For this command you need to have an existing angular project.</span>
+    </div>
   </app-section-content>
 </app-section-container>
