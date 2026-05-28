@@ -54,7 +54,7 @@ async function createAngularProject(
   cpSync(`${originPath}/ui/theme/grid.css`, `${name}/src/theme/grid.css`);
   cpSync(`${originPath}/ui/generate-icons.js`, `${name}/generate-icons.js`);
 
-  runCommand(`${pm.run} generate-icons.js`, {
+  await runCommand('node generate-icons.js', {
     cwd: name,
     verbose,
     loaderText: 'Generating icons',
