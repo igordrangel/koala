@@ -216,12 +216,12 @@ export async function setupExistingProject(projectName: string, verbose = false)
   const pm = detectPackageManager(projectName);
 
   await runCommand(getProjectExecCommand(pm, 'eslint . --fix'), {
-    cwd: projectName,
+    cwd: projectPath,
     verbose,
     loaderText: 'Linting project',
   });
   await runCommand(getProjectExecCommand(pm, 'prettier . --write'), {
-    cwd: projectName,
+    cwd: projectPath,
     verbose,
     loaderText: 'Formatting project',
   });

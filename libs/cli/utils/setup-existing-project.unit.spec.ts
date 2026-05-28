@@ -269,6 +269,58 @@ describe('setupExistingProject', () => {
     // Note: cpSync might not be properly mocked with vi.mock, but we can verify the intent
   });
 
+  it('should run lint and format using project path as cwd', async () => {
+    const { validateAngularProject } = await import('./validate-project');
+    const { detectTestFramework } = await import('./detect-test-framework');
+    const { detectPackageManager } = await import('./package-manager');
+    const { getProjectExecCommand } = await import('./package-manager');
+    const { runCommand } = await import('./run-command');
+
+    vi.mocked(validateAngularProject).mockReturnValue({
+      isValid: true,
+      isAngular: true,
+      isStandalone: true,
+      hasPackageJson: true,
+      hasTsConfig: true,
+      errors: [],
+    });
+
+    vi.mocked(detectTestFramework).mockReturnValue({
+      unit: 'vitest',
+      e2e: 'none',
+      hasTestScripts: true,
+    });
+
+    vi.mocked(detectPackageManager).mockReturnValue('npm');
+    vi.mocked(getProjectExecCommand).mockImplementation((_pm, cmd) => `npx ${cmd}`);
+
+    vi.mocked(fs.existsSync).mockReturnValue(false);
+    vi.mocked(fs.mkdirSync).mockReturnValue('');
+    vi.mocked(fs.readFileSync).mockReturnValue(
+      JSON.stringify({
+        scripts: {},
+        dependencies: { '@koalarx/utils': '1.0.0', clsx: '1.0.0' },
+        devDependencies: {},
+      }),
+    );
+
+    await setupExistingProject('test-project');
+
+    const lintCall = vi.mocked(runCommand).mock.calls.find((call) =>
+      call[0]?.toString().includes('eslint'),
+    );
+    const formatCall = vi.mocked(runCommand).mock.calls.find((call) =>
+      call[0]?.toString().includes('prettier'),
+    );
+
+    expect(lintCall?.[1]).toEqual(
+      expect.objectContaining({ cwd: '/test/projects/test-project' }),
+    );
+    expect(formatCall?.[1]).toEqual(
+      expect.objectContaining({ cwd: '/test/projects/test-project' }),
+    );
+  });
+
   it('should handle verbose mode', async () => {
     const { validateAngularProject } = await import('./validate-project');
     const { detectTestFramework } = await import('./detect-test-framework');
