@@ -7,7 +7,8 @@ import { PackageManager } from './utils/package-manager';
 
 function getCliVersion(): string {
   try {
-    const packageJsonPath = path.resolve(__dirname, '../../package.json');
+    // runner.js lives in `<packageRoot>/cli/` (published) or `<packageRoot>/dist/cli/` (local build)
+    const packageJsonPath = path.resolve(__dirname, '../package.json');
     const packageJsonContent = fs.readFileSync(packageJsonPath, 'utf8');
     const packageJson = JSON.parse(packageJsonContent) as { version?: string };
 
