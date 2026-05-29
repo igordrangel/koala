@@ -29,7 +29,8 @@
   [class.min-w-[calc(100%-1rem)]!]="isMenu || isMenuOptions"
   [class.max-w-[calc(100vw-1rem)]!]="isMenu || isMenuOptions"
   [class.lg:min-w-auto!]="isMenu || isMenuOptions"
-  [class.max-h-85]="isMenu"
+  [class.max-h-55]="isOptions"
+  [class.max-h-85]="isMenu || isMenuOptions"
   [style.min-width.px]="isOptions ? triggerWidth.value() : 0"
   [style.max-width.px]="isOptions ? triggerWidth.value() : 0"
 >

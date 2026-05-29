@@ -43,9 +43,8 @@
 
     <app-dropdown
       class="absolute top-0 left-0 z-0 w-full"
-      mode="options"
-      (opened)="optionsVisible.set(true)"
-      (closed)="optionsVisible.set(false)"
+      mode="menuOptions"
+      (isOpen)="optionsVisible.set($event)"
     >
       <button #triggerOptions type="button" class="flex-1 h-fit invisible" trigger>
         Filter Trigger

@@ -9,7 +9,6 @@ import {
   resource,
   viewChild,
 } from '@angular/core';
-import { delay } from '@koalarx/utils/KlDelay';
 import { randomString } from '@koalarx/utils/KlString';
 
 export type DropdownMode = 'menu' | 'options' | 'menuOptions';
@@ -61,24 +60,45 @@ export class DropdownContainer implements OnInit, OnDestroy {
 
   readonly triggerWidth = resource({
     defaultValue: 200,
-    loader: async () => {
-      let triggerOptionsElement: HTMLButtonElement | undefined;
+    loader: async ({ abortSignal }) => {
+      const maxAttempts = 40;
 
-      do {
-        await delay(250);
+      for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        if (abortSignal.aborted) {
+          return 200;
+        }
 
         const elementRef = this.dropdownTriggerElement();
 
-        if (!elementRef) {
-          continue;
+        if (elementRef?.nativeElement) {
+          return elementRef.nativeElement.getBoundingClientRect().width;
         }
 
-        triggerOptionsElement = elementRef?.nativeElement;
-      } while (!triggerOptionsElement);
+        try {
+          await this.waitForTrigger(abortSignal);
+        } catch {
+          return 200;
+        }
+      }
 
-      return triggerOptionsElement.getBoundingClientRect().width;
+      return 200;
     },
   });
+
+  private async waitForTrigger(abortSignal: AbortSignal) {
+    await new Promise<void>((resolve, reject) => {
+      const timeoutId = setTimeout(resolve, 250);
+
+      abortSignal.addEventListener(
+        'abort',
+        () => {
+          clearTimeout(timeoutId);
+          reject(abortSignal.reason);
+        },
+        { once: true },
+      );
+    });
+  }
 
   private isOverlapTrigger(triggerElement: HTMLElement, contentElement: HTMLElement) {
     const triggerRect = triggerElement.getBoundingClientRect();

@@ -97,10 +97,6 @@ export class InputCalendar implements ControlValueAccessor {
     });
 
     effect(() => {
-      this.onChanged(this.value());
-    });
-
-    effect(() => {
       if (this.type() === 'daterange') {
         this.rangeEditTarget.set('from');
       }
@@ -158,6 +154,10 @@ export class InputCalendar implements ControlValueAccessor {
     input.value = value;
   }
 
+  private notifyValueChange() {
+    this.onChanged(this.value());
+  }
+
   private applyParsedValue(rawValue: string) {
     const parsedValue = parseInputValue(rawValue, this.type(), this.format());
 
@@ -166,6 +166,7 @@ export class InputCalendar implements ControlValueAccessor {
     }
 
     this.value.set(parsedValue);
+    this.notifyValueChange();
   }
 
   private syncRangeEditTarget(rawValue: string) {
@@ -312,10 +313,12 @@ export class InputCalendar implements ControlValueAccessor {
 
   setDateValue(value: KlDate) {
     this.value.set(toSelectedDateValue(value, this.type(), this.value()));
+    this.notifyValueChange();
   }
 
   setRangeValue(value: string) {
     this.value.set(value);
+    this.notifyValueChange();
   }
 
   changeDisplayedYear(step: number) {
@@ -325,6 +328,7 @@ export class InputCalendar implements ControlValueAccessor {
   setMonthValue(month: number) {
     const parsedMonth = String(month + 1).padStart(2, '0');
     this.value.set(`${this.displayedYear()}-${parsedMonth}`);
+    this.notifyValueChange();
   }
 
   setTimeValue(value: string) {
@@ -335,6 +339,7 @@ export class InputCalendar implements ControlValueAccessor {
     const dateValue = getDatePart(this.value()) || new KlDate(new Date()).format('yyyy-MM-dd');
 
     this.value.set(`${dateValue}T${value}`);
+    this.notifyValueChange();
   }
 
   clear(event: Event) {
@@ -342,6 +347,7 @@ export class InputCalendar implements ControlValueAccessor {
     event.stopPropagation();
     this.value.set('');
     this.inputValue.set('');
+    this.notifyValueChange();
     this.textInput()?.nativeElement.focus();
   }
 }
