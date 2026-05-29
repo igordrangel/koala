@@ -1,6 +1,6 @@
 {
   "name": "@koalarx/ui-cli",
-  "version": "0.20.6",
+  "version": "0.20.7",
   "scripts": {
     "build": "bun scripts/build",
     "build:doc": "cd libs/ui && bun run build:prod",
