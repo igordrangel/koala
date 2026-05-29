@@ -18,6 +18,7 @@ import { InlineFilterSelect } from '../fields/select/inline-filter-select';
 export class InputFilterEdit {
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly handleCommand = (command: () => void) => setTimeout(() => command(), 50);
+  private firstLoad = true;
 
   protected readonly closeOutsideClick = (event: PointerEvent) => {
     const contentElement = this.elementRef.nativeElement;
@@ -67,8 +68,14 @@ export class InputFilterEdit {
   constructor() {
     effect(() => {
       const field = this.field();
+      const value = field.value();
 
-      if (['select', 'combobox'].includes(field.type) && !field.multiple && field.value()) {
+      if (this.firstLoad) {
+        this.firstLoad = false;
+        return;
+      }
+
+      if (['select', 'combobox'].includes(field.type) && !field.multiple && value) {
         this.exit();
       }
     });

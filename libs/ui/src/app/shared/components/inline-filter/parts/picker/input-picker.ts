@@ -164,23 +164,23 @@ export class InputPicker implements OnInit {
       option.templateValue.set('');
       option.value.set(null);
 
+      newOptions.push(option);
+
       return newOptions;
     });
   }
 
   edit(field: InlineFilterField) {
     this.selectedOptions.update((options) => {
-      if (options.includes(field)) {
-        return options.map((o) => {
-          if (o === field) {
-            return { ...o, editing: true };
-          }
+      return options.map((o) => {
+        o.editing = false;
 
-          return { ...o, editing: false };
-        });
-      }
+        if (o.name === field.name) {
+          o.editing = true;
+        }
 
-      return options;
+        return o;
+      });
     });
   }
 
