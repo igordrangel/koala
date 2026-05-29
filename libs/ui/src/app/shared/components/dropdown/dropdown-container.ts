@@ -10,6 +10,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { randomString } from '@koalarx/utils/KlString';
+import { resolveStableWidth } from './resolve-stable-width';
 
 export type DropdownMode = 'menu' | 'options' | 'menuOptions';
 export type DropdownPosition = 'top' | 'bottom' | 'left' | 'right';
@@ -60,44 +61,21 @@ export class DropdownContainer implements OnInit, OnDestroy {
 
   readonly triggerWidth = resource({
     defaultValue: 200,
-    loader: async ({ abortSignal }) => {
-      const maxAttempts = 40;
-
-      for (let attempt = 0; attempt < maxAttempts; attempt++) {
-        if (abortSignal.aborted) {
-          return 200;
-        }
-
-        const elementRef = this.dropdownTriggerElement();
-
-        if (elementRef?.nativeElement) {
-          return elementRef.nativeElement.getBoundingClientRect().width;
-        }
-
-        try {
-          await this.waitForTrigger(abortSignal);
-        } catch {
-          return 200;
-        }
-      }
-
-      return 200;
-    },
+    loader: ({ abortSignal }) => resolveStableWidth(() => this.readTriggerWidth(), abortSignal),
   });
 
-  private async waitForTrigger(abortSignal: AbortSignal) {
-    await new Promise<void>((resolve, reject) => {
-      const timeoutId = setTimeout(resolve, 250);
+  private readTriggerWidth(): number | undefined {
+    const trigger = this.dropdownTriggerElement()?.nativeElement;
+    if (!trigger) {
+      return undefined;
+    }
 
-      abortSignal.addEventListener(
-        'abort',
-        () => {
-          clearTimeout(timeoutId);
-          reject(abortSignal.reason);
-        },
-        { once: true },
-      );
-    });
+    const width = Math.max(
+      trigger.getBoundingClientRect().width,
+      trigger.parentElement?.getBoundingClientRect().width ?? 0,
+    );
+
+    return width > 0 ? width : undefined;
   }
 
   private isOverlapTrigger(triggerElement: HTMLElement, contentElement: HTMLElement) {
@@ -192,6 +170,10 @@ export class DropdownContainer implements OnInit, OnDestroy {
 
     contentElement.showPopover();
     this.ajustPosition();
+
+    if (this.mode() === 'options') {
+      requestAnimationFrame(() => this.triggerWidth.reload());
+    }
   }
 
   ajustPosition() {
