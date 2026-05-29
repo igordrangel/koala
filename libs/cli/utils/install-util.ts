@@ -13,6 +13,7 @@ export const InstallUtilFlagsList = [
   'string-mask',
   'scroll-into-view',
   'control-changes',
+  'form-is-valid',
 ] as const;
 export type InstallUtilFlags = (typeof InstallUtilFlagsList)[number];
 

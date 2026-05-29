@@ -160,6 +160,7 @@ export async function runNewCommand(args: NewArgs): Promise<void> {
   });
 
   installUtil(name, 'control-changes');
+  installUtil(name, 'form-is-valid');
 
   logSuccess(console.log, 'Project ready');
 }

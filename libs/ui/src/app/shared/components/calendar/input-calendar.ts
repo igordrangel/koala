@@ -4,6 +4,7 @@ import {
   computed,
   effect,
   ElementRef,
+  forwardRef,
   input,
   model,
   signal,
@@ -29,6 +30,8 @@ import {
 import { InputCalendarFormat, InputCalendarType } from './input-calendar.types';
 import { InputCalendarMonthPickerComponent } from './parts/input-calendar-month-picker.component';
 import { InputCalendarTimeRowComponent } from './parts/input-calendar-time-row.component';
+import { Dropdown } from '../dropdown';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 const RANGE_SEPARATOR = ' - ';
 
@@ -38,23 +41,34 @@ const RANGE_SEPARATOR = ' - ';
   styleUrls: ['./input-calendar.css'],
   imports: [
     Calendar,
+    Dropdown,
     InputCalendarMonthPickerComponent,
     InputCalendarTimeRowComponent,
     Input,
     Mask,
   ],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => InputCalendar),
+      multi: true,
+    },
+  ],
 })
-export class InputCalendar {
+export class InputCalendar implements ControlValueAccessor {
+  private onChanged: (value: any) => void = () => {};
+  private onTouched: () => void = () => {};
+
   private readonly textInput = viewChild<ElementRef<HTMLInputElement>>('textInput');
-  private readonly popover = viewChild<ElementRef<HTMLElement>>('popover');
   private readonly rangeEditTarget = signal<'from' | 'to'>('from');
 
-  readonly id = `input-calendar-${Math.random().toString(16).slice(2)}`;
-  readonly popoverId = `input-calendar-popover-${Math.random().toString(16).slice(2)}`;
+  protected isDisabled = signal(false);
+
   readonly format = input<InputCalendarFormat>('dd/MM/yyyy');
   readonly type = input<InputCalendarType>('date');
-  readonly size = input<InputSize>('sm');
+  readonly size = input<InputSize>('md');
   readonly inline = input(false, { transform: booleanAttribute });
+  readonly disabled = input(false, { transform: booleanAttribute });
 
   readonly value = model<string>('');
   readonly placeholder = input<string>('Pick a date');
@@ -73,6 +87,18 @@ export class InputCalendar {
   readonly monthOptions = createMonthOptions('pt-BR');
 
   constructor() {
+    effect(() => {
+      if (this.disabled()) {
+        this.isDisabled.set(true);
+      } else {
+        this.isDisabled.set(false);
+      }
+    });
+
+    effect(() => {
+      this.onChanged(this.value());
+    });
+
     effect(() => {
       if (this.type() === 'daterange') {
         this.rangeEditTarget.set('from');
@@ -156,6 +182,22 @@ export class InputCalendar {
     if (fromValue.replace(/\D/g, '').length > 0) {
       this.rangeEditTarget.set('from');
     }
+  }
+
+  writeValue(value: string): void {
+    this.value.set(value);
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChanged = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    this.isDisabled.set(isDisabled);
   }
 
   onInputChange(event: Event) {
@@ -262,20 +304,9 @@ export class InputCalendar {
   }
 
   openPopover() {
-    const popoverElement = this.popover()?.nativeElement as
-      | (HTMLElement & { showPopover?: () => void })
-      | undefined;
-    const textInput = this.textInput()?.nativeElement;
-
-    if (!popoverElement || !popoverElement.showPopover) {
-      return;
-    }
-
-    popoverElement.showPopover();
-
-    if (textInput && document.activeElement !== textInput) {
-      queueMicrotask(() => textInput.focus());
-    }
+    this.textInput()?.nativeElement.focus();
+    this.textInput()?.nativeElement.click();
+    this.onTouched();
   }
 
   setDateValue(value: KlDate) {

@@ -36,30 +36,30 @@ export function queryParamsToOptions(
         return null;
       }
 
-      const option = { ...fieldConfig, value };
+      fieldConfig.value.set(value);
 
       switch (fieldConfig.type) {
         case 'input': {
-          toInput(option, value);
+          toInput(fieldConfig, value);
           break;
         }
         case 'calendar': {
-          toCalendar(option, value);
+          toCalendar(fieldConfig, value);
           break;
         }
         case 'combobox': {
-          toCombobox(option, value, selectedOptions, injector);
+          toCombobox(fieldConfig, value, selectedOptions, injector);
           break;
         }
         case 'select': {
-          toSelect(option, value, selectedOptions, injector);
+          toSelect(fieldConfig, value, selectedOptions, injector);
           break;
         }
       }
 
-      return option;
+      return fieldConfig;
     })
     .filter((option) => option !== null);
 
-  selectedOptions.set(options as InlineFilterField[]);
+  selectedOptions.set(options);
 }

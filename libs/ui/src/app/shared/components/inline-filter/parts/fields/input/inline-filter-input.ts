@@ -19,10 +19,13 @@ export class InlineFilterInput extends FieldBase implements OnInit {
     super();
 
     effect(() => {
+      const config = this.config();
       const value = this.valueChanges();
 
       if (!this.valueControl.invalid) {
-        this.templateValue.set(this.config().inputType === 'currency' ? maskCoin(value) : value);
+        config.templateValue.set(config.inputType === 'currency' ? maskCoin(value) : value);
+      } else {
+        config.templateValue.set('');
       }
     });
   }

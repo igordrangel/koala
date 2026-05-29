@@ -1,6 +1,9 @@
 @if (config(); as config) {
   @let mask = config.inputType === 'cpf' ? '000.000.000-00' : 'SS.SSS.SSS/SSSS-SS';
-  @let valueTemplate = config.inputType === 'cpf' || config.inputType === 'cnpj' ? mask : templateValue() || config.placeholder || 'Type a value';
+  @let valueTemplate =
+    config.inputType === 'cpf' || config.inputType === 'cnpj'
+      ? mask
+      : config.templateValue() || config.placeholder || 'Digite um valor';
   @let widthField = valueTemplate.length - valueTemplate.split(' ').length / 2;
 
   @switch (config.inputType) {
@@ -14,14 +17,12 @@
         class="outline-0 text-xs [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none appearance-none"
         [style.width]="widthField + 'ch'"
         [type]="config.inputType"
-        [placeholder]="config.placeholder ?? 'Type a value'"
+        [placeholder]="config.placeholder ?? 'Digite um valor'"
         [formControl]="valueControl"
-        (input)="config.value = templateValue()"
       />
     }
     @case ('cpf')
     @case ('cnpj') {
-
       <input
         #inputField
         class="outline-0 min-w-0 w-fit text-xs"
@@ -30,7 +31,6 @@
         [appMask]="mask"
         [placeholder]="mask"
         [formControl]="valueControl"
-        (input)="config.value = templateValue()"
       />
     }
     @case ('currency') {
@@ -42,7 +42,6 @@
         appCurrency
         placeholder="R$ 0,00"
         [formControl]="valueControl"
-        (input)="config.value = templateValue()"
       />
     }
   }

@@ -6,9 +6,9 @@ export function toInput(option: InlineFilterField, value: string) {
   const templateValue = coerceValue(value);
 
   if (option.inputType === 'currency' && typeof templateValue === 'number') {
-    option.templateValue = maskCoin(templateValue);
+    option.templateValue.set(maskCoin(templateValue));
     return;
   }
 
-  option.templateValue = value;
+  option.templateValue.set(value);
 }

@@ -1,3 +1,4 @@
+import { WritableSignal } from '@angular/core';
 import { ValidatorFn } from '@angular/forms';
 import { ComboboxOptions } from '../combobox';
 import { SelectOptions } from '../select';
@@ -23,12 +24,12 @@ export interface InlineFilterField {
   placeholder?: string;
   validators?: ValidatorFn | ValidatorFn[];
   multiple?: boolean;
-  editing?: boolean;
   defaultValue?: any;
-  templateValue?: string;
-  value?: any;
-  invalid?: boolean;
-  loading?: boolean;
+  editing?: boolean;
+  templateValue: WritableSignal<string>;
+  value: WritableSignal<any>;
+  invalid: WritableSignal<boolean>;
+  loading: WritableSignal<boolean>;
 }
 
 export interface InlineFilterConfig {

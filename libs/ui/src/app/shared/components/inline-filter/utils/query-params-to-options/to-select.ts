@@ -16,11 +16,11 @@ export function toSelect(
   injector: Injector,
 ) {
   if (Array.isArray(option.options)) {
-    option.templateValue = joinOptionLabels(filterOptionsByValue(option.options, value));
+    option.templateValue.set(joinOptionLabels(filterOptionsByValue(option.options, value)));
   } else {
     const optionsResource = option.options as ResourceRef<SelectOption<any, any>[]>;
 
-    option.loading = true;
+    option.loading.set(true);
 
     toObservable(optionsResource.value, { injector })
       .pipe(delay(50), first())

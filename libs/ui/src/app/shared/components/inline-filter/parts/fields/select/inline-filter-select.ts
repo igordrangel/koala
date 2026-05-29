@@ -23,6 +23,7 @@ export class InlineFilterSelect extends FieldBase implements OnInit {
     super();
 
     effect(() => {
+      const config = this.config();
       const value = this.valueChanges();
       const options = this.options();
 
@@ -37,7 +38,7 @@ export class InlineFilterSelect extends FieldBase implements OnInit {
         .map((option) => option.label)
         .join(', ');
 
-      this.templateValue.set(selectedOption);
+      config.templateValue.set(selectedOption);
     });
   }
 

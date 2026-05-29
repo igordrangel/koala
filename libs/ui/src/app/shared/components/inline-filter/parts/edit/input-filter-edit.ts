@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, input, output, signal } from '@angular/core';
+import { Component, effect, ElementRef, inject, input, output, signal } from '@angular/core';
 import { InlineFilterField } from '../../config';
 import { InlineFilterCalendar } from '../fields/calendar/inline-filter-calendar';
 import { InlineFilterCombobox } from '../fields/combobox/inline-filter-combobox';
@@ -17,20 +17,21 @@ import { InlineFilterSelect } from '../fields/select/inline-filter-select';
 })
 export class InputFilterEdit {
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly handleCommand = (command: () => void) => setTimeout(() => command(), 50);
 
   protected readonly closeOutsideClick = (event: PointerEvent) => {
     const contentElement = this.elementRef.nativeElement;
     const clickElement = event.target as HTMLElement;
 
-    if (contentElement && !contentElement.contains(clickElement)) {
-      this.exitEditMode.emit();
+    if (!contentElement?.contains(clickElement)) {
+      this.exit();
     }
   };
 
   protected readonly onKeyUp = (event: KeyboardEvent) => {
     switch (event.key) {
       case 'Tab': {
-        setTimeout(() => this.exitEditMode.emit());
+        this.exit();
         break;
       }
       case 'Enter': {
@@ -38,11 +39,11 @@ export class InputFilterEdit {
           return;
         }
 
-        setTimeout(() => this.exitEditMode.emit());
+        this.exit();
         break;
       }
       case 'Escape': {
-        setTimeout(() => this.cancelEdit.emit());
+        this.cancel();
         break;
       }
       default:
@@ -54,4 +55,22 @@ export class InputFilterEdit {
   readonly invalid = signal(false);
   readonly cancelEdit = output<void>();
   readonly exitEditMode = output<void>();
+
+  private exit() {
+    this.handleCommand(() => this.exitEditMode.emit());
+  }
+
+  private cancel() {
+    this.handleCommand(() => this.cancelEdit.emit());
+  }
+
+  constructor() {
+    effect(() => {
+      const field = this.field();
+
+      if (['select', 'combobox'].includes(field.type) && !field.multiple && field.value()) {
+        this.exit();
+      }
+    });
+  }
 }

@@ -14,8 +14,8 @@ export function asyncNotFoundTemplateValue(
 
     const currentOption = current[optionIndex];
 
-    currentOption.templateValue = '';
-    currentOption.loading = false;
+    currentOption.templateValue.set('');
+    currentOption.loading.set(false);
 
     return current;
   });

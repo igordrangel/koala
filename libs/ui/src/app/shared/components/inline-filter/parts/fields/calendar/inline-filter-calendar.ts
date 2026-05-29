@@ -16,16 +16,17 @@ export class InlineFilterCalendar extends FieldBase implements OnInit {
     super();
 
     effect(() => {
-      const value = this.value();
+      const config = this.config();
+      const value = this.valueChanges();
 
       if (this.valueControl.invalid) {
         return;
       }
 
       if (value) {
-        this.templateValue.set(new KlDate(`${value}T00:00:00`).format('dd/MM/yyyy'));
+        config.templateValue.set(new KlDate(`${value}T00:00:00`).format('dd/MM/yyyy'));
       } else {
-        this.templateValue.set('');
+        config.templateValue.set('');
       }
     });
   }

@@ -30,7 +30,14 @@ export class Input {
         this.elementRef.nativeElement.classList.add('outline-none');
         return;
       }
-      this.elementRef.nativeElement.classList.add('input', 'validator', this.inputSizeClass);
+
+      this.elementRef.nativeElement.classList.add(
+        'input',
+        'validator',
+        'bg-transparent',
+        'w-full',
+        this.inputSizeClass,
+      );
     });
   }
 }

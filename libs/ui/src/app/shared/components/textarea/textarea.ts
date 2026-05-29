@@ -30,13 +30,15 @@ export class Textarea {
     }
   }
 
-  readonly size = input<TextareaSize>('sm');
+  readonly size = input<TextareaSize>('md');
   readonly resizable = input(false, { transform: booleanAttribute });
 
   constructor() {
     afterRenderEffect(() => {
       this.elementRef.nativeElement.classList.add(
         'textarea',
+        'w-full',
+        'bg-transparent',
         'validator',
         this.resizable() ? 'resize' : 'resize-none',
         this.inputSizeClass,

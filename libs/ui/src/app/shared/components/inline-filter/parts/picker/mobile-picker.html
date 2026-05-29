@@ -79,7 +79,7 @@
                     #calendarField
                     format="dd/MM/yyyy"
                     [placeholder]="field.placeholder ?? 'Select a date'"
-                    (valueChange)="control.setValue($event)"
+                    [formControl]="control"
                   />
                 }
               }
@@ -91,6 +91,10 @@
               <span appValidatorHint>{{ field.label }} is required</span>
             } @else if (control.hasError('email')) {
               <span appValidatorHint>Invalid email</span>
+            } @else if (control.hasError('cpfInvalid')) {
+              <span appValidatorHint>CPF inválido</span>
+            } @else if (control.hasError('cnpjInvalid')) {
+              <span appValidatorHint>CNPJ inválido</span>
             }
           </app-fieldset>
         }

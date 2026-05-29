@@ -1,8 +1,10 @@
-import { Component, output, viewChild, ElementRef, input } from '@angular/core';
+import { Component, ElementRef, input, output, viewChild } from '@angular/core';
+import { Input } from '../../input-field';
 
 @Component({
   selector: 'app-input-calendar-time-row',
   templateUrl: './input-calendar-time-row.component.html',
+  imports: [Input],
 })
 export class InputCalendarTimeRowComponent {
   private readonly timeInput = viewChild<ElementRef<HTMLInputElement>>('timeInput');

@@ -1,4 +1,3 @@
-import { isMobile } from '@/shared/utils/is-mobile';
 import {
   booleanAttribute,
   Component,
@@ -7,9 +6,14 @@ import {
   OnDestroy,
   OnInit,
   output,
+  resource,
   viewChild,
 } from '@angular/core';
+import { delay } from '@koalarx/utils/KlDelay';
 import { randomString } from '@koalarx/utils/KlString';
+
+export type DropdownMode = 'menu' | 'options';
+export type DropdownPosition = 'top' | 'bottom' | 'left' | 'right';
 
 @Component({
   selector: 'app-dropdown',
@@ -47,12 +51,34 @@ export class DropdownContainer implements OnInit, OnDestroy {
     uppercase: false,
     lowercase: false,
   });
+  readonly mode = input<DropdownMode>('menu');
   readonly insideClick = input(false, { transform: booleanAttribute });
   readonly disabled = input(false, { transform: booleanAttribute });
 
   readonly opened = output<void>();
   readonly closed = output<void>();
   readonly isOpen = output<boolean>();
+
+  readonly triggerWidth = resource({
+    defaultValue: 200,
+    loader: async () => {
+      let triggerOptionsElement: HTMLButtonElement | undefined;
+
+      do {
+        await delay(250);
+
+        const elementRef = this.dropdownTriggerElement();
+
+        if (!elementRef) {
+          continue;
+        }
+
+        triggerOptionsElement = elementRef?.nativeElement;
+      } while (!triggerOptionsElement);
+
+      return triggerOptionsElement.getBoundingClientRect().width;
+    },
+  });
 
   private isOverlapTrigger(triggerElement: HTMLElement, contentElement: HTMLElement) {
     const triggerRect = triggerElement.getBoundingClientRect();
@@ -64,6 +90,59 @@ export class DropdownContainer implements OnInit, OnDestroy {
       contentRect.right < triggerRect.left ||
       contentRect.left > triggerRect.right
     );
+  }
+
+  private get positionDefinitions() {
+    return {
+      menu: {
+        top: ['dropdown-start', 'dropdown-top', 'mb-1'],
+        bottom: ['dropdown-start', 'dropdown-bottom', 'mt-1'],
+        left: ['dropdown-start', 'dropdown-left', 'mr-1'],
+        right: ['dropdown-start', 'dropdown-right', 'ml-1'],
+      },
+      options: {
+        top: ['dropdown-center', 'dropdown-top', 'mb-1'],
+        bottom: ['dropdown-start', 'dropdown-bottom', 'mt-1'],
+        left: ['dropdown-center', 'dropdown-left', 'mr-1'],
+        right: ['dropdown-center', 'dropdown-right', 'ml-1'],
+      },
+    };
+  }
+
+  private getPositionDefinition(position: DropdownPosition) {
+    return this.positionDefinitions[this.mode()][position];
+  }
+
+  private getPosition(currentPosition?: DropdownPosition): DropdownPosition {
+    const mode = this.mode();
+
+    if (mode === 'menu') {
+      switch (currentPosition) {
+        case 'top':
+          return 'bottom';
+        case 'bottom':
+          return 'left';
+        case 'left':
+          return 'right';
+        case 'right':
+          return 'top';
+        default:
+          return 'left';
+      }
+    }
+
+    switch (currentPosition) {
+      case 'top':
+        return 'right';
+      case 'bottom':
+        return 'top';
+      case 'left':
+        return 'right';
+      case 'right':
+        return 'left';
+      default:
+        return 'bottom';
+    }
   }
 
   ngOnDestroy() {
@@ -81,35 +160,30 @@ export class DropdownContainer implements OnInit, OnDestroy {
     const contentElement = this.dropdownContentElement()?.nativeElement;
 
     if (triggerElement && contentElement) {
-      contentElement.classList.add('dropdown-start');
+      let currentPosition = this.getPosition();
+      let currentPositionDefinition = this.getPositionDefinition(currentPosition);
+
+      contentElement.classList.add(...currentPositionDefinition);
 
       setTimeout(() => {
         let isAboveTrigger = false;
         let tryCount = 0;
+        const maxCount = 3;
 
         do {
           isAboveTrigger = this.isOverlapTrigger(triggerElement, contentElement);
 
           if (isAboveTrigger) {
-            if (contentElement.classList.contains('dropdown-top')) {
-              contentElement.classList.remove('dropdown-top');
-              contentElement.classList.add('dropdown-bottom');
-            } else if (contentElement.classList.contains('dropdown-bottom')) {
-              contentElement.classList.remove('dropdown-bottom');
-              contentElement.classList.add('dropdown-left');
-            } else {
-              contentElement.classList.add('dropdown-top');
-            }
+            contentElement.classList.remove(...currentPositionDefinition);
+
+            currentPosition = this.getPosition(currentPosition);
+            currentPositionDefinition = this.getPositionDefinition(currentPosition);
+
+            contentElement.classList.add(...currentPositionDefinition);
           }
 
           tryCount++;
-        } while (isAboveTrigger && tryCount < 3);
-
-        if (!isMobile()) {
-          contentElement.style.marginRight = '1.5rem';
-        } else {
-          contentElement.style.marginRight = '1rem';
-        }
+        } while (isAboveTrigger && tryCount < maxCount);
       });
     }
   }

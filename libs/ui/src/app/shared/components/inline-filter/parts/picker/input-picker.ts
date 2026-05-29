@@ -66,6 +66,7 @@ export class InputPicker implements OnInit {
     const filterOptions = this.filterOptions().filter(
       (option) => !this.selectedOptions().some((selected) => selected.name === option.name),
     );
+
     const filterValue = this.filter().toLowerCase();
 
     if (!filterValue) {
@@ -84,6 +85,7 @@ export class InputPicker implements OnInit {
       const isVisible = this.optionsVisible();
       const filteredOptions = this.filteredOptions();
       const hasFilter = !!this.filter();
+      const inEditionMode = this.selectedOptions().some((option) => option.editing);
 
       if (!triggerElement) {
         return;
@@ -94,7 +96,7 @@ export class InputPicker implements OnInit {
         return;
       }
 
-      if (!isVisible && hasFilter && filteredOptions.length > 0) {
+      if (!inEditionMode && !isVisible && hasFilter && filteredOptions.length > 0) {
         this.toggleOptions();
       }
     });
@@ -105,7 +107,7 @@ export class InputPicker implements OnInit {
 
       this.router.navigate([], { queryParams: payload });
 
-      if (!selectedOptions.some((option) => option.editing)) {
+      if (selectedOptions.length > 0 && !selectedOptions.some((option) => option.editing)) {
         setTimeout(() => this.inputFilterElement()?.nativeElement.focus());
         this.payload.emit(payload);
       }
@@ -152,11 +154,17 @@ export class InputPicker implements OnInit {
     option.editing = true;
 
     this.selectedOptions.update((options) => {
-      if (options.includes(option)) {
-        return options.filter((o) => o !== option);
+      const newOptions = [...options];
+      const index = options.findIndex((o) => o.name === option.name);
+
+      if (index !== -1) {
+        newOptions.splice(index, 1);
       }
 
-      return [...options, option];
+      option.templateValue.set('');
+      option.value.set(null);
+
+      return newOptions;
     });
   }
 

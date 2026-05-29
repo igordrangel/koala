@@ -1,5 +1,5 @@
+import { accessibilitySelectOptionsOnKeyDown } from '@/shared/utils/accessibility-select-options-on-keydown';
 import { DestroyRef, Signal } from '@angular/core';
-import { onKeyDown } from './on-keydown';
 import { onKeyUp } from './on-keyup';
 
 export function handleAccessibility(
@@ -11,8 +11,8 @@ export function handleAccessibility(
   filter: Signal<string>,
   destroyRef: DestroyRef,
 ) {
-  const onKeyUpHandler = onKeyUp(optionsElement, openOptions, editLastOption);
-  const onKeyDownHandler = onKeyDown(filter, removeLastOption);
+  const onKeyUpHandler = onKeyUp(filter, optionsElement, editLastOption, removeLastOption);
+  const onKeyDownHandler = accessibilitySelectOptionsOnKeyDown(optionsElement, openOptions);
 
   inputElement.addEventListener('keyup', onKeyUpHandler);
   inputElement.addEventListener('keydown', onKeyDownHandler);

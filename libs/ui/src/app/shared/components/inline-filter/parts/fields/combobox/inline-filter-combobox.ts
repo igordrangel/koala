@@ -17,6 +17,7 @@ export class InlineFilterCombobox extends FieldBase implements OnInit {
     super();
 
     effect(() => {
+      const config = this.config();
       const selectedOptions = this.comboboxComponentRef()?.selectedOptions();
 
       if (this.valueControl.invalid) {
@@ -24,7 +25,9 @@ export class InlineFilterCombobox extends FieldBase implements OnInit {
       }
 
       if (selectedOptions) {
-        this.templateValue.set(selectedOptions.map((option) => option.label).join(', '));
+        config.templateValue.set(selectedOptions.map((option) => option.label).join(', '));
+      } else {
+        config.templateValue.set('');
       }
     });
   }
