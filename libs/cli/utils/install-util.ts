@@ -14,6 +14,7 @@ export const InstallUtilFlagsList = [
   'scroll-into-view',
   'control-changes',
   'form-is-valid',
+  'accessibility-select-options-on-keydown',
 ] as const;
 export type InstallUtilFlags = (typeof InstallUtilFlagsList)[number];
 

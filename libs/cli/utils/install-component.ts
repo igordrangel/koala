@@ -104,8 +104,9 @@ export function installComponent(projectName: string, component: InstallComponen
       break;
     case 'calendar':
       libDeps.push('cally');
-      componentDeps.push('input-field');
+      componentDeps.push('input-field', 'dropdown');
       directiveDeps.push('mask');
+      utilDeps.push('control-changes');
       break;
     case 'input-cpf':
     case 'input-cnpj':
@@ -127,11 +128,21 @@ export function installComponent(projectName: string, component: InstallComponen
     case 'combobox':
     case 'select':
       libDeps.push('@angular/aria');
-      utilDeps.push('scroll-into-view');
+      utilDeps.push(
+        'scroll-into-view',
+        'accessibility-select-options-on-keydown',
+        'control-changes',
+      );
       componentDeps.push('dropdown', 'input-field', 'loading');
       break;
     case 'inline-filter':
-      utilDeps.push('is-mobile', 'scroll-into-view');
+      utilDeps.push(
+        'form-is-valid',
+        'control-changes',
+        'is-mobile',
+        'scroll-into-view',
+        'accessibility-select-options-on-keydown',
+      );
       componentDeps.push(
         'combobox',
         'select',
