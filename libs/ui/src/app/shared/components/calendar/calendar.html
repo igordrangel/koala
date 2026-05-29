@@ -2,6 +2,7 @@
   <calendar-range
     #calendar
     class="cally bg-base-100 border border-base-300 shadow-lg w-full"
+    [class.border-none]="noBorder()"
     [class.rounded-box]="!squareBottom()"
     [class.rounded-t-box]="squareBottom()"
     [value]="value()"
@@ -15,6 +16,7 @@
   <calendar-date
     #calendar
     class="cally bg-base-100 border border-base-300 shadow-lg w-full"
+    [class.border-none]="noBorder()"
     [class.rounded-box]="!squareBottom()"
     [class.rounded-t-box]="squareBottom()"
     [value]="value()"

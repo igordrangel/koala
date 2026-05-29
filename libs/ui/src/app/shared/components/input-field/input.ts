@@ -21,7 +21,7 @@ export class Input {
     }
   }
 
-  readonly size = input<InputSize>('sm');
+  readonly size = input<InputSize>('md');
   readonly inline = input(false);
 
   constructor() {

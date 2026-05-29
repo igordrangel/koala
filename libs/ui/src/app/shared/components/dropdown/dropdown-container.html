@@ -16,6 +16,7 @@
 
 @let isMenu = mode() === 'menu';
 @let isOptions = mode() === 'options';
+@let isMenuOptions = mode() === 'menuOptions';
 
 <div
   #dropdownContent
@@ -25,9 +26,9 @@
   [style.position-anchor]="anchorName"
   class="dropdown menu p-0 bg-base-100 rounded-box shadow-sm border-2 border-base-300 rounded-md overflow-y-auto overflow-x-hidden w-auto"
   [class.mt-2]="isOptions"
-  [class.min-w-[calc(100%-1rem)]!]="isMenu"
-  [class.max-w-[calc(100vw-1rem)]!]="isMenu"
-  [class.lg:min-w-auto!]="isMenu"
+  [class.min-w-[calc(100%-1rem)]!]="isMenu || isMenuOptions"
+  [class.max-w-[calc(100vw-1rem)]!]="isMenu || isMenuOptions"
+  [class.lg:min-w-auto!]="isMenu || isMenuOptions"
   [class.max-h-85]="isMenu"
   [style.min-width.px]="isOptions ? triggerWidth.value() : 0"
   [style.max-width.px]="isOptions ? triggerWidth.value() : 0"

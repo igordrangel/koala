@@ -12,7 +12,7 @@ import {
 import { delay } from '@koalarx/utils/KlDelay';
 import { randomString } from '@koalarx/utils/KlString';
 
-export type DropdownMode = 'menu' | 'options';
+export type DropdownMode = 'menu' | 'options' | 'menuOptions';
 export type DropdownPosition = 'top' | 'bottom' | 'left' | 'right';
 
 @Component({
@@ -102,9 +102,15 @@ export class DropdownContainer implements OnInit, OnDestroy {
       },
       options: {
         top: ['dropdown-center', 'dropdown-top', 'mb-1'],
-        bottom: ['dropdown-start', 'dropdown-bottom', 'mt-1'],
+        bottom: ['dropdown-center', 'dropdown-bottom', 'mt-1'],
         left: ['dropdown-center', 'dropdown-left', 'mr-1'],
         right: ['dropdown-center', 'dropdown-right', 'ml-1'],
+      },
+      menuOptions: {
+        top: ['dropdown-start', 'dropdown-top', 'mb-1'],
+        bottom: ['dropdown-start', 'dropdown-bottom', 'mt-1'],
+        left: ['dropdown-start', 'dropdown-left', 'mr-1'],
+        right: ['dropdown-start', 'dropdown-right', 'ml-1'],
       },
     };
   }
@@ -153,6 +159,19 @@ export class DropdownContainer implements OnInit, OnDestroy {
   ngOnInit() {
     document.addEventListener('click', this.closeInsideClick);
     this.dropdownContentElement()?.nativeElement.addEventListener('toggle', this.dropdownToggle);
+  }
+
+  open() {
+    const contentElement = this.dropdownContentElement()?.nativeElement as
+      | (HTMLElement & { showPopover?: () => void })
+      | undefined;
+
+    if (!contentElement?.showPopover || contentElement.matches(':popover-open')) {
+      return;
+    }
+
+    contentElement.showPopover();
+    this.ajustPosition();
   }
 
   ajustPosition() {

@@ -9,6 +9,8 @@ export function accessibilitySelectOptionsOnKeyDown(
 
     switch (event.key) {
       case 'ArrowUp': {
+        event.preventDefault();
+
         let previousOption: HTMLLIElement = focusedOption?.previousElementSibling as HTMLLIElement;
 
         if (!previousOption) {
@@ -24,6 +26,8 @@ export function accessibilitySelectOptionsOnKeyDown(
         break;
       }
       case 'ArrowDown': {
+        event.preventDefault();
+
         const alreadyVisible = openOptions();
 
         let nextOption: HTMLLIElement | null = alreadyVisible

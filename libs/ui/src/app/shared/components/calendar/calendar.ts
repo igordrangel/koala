@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
@@ -26,6 +27,7 @@ export class Calendar {
   readonly type = input<CalendarType>('date');
   readonly value = input<string>();
   readonly squareBottom = input<boolean>(false);
+  readonly noBorder = input(false, { transform: booleanAttribute });
   readonly selectedDate = output<KlDate>();
   readonly selectedRange = output<string>();
 

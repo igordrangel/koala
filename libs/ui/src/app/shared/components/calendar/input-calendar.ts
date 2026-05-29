@@ -30,7 +30,7 @@ import {
 import { InputCalendarFormat, InputCalendarType } from './input-calendar.types';
 import { InputCalendarMonthPickerComponent } from './parts/input-calendar-month-picker.component';
 import { InputCalendarTimeRowComponent } from './parts/input-calendar-time-row.component';
-import { Dropdown } from '../dropdown';
+import { Dropdown, DropdownContainer } from '../dropdown';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 const RANGE_SEPARATOR = ' - ';
@@ -60,6 +60,7 @@ export class InputCalendar implements ControlValueAccessor {
   private onTouched: () => void = () => {};
 
   private readonly textInput = viewChild<ElementRef<HTMLInputElement>>('textInput');
+  private readonly dropdown = viewChild(DropdownContainer);
   private readonly rangeEditTarget = signal<'from' | 'to'>('from');
 
   protected isDisabled = signal(false);
@@ -304,8 +305,8 @@ export class InputCalendar implements ControlValueAccessor {
   }
 
   openPopover() {
+    this.dropdown()?.open();
     this.textInput()?.nativeElement.focus();
-    this.textInput()?.nativeElement.click();
     this.onTouched();
   }
 
