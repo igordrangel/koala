@@ -155,12 +155,23 @@ export class ComboboxField implements OnInit, ControlValueAccessor {
       this.inputFilterElement()!.nativeElement,
       this.filterOptionsElement()!.nativeElement,
       this.selectedOptionContentElement()!.nativeElement,
-      this.filter,
+      () => {
+        const alreadyVisible = this.dropdownOpened();
+
+        if (alreadyVisible) {
+          return true;
+        }
+
+        this.toggleDropdown();
+
+        return false;
+      },
       () => {
         if (this.multiple()) {
           this.removeOption(this.selectedValues()[this.selectedValues().length - 1]);
         }
       },
+      this.filter,
       this.destroyRef,
     );
 
@@ -224,8 +235,7 @@ export class ComboboxField implements OnInit, ControlValueAccessor {
 
     if (!this.openOnType()) {
       this.triggerOptionsElement()?.nativeElement.click();
-      this.dropdownOpened.set(true);
-      this.onTouched?.();
+      this.onTouched();
     }
   }
 

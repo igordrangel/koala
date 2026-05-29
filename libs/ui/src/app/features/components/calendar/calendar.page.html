@@ -24,26 +24,38 @@
         >
           <div class="flex flex-col gap-2">
             <span class="text-sm font-semibold">date</span>
-            <app-input-calendar class="w-full" [(value)]="inputDateValue" />
-            <span class="px-2 opacity-60">value: {{ inputDateValue() }}</span>
+            <app-input-calendar class="w-full" [formControl]="formDate.controls.date" />
+            <span class="px-2 opacity-60">value: {{ dateValue() }}</span>
           </div>
 
           <div class="flex flex-col gap-2">
             <span class="text-sm font-semibold">datetime</span>
-            <app-input-calendar class="w-full" type="datetime" [(value)]="inputDateTimeValue" />
-            <span class="px-2 opacity-60">value: {{ inputDateTimeValue() }}</span>
+            <app-input-calendar
+              class="w-full"
+              type="datetime"
+              [formControl]="formDate.controls.datetime"
+            />
+            <span class="px-2 opacity-60">value: {{ datetimeValue() }}</span>
           </div>
 
           <div class="flex flex-col gap-2">
             <span class="text-sm font-semibold">month</span>
-            <app-input-calendar class="w-full" type="month" [(value)]="inputMonthValue" />
-            <span class="px-2 opacity-60">value: {{ inputMonthValue() }}</span>
+            <app-input-calendar
+              class="w-full"
+              type="month"
+              [formControl]="formDate.controls.month"
+            />
+            <span class="px-2 opacity-60">value: {{ monthValue() }}</span>
           </div>
 
           <div class="flex flex-col gap-2">
             <span class="text-sm font-semibold">daterange</span>
-            <app-input-calendar class="w-full" type="daterange" [(value)]="inputDateRangeValue" />
-            <span class="px-2 opacity-60">value: {{ inputDateRangeValue() }}</span>
+            <app-input-calendar
+              class="w-full"
+              type="daterange"
+              [formControl]="formDate.controls.daterange"
+            />
+            <span class="px-2 opacity-60">value: {{ daterangeValue() }}</span>
           </div>
         </div>
       </div>

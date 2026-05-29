@@ -1,5 +1,5 @@
 <fieldset class="fieldset">
-  <legend class="fieldset-legend">
+  <legend class="fieldset-legend mb-0 pb-[0.1rem]">
     <ng-content select="[label]" />
   </legend>
 
@@ -11,7 +11,7 @@
   </div>
   <ng-content select="[appValidatorHint]" />
 
-  <p class="label empty:hidden">
+  <div class="flex w-full opacity-60 empty:hidden">
     <ng-content select="[hint]" />
-  </p>
+  </div>
 </fieldset>

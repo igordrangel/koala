@@ -1,6 +1,7 @@
 calendar-select-year::part(label) {
   display: none;
 }
+
 calendar-select-year::part(select) {
   background-color: var(--color-base-100);
   border: none;

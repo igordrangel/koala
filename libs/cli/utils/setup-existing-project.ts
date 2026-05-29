@@ -212,6 +212,7 @@ export async function setupExistingProject(projectName: string, verbose = false)
   }
 
   installUtil(projectName, 'control-changes');
+  installUtil(projectName, 'form-is-valid');
 
   const pm = detectPackageManager(projectName);
 

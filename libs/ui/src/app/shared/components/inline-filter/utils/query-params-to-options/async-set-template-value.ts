@@ -20,9 +20,8 @@ export function asyncSetTemplateValue(
 
     const currentOption = current[optionIndex];
 
-    currentOption.templateValue = joinOptionLabels(filterOptionsByValue(loadedOptions, value));
-
-    currentOption.loading = false;
+    currentOption.templateValue.set(joinOptionLabels(filterOptionsByValue(loadedOptions, value)));
+    currentOption.loading.set(false);
 
     return current;
   });

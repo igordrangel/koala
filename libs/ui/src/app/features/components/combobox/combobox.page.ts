@@ -37,7 +37,7 @@ export class ComboboxPage {
     initialValue: this.remoteComboboxControl.value,
   });
 
-  readonly localOptions: ComboboxOption<string>[] = new KlArray([
+  readonly localOptions = new KlArray<ComboboxOption<string>>([
     { value: 'sp', label: 'Sao Paulo' },
     { value: 'rj', label: 'Rio de Janeiro' },
     { value: 'mg', label: 'Minas Gerais' },

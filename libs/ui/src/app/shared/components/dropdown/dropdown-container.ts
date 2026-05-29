@@ -1,4 +1,3 @@
-import { isMobile } from '@/shared/utils/is-mobile';
 import {
   booleanAttribute,
   Component,
@@ -7,9 +6,14 @@ import {
   OnDestroy,
   OnInit,
   output,
+  resource,
   viewChild,
 } from '@angular/core';
 import { randomString } from '@koalarx/utils/KlString';
+import { resolveStableWidth } from './resolve-stable-width';
+
+export type DropdownMode = 'menu' | 'options' | 'menuOptions';
+export type DropdownPosition = 'top' | 'bottom' | 'left' | 'right';
 
 @Component({
   selector: 'app-dropdown',
@@ -47,12 +51,32 @@ export class DropdownContainer implements OnInit, OnDestroy {
     uppercase: false,
     lowercase: false,
   });
+  readonly mode = input<DropdownMode>('menu');
   readonly insideClick = input(false, { transform: booleanAttribute });
   readonly disabled = input(false, { transform: booleanAttribute });
 
   readonly opened = output<void>();
   readonly closed = output<void>();
   readonly isOpen = output<boolean>();
+
+  readonly triggerWidth = resource({
+    defaultValue: 200,
+    loader: ({ abortSignal }) => resolveStableWidth(() => this.readTriggerWidth(), abortSignal),
+  });
+
+  private readTriggerWidth(): number | undefined {
+    const trigger = this.dropdownTriggerElement()?.nativeElement;
+    if (!trigger) {
+      return undefined;
+    }
+
+    const width = Math.max(
+      trigger.getBoundingClientRect().width,
+      trigger.parentElement?.getBoundingClientRect().width ?? 0,
+    );
+
+    return width > 0 ? width : undefined;
+  }
 
   private isOverlapTrigger(triggerElement: HTMLElement, contentElement: HTMLElement) {
     const triggerRect = triggerElement.getBoundingClientRect();
@@ -66,6 +90,65 @@ export class DropdownContainer implements OnInit, OnDestroy {
     );
   }
 
+  private get positionDefinitions() {
+    return {
+      menu: {
+        top: ['dropdown-start', 'dropdown-top', 'mb-1'],
+        bottom: ['dropdown-start', 'dropdown-bottom', 'mt-1'],
+        left: ['dropdown-start', 'dropdown-left', 'mr-1'],
+        right: ['dropdown-start', 'dropdown-right', 'ml-1'],
+      },
+      options: {
+        top: ['dropdown-center', 'dropdown-top', 'mb-1'],
+        bottom: ['dropdown-center', 'dropdown-bottom', 'mt-1'],
+        left: ['dropdown-center', 'dropdown-left', 'mr-1'],
+        right: ['dropdown-center', 'dropdown-right', 'ml-1'],
+      },
+      menuOptions: {
+        top: ['dropdown-start', 'dropdown-top', 'mb-1'],
+        bottom: ['dropdown-start', 'dropdown-bottom', 'mt-1'],
+        left: ['dropdown-start', 'dropdown-left', 'mr-1'],
+        right: ['dropdown-start', 'dropdown-right', 'ml-1'],
+      },
+    };
+  }
+
+  private getPositionDefinition(position: DropdownPosition) {
+    return this.positionDefinitions[this.mode()][position];
+  }
+
+  private getPosition(currentPosition?: DropdownPosition): DropdownPosition {
+    const mode = this.mode();
+
+    if (mode === 'menu') {
+      switch (currentPosition) {
+        case 'top':
+          return 'bottom';
+        case 'bottom':
+          return 'left';
+        case 'left':
+          return 'right';
+        case 'right':
+          return 'top';
+        default:
+          return 'left';
+      }
+    }
+
+    switch (currentPosition) {
+      case 'top':
+        return 'right';
+      case 'bottom':
+        return 'top';
+      case 'left':
+        return 'right';
+      case 'right':
+        return 'left';
+      default:
+        return 'bottom';
+    }
+  }
+
   ngOnDestroy() {
     document.removeEventListener('click', this.closeInsideClick);
     this.dropdownContentElement()?.nativeElement.removeEventListener('toggle', this.dropdownToggle);
@@ -76,40 +159,52 @@ export class DropdownContainer implements OnInit, OnDestroy {
     this.dropdownContentElement()?.nativeElement.addEventListener('toggle', this.dropdownToggle);
   }
 
+  open() {
+    const contentElement = this.dropdownContentElement()?.nativeElement as
+      | (HTMLElement & { showPopover?: () => void })
+      | undefined;
+
+    if (!contentElement?.showPopover || contentElement.matches(':popover-open')) {
+      return;
+    }
+
+    contentElement.showPopover();
+    this.ajustPosition();
+
+    if (this.mode() === 'options') {
+      requestAnimationFrame(() => this.triggerWidth.reload());
+    }
+  }
+
   ajustPosition() {
     const triggerElement = this.dropdownTriggerElement()?.nativeElement;
     const contentElement = this.dropdownContentElement()?.nativeElement;
 
     if (triggerElement && contentElement) {
-      contentElement.classList.add('dropdown-start');
+      let currentPosition = this.getPosition();
+      let currentPositionDefinition = this.getPositionDefinition(currentPosition);
+
+      contentElement.classList.add(...currentPositionDefinition);
 
       setTimeout(() => {
         let isAboveTrigger = false;
         let tryCount = 0;
+        const maxCount = 3;
 
         do {
           isAboveTrigger = this.isOverlapTrigger(triggerElement, contentElement);
 
           if (isAboveTrigger) {
-            if (contentElement.classList.contains('dropdown-top')) {
-              contentElement.classList.remove('dropdown-top');
-              contentElement.classList.add('dropdown-bottom');
-            } else if (contentElement.classList.contains('dropdown-bottom')) {
-              contentElement.classList.remove('dropdown-bottom');
-              contentElement.classList.add('dropdown-left');
-            } else {
-              contentElement.classList.add('dropdown-top');
-            }
+            contentElement.classList.remove(...currentPositionDefinition);
+
+            currentPosition = this.getPosition(currentPosition);
+            currentPositionDefinition = this.getPositionDefinition(currentPosition);
+
+            contentElement.classList.add(...currentPositionDefinition);
           }
 
           tryCount++;
-        } while (isAboveTrigger && tryCount < 3);
-
-        if (!isMobile()) {
-          contentElement.style.marginRight = '1.5rem';
-        } else {
-          contentElement.style.marginRight = '1rem';
-        }
+        } while (isAboveTrigger && tryCount < maxCount);
       });
     }
   }

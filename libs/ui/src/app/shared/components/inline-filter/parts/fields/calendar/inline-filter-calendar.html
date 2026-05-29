@@ -4,9 +4,8 @@
       <app-input-calendar
         #calendarField
         format="dd/MM/yyyy"
-        [(value)]="value"
-        [placeholder]="config.placeholder ?? 'Select a date'"
-        (valueChange)="valueControl.setValue($event)"
+        [formControl]="valueControl"
+        [placeholder]="config.placeholder ?? 'Pick a date'"
         [inline]="!isMobile"
       />
     }

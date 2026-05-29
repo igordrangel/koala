@@ -1,5 +1,6 @@
 import { ValidatorFn } from '@angular/forms';
 import { InlineFilterField, InlineFilterFieldType } from '../config';
+import { signal } from '@angular/core';
 
 export abstract class BuilderBase {
   protected config = {} as InlineFilterField;
@@ -26,6 +27,11 @@ export abstract class BuilderBase {
   }
 
   build() {
+    this.config.templateValue = signal('');
+    this.config.value = signal(null);
+    this.config.invalid = signal(false);
+    this.config.loading = signal(false);
+
     return this.config;
   }
 }

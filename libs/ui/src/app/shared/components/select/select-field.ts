@@ -54,14 +54,14 @@ export class SelectField implements OnInit, ControlValueAccessor {
 
   readonly placeholder = input('Select an option');
   readonly inline = input(false, { transform: booleanAttribute });
-  readonly options = input.required<SelectOptions>();
+  readonly options = input.required<SelectOptions<any, any>>();
   readonly size = input<InputSize>('md');
   readonly multiple = input(false, { transform: booleanAttribute });
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly hideClear = input(false, { transform: booleanAttribute });
 
-  readonly selected = output<SelectOption[]>();
-  readonly selectedOptions = signal<SelectOption[]>([]);
+  readonly selected = output<SelectOption<any, any>[]>();
+  readonly selectedOptions = signal<SelectOption<any, any>[]>([]);
   readonly selectedValues = linkedSignal<any[]>(() =>
     this.selectedOptions().map((option) => option.value),
   );

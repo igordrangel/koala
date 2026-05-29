@@ -24,7 +24,7 @@ export function toCombobox(
   const options = option.options as ComboboxOptions<any, any>;
 
   if (Array.isArray(options)) {
-    option.templateValue = joinOptionLabels(filterOptionsByValue(options, value));
+    option.templateValue.set(joinOptionLabels(filterOptionsByValue(options, value)));
   } else {
     const optionsResource: ResourceRef<ComboboxOption<any, any>[]> =
       typeof options === 'object'
@@ -35,7 +35,7 @@ export function toCombobox(
             injector,
           );
 
-    option.loading = true;
+    option.loading.set(true);
 
     toObservable(optionsResource.value, { injector })
       .pipe(

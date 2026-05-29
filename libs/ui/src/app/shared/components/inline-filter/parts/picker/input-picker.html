@@ -1,5 +1,5 @@
 <div
-  class="flex flex-wrap justify-start items-center gap-1 border border-base-300 rounded-lg p-2 text-sm"
+  class="flex flex-wrap justify-start items-center gap-1 border border-base-300 rounded-lg px-2 py-1 text-sm h-10"
 >
   @if (selectedOptions().length > 0) {
     <button
@@ -42,18 +42,18 @@
     />
 
     <app-dropdown
-      class="absolute top-0 left-0 z-0"
-      (opened)="optionsVisible.set(true)"
-      (closed)="optionsVisible.set(false)"
+      class="absolute top-0 left-0 z-0 w-full"
+      mode="menuOptions"
+      (isOpen)="optionsVisible.set($event)"
     >
       <button #triggerOptions type="button" class="flex-1 h-fit invisible" trigger>
         Filter Trigger
       </button>
-      <div #filterOptions class="p-1 w-50" options>
+      <div #filterOptions class="p-1 w-full" options>
         @for (option of filteredOptions(); track $index) {
           <li
-            class="data-[active=true]:bg-neutral-800 rounded cursor-pointer text-left w-full group"
-            [attr.data-value]="option.value"
+            class="data-[active=true]:bg-neutral-300 dark:data-[active=true]:bg-neutral-800 rounded cursor-pointer text-left w-full group"
+            [attr.data-value]="option.value()"
             (click)="chooseOption(option)"
           >
             <span>{{ option.label }}</span>

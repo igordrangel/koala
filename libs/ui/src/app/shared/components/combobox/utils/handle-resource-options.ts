@@ -11,11 +11,14 @@ export function handleResourceOptions(
     return resource({
       injector,
       defaultValue: [],
-      params: () => filter(),
+      params: () => ({
+        filter: filter(),
+        options: listConfig.resourceRef.value(),
+      }),
       loader: ({ params }) => {
         return Promise.resolve(
-          listConfig.resourceRef.value().filter((option) => {
-            const filterValue = params.toLowerCase();
+          params.options.filter((option) => {
+            const filterValue = params.filter.toLowerCase();
             return option.label.toLowerCase().includes(filterValue);
           }) ?? [],
         );

@@ -3,7 +3,11 @@
     class="relative flex flex-wrap gap-1 w-full h-auto bg-transparent"
     [class.input]="!inline()"
     [class.validator]="!inline()"
-    [class]="'text-' + size()"
+    [class.input-xs]="!inline() && size() === 'xs'"
+    [class.input-sm]="!inline() && size() === 'sm'"
+    [class.input-md]="!inline() && size() === 'md'"
+    [class.input-lg]="!inline() && size() === 'lg'"
+    [class.input-xl]="!inline() && size() === 'xl'"
   >
     <div
       #selectedOptionContent
@@ -17,7 +21,7 @@
       @if (selectedOptions().length > 0) {
         @if (multiple()) {
           @for (item of selectedOptions(); track $index) {
-            <span class="badge badge-success badge-soft badge-sm">
+            <span class="badge badge-success dark:badge-soft badge-sm">
               {{ item.label }}
               <button
                 type="button"
@@ -53,7 +57,7 @@
       #inputFilter
       role="inputFilter"
       type="text"
-      class="relative flex-1 outline-0 w-full min-w-20 pr-10"
+      class="relative flex-1 outline-none shadow-none w-full min-w-20 pr-10 h-auto"
       [class.hidden]="!multiple() && selectedOptions().length > 0 && !dropdownOpened()"
       [class.border-0]="inline()"
       [class.h-8]="!inline()"
@@ -80,27 +84,19 @@
     }
   </div>
 
-  @let inputWidth = (inputFilter.getClientRects()[0]?.width || 0) + 20;
-
   <app-dropdown
     class="absolute bottom-1 left-0 -z-1 w-full"
+    mode="options"
     [insideClick]="multiple()"
-    (closed)="dropdownOpened.set(false)"
     [disabled]="isDisabled()"
+    (isOpen)="dropdownOpened.set($event)"
   >
     <button #triggerOptions type="button" class="flex-1 h-fit invisible" trigger>
       Filter Trigger
     </button>
-    <div
-      #filterOptions
-      class="flex flex-col"
-      [class.w-50]="inline()"
-      [class.w-full]="!inline()"
-      [style.min-width.px]="inputWidth"
-      options
-    >
+    <div #filterOptions class="flex flex-col" options>
       <span
-        class="flex items-center text-neutral-500 h-8 px-4 text-xs border-b border-base-200 w-full"
+        class="flex items-center text-neutral-500 h-8 px-4 text-xs border-b border-base-300 w-full"
       >
         @if (filter(); as filterValue) {
           Results for "{{ filterValue }}"
@@ -109,7 +105,7 @@
         }
       </span>
 
-      <ul class="w-full max-h-40 overflow-y-auto p-1">
+      <ul class="w-full max-h-40 overflow-y-auto overflow-x-hidden p-1">
         @if (filteredOptions()?.isLoading() && !filteredOptions()?.error()) {
           <li
             class="flex items-center justify-center gap-2 pointer-events-none py-3 text-neutral-500"
@@ -122,20 +118,26 @@
           </li>
         } @else {
           @for (option of filteredOptions()?.value(); track $index) {
+            @let isActive = selectedValues().length === 0 && $index === 0;
+            @let isSelected = selectedValues().includes(option.value);
+
             <li
-              class="data-[active=true]:bg-neutral-800 rounded cursor-pointer text-left w-full group"
+              class="data-[active=true]:bg-neutral-300 dark:data-[active=true]:bg-neutral-800 rounded cursor-pointer text-left w-full group"
               [attr.data-value]="option.value"
-              [attr.data-selected]="selectedValues().includes(option.value)"
+              [attr.data-selected]="isSelected"
+              [attr.data-active]="isActive"
               (click)="toggleOption(option)"
             >
-              <div class="flex items-center justify-between">
-                <div class="flex flex-col gap-1">
-                  <span>{{ option.label }}</span>
-                  <span class="empty:hidden">{{ option.description }}</span>
+              <div class="flex items-center justify-between gap-2 w-full">
+                <div class="flex flex-col gap-1 w-[calc(100%-2rem)]">
+                  <span class="text-overflow-ellipsis">{{ option.label }}</span>
+                  <span class="text-base-content/50 text-xs truncate empty:hidden">
+                    {{ option.description }}
+                  </span>
                 </div>
 
                 <i
-                  class="fa-solid fa-check text-success invisible group-data-[selected=true]:visible"
+                  class="fa-solid fa-check text-primary dark:text-success invisible group-data-[selected=true]:visible px-2 w-20"
                 ></i>
               </div>
             </li>

@@ -8,5 +8,5 @@ export function toCalendar(option: InlineFilterField, value: string) {
     return;
   }
 
-  option.templateValue = date.format('dd/MM/yyyy');
+  option.templateValue.set(date.format('dd/MM/yyyy'));
 }

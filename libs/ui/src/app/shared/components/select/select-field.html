@@ -1,23 +1,22 @@
 <app-dropdown
   class="relative w-full"
+  mode="options"
   [insideClick]="multiple()"
-  (isOpen)="toggleDropdown($event)"
   [disabled]="isDisabled()"
+  (isOpen)="toggleDropdown($event)"
 >
-  @let textSizeClass = 'text-' + size();
-  @let inputSizeClass = 'input-' + size();
-  @let sizeClass = inputSizeClass + ' ' + textSizeClass;
-
   <button
     #triggerOptions
     type="button"
-    [class]="
-      'relative bg-transparent flex items-center justify-between text-left outline-0 w-full h-auto py-0.5 pr-10 gap-2 cursor-pointer ' +
-      sizeClass
-    "
+    class="relative flex flex-wrap gap-1 w-full bg-transparent outline-none"
     [class.pr-5]="hideClear()"
     [class.input]="!inline()"
     [class.validator]="!inline()"
+    [class.input-xs]="!inline() && size() === 'xs'"
+    [class.input-sm]="!inline() && size() === 'sm'"
+    [class.input-md]="!inline() && size() === 'md'"
+    [class.input-lg]="!inline() && size() === 'lg'"
+    [class.input-xl]="!inline() && size() === 'xl'"
     [attr.list]="listElementId"
     [disabled]="isDisabled()"
     trigger
@@ -44,7 +43,7 @@
         [class.p-0!]="inline()"
       >
         @for (item of selectedOptions(); track $index) {
-          <span class="badge badge-success badge-soft badge-sm">
+          <span class="badge badge-success dark:badge-soft badge-sm">
             {{ item.label }}
             <button
               type="button"
@@ -76,17 +75,7 @@
     }
   </button>
 
-  @let inputWidth = (triggerOptions.getClientRects()[0]?.width || 0) - 5;
-
-  <ul
-    #filterOptions
-    class="p-1"
-    [class.w-50]="inline()"
-    [class.w-full]="!inline()"
-    [class.opened]="dropdownOpened()"
-    [style.min-width.px]="inputWidth"
-    options
-  >
+  <ul #filterOptions class="p-1" [class.opened]="dropdownOpened()" options>
     @if (filteredOptions()?.isLoading() && !filteredOptions()?.error()) {
       <li class="flex items-center justify-center gap-2 pointer-events-none py-3 text-neutral-500">
         <span appLoading size="xs"></span> Loading...
@@ -97,10 +86,14 @@
       </li>
     } @else {
       @for (option of filteredOptions()?.value(); track $index) {
+        @let isActive = selectedValues().length === 0 && $index === 0;
+        @let isSelected = selectedValues().includes(option.value);
+
         <li
-          class="data-[active=true]:bg-neutral-800 rounded cursor-pointer text-left w-full group"
+          class="data-[active=true]:bg-neutral-300 dark:data-[active=true]:bg-neutral-800 rounded cursor-pointer text-left w-full group"
           [attr.data-value]="option.value"
-          [attr.data-selected]="selectedValues().includes(option.value)"
+          [attr.data-selected]="isSelected"
+          [attr.data-active]="isActive"
           (click)="toggleOption(option)"
         >
           <div class="flex items-center justify-between">
