@@ -1,3 +1,3 @@
 export function generateTitle(title: string): string {
-  return `${title} - @koalarx/ui`;
+  return `${title} - koalarx/ui`;
 }
