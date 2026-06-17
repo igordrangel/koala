@@ -1,3 +1,0 @@
-```bash
-kl install textarea
-```

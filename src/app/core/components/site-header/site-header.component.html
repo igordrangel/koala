@@ -1,0 +1,83 @@
+<header
+  class="mb-4 rounded-b-3xl border border-t-0 border-base-300 bg-base-100/80 backdrop-blur-sm sm:mb-8 md:rounded-b-2xl"
+>
+  <div
+    class="relative flex flex-col gap-2.5 px-6 pb-3 pt-3 sm:gap-3 md:flex-row md:items-center md:gap-0 md:pb-3.5 md:pt-2.5"
+  >
+    <div class="flex flex-nowrap items-center justify-between gap-3 md:contents">
+      <div class="flex shrink-0 md:flex md:flex-1 md:justify-start">
+        <a
+          [routerLink]="homeLink()"
+          class="koala-wordmark inline-flex shrink-0 items-center whitespace-nowrap text-[1.05rem] sm:text-xl"
+          routerLinkActive="opacity-100"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <i class="app-icon kl-logotype koala-wordmark-icon"></i>
+          <span class="koala-wordmark-text">oalarx</span>
+        </a>
+      </div>
+
+      <div
+        class="flex shrink-0 flex-nowrap items-center whitespace-nowrap md:flex md:flex-1 md:justify-end"
+      >
+        <a
+          href="https://www.npmjs.com/org/koalarx"
+          target="_blank"
+          rel="noopener noreferrer"
+          appButton
+          btnVariant="ghost"
+          btnSize="xs"
+          class="shrink-0 whitespace-nowrap px-1.5 text-xs opacity-60 hover:opacity-100 sm:px-2 sm:text-sm"
+        >
+          npm
+          <i class="fa-solid fa-arrow-up-long rotate-45 text-[0.6rem] opacity-50"></i>
+        </a>
+
+        <span
+          class="mx-1.5 shrink-0 text-xs opacity-30 select-none sm:mx-2 sm:text-sm md:mx-2.5"
+          aria-hidden="true"
+          >|</span
+        >
+
+        <button
+          type="button"
+          class="shrink-0 rounded px-1.5 py-0.5 text-xs transition-colors hover:opacity-100"
+          [class.bg-neutral-300]="locale() === 'pt'"
+          [class.text-neutral-900]="locale() === 'pt'"
+          [class.opacity-60]="locale() !== 'pt'"
+          (click)="switchLocale('pt')"
+        >
+          PT
+        </button>
+        <button
+          type="button"
+          class="ml-0.5 shrink-0 rounded px-1.5 py-0.5 text-xs transition-colors hover:opacity-100"
+          [class.bg-neutral-300]="locale() === 'en'"
+          [class.text-neutral-900]="locale() === 'en'"
+          [class.opacity-60]="locale() !== 'en'"
+          (click)="switchLocale('en')"
+        >
+          EN
+        </button>
+      </div>
+    </div>
+
+    <nav
+      class="flex flex-wrap items-center justify-center gap-0.5 sm:gap-1 md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:flex-nowrap md:gap-2"
+    >
+      @for (link of navLinks(); track link.href) {
+        <a
+          [href]="link.href"
+          target="_blank"
+          rel="noopener noreferrer"
+          appButton
+          btnVariant="ghost"
+          btnSize="xs"
+          class="shrink-0 whitespace-nowrap px-1.5 text-xs opacity-60 hover:opacity-100 sm:px-2 sm:text-sm md:px-3"
+        >
+          {{ link.label }}
+        </a>
+      }
+    </nav>
+  </div>
+</header>

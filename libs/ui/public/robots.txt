@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://koalarx.com/google/sitemap.xml

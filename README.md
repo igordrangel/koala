@@ -1,88 +1,47 @@
-<div align="center">
-  <h1>@koalarx/ui-cli</h1>
-  <p>CLI for creating and managing Angular projects with ready-to-use UI components.</p>
+# Koala
 
-[![npm version](https://img.shields.io/npm/v/@koalarx/ui-cli)](https://www.npmjs.com/package/@koalarx/ui-cli)
-[![license](https://img.shields.io/npm/l/@koalarx/ui-cli)](./LICENSE)
+Landing page estática do ecossistema **Koala** — índice das bibliotecas:
 
-**[📖 Full Documentation → koalarx.com](https://koalarx.com)**
+| Biblioteca | Pacote | Documentação |
+| --- | --- | --- |
+| **Koala UI** | `@koalarx/ui` | [ui.koalarx.com](https://ui.koalarx.com) |
+| **Koala Nest** | `@koalarx/nest` | [nest.koalarx.com](https://nest.koalarx.com) |
+| **Koala Utils** | `@koalarx/utils` | [GitHub](https://github.com/igordrangel/koala-utils) |
 
-</div>
+Site publicado em **[koalarx.com](https://koalarx.com)**.
 
----
-
-## Installation
-
-```bash
-npm install -g @koalarx/ui-cli
-```
-
-or with bun:
+## Desenvolvimento
 
 ```bash
-bun add -g @koalarx/ui-cli
+bun install
+bun run start
 ```
 
----
+Rotas: `/pt` (padrão) e `/en`. A raiz `/` redireciona para `/pt`.
 
-## Commands
+## Build (SSG)
 
-### `kl new`
-
-Creates a new Angular project with the Koala structure and dependencies already configured.
-
-During project creation, the CLI asks which package manager you want to use:
-
-- `bun`
-- `npm`
-- `yarn`
-- `pnpm`
-
-You can also skip the interactive prompt by passing the `--pm` flag.
+Gera site estático em `dist/koala/browser`:
 
 ```bash
-kl new --name meu-projeto
-kl new --name my-project --pm npm
+bun run build
+bun run preview   # http://localhost:4321
 ```
 
----
+## Deploy (GitHub Pages)
 
-### `kl install`
+O workflow `.github/workflows/deploy-docs.yml` faz build e publica no GitHub Pages ao push na branch `main`.
 
-Adds one or more UI components to the project.
+1. No repositório GitHub: **Settings → Pages → Build and deployment → GitHub Actions**
+2. DNS do domínio customizado: `koalarx.com` (arquivo `public/CNAME`)
+3. Após o merge em `main`, o site fica disponível em [koalarx.com](https://koalarx.com)
 
-```bash
-kl install button
-kl install button,loading,dropdown
-kl install modal --project meu-projeto
-```
+## Stack
 
----
+- Angular 21 com SSG (`outputMode: static`)
+- Koala UI (tema `koala`, Tailwind CSS v4, DaisyUI)
+- Design alinhado a [koala-ui](https://ui.koalarx.com) e [koala-nest](https://nest.koalarx.com)
 
-### `kl init`
+## Licença
 
-Initializes an existing Angular project with the Koala structure and required tooling.
-
-```bash
-kl init
-kl init --project meu-projeto
-kl init --project meu-projeto --verbose
-```
-
----
-
-### `kl version`
-
-Shows the installed CLI version.
-
-```bash
-kl version
-```
-
----
-
-## Documentation
-
-For detailed installation guides, usage instructions, and examples for each component, visit the official documentation:
-
-**[koalarx.com](https://koalarx.com)**
+MIT © [Igor D. Rangel](https://igordrangel.com.br/)

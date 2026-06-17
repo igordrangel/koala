@@ -1,0 +1,61 @@
+<section class="flex flex-col items-center gap-4 text-center my-12 px-6 sm:my-20 lg:my-25">
+  <span class="badge badge-neutral badge-sm motion-reveal-scale motion-delay-1">
+    <i class="fa-solid fa-circle text-red-600 text-[0.5rem]"></i>
+    {{ copy().landing.heroBadge }}
+    <i class="fa-solid fa-arrow-right text-[0.7rem] opacity-70"></i>
+  </span>
+
+  <h1 class="text-4xl sm:text-5xl font-semibold max-w-4xl motion-reveal motion-delay-2">
+    {{ copy().landing.heroLead }}<span class="koala-brand-text">{{ copy().landing.heroBrand }}</span
+    >{{ copy().landing.heroTrail }}
+  </h1>
+
+  <h2 class="max-w-2xl text-lg opacity-80 motion-reveal motion-delay-3">
+    {{ copy().landing.heroSubtitle }}
+  </h2>
+</section>
+
+<section class="px-6 pb-24 max-w-6xl mx-auto w-full">
+  <article class="py-2">
+    <div class="flex flex-col mb-2">
+      <h2 class="text-3xl font-bold">{{ copy().landing.librariesTitle }}</h2>
+      <small class="text-base font-light opacity-75">
+        {{ copy().landing.librariesSubtitle }}
+      </small>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+      @for (library of libraries(); track library.id; let i = $index) {
+        <app-library-card
+          [library]="library"
+          [labels]="libraryLabels()"
+          [revealDelay]="revealDelay(i)"
+        />
+      }
+    </div>
+  </article>
+
+  <article class="block mt-16 py-2">
+    <div class="flex flex-col mb-2">
+      <h2 class="text-3xl font-bold">{{ copy().landing.whyTitle }}</h2>
+      <small class="text-base font-light opacity-75">
+        {{ copy().landing.whySubtitle }}
+      </small>
+    </div>
+
+    <div class="flex flex-wrap gap-8 mt-5">
+      @for (card of copy().whyCards; track card.title; let i = $index) {
+        <div
+          class="group relative w-full overflow-hidden rounded-2xl border border-base-300/80 bg-base-100/80 p-4 backdrop-blur-sm koala-effect-card hover:border-base-content/40 hover:shadow-lg hover:shadow-base-content/5 motion-reduce:hover:translate-y-0 lg:w-[calc(50%-2rem)]"
+          [class]="i % 2 === 1 ? 'motion-delay-2' : 'motion-delay-1'"
+          appReveal
+        >
+          <h4 class="font-bold text-lg">{{ card.title }}</h4>
+          <p class="font-light text-sm opacity-80">
+            {{ card.description }}
+          </p>
+        </div>
+      }
+    </div>
+  </article>
+</section>

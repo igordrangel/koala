@@ -1,0 +1,102 @@
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes motion-fade-up {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 1.25rem, 0);
+      filter: blur(10px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      filter: blur(0);
+    }
+  }
+
+  @keyframes motion-fade-scale {
+    from {
+      opacity: 0;
+      transform: scale(0.94);
+      filter: blur(8px);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+      filter: blur(0);
+    }
+  }
+
+  .motion-reveal {
+    opacity: 0;
+    animation: motion-fade-up 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    will-change: opacity, transform, filter;
+  }
+
+  .motion-reveal-scale {
+    opacity: 0;
+    animation: motion-fade-scale 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    will-change: opacity, transform, filter;
+  }
+
+  .motion-delay-1 {
+    animation-delay: 0.05s;
+  }
+
+  .motion-delay-2 {
+    animation-delay: 0.15s;
+  }
+
+  .motion-delay-3 {
+    animation-delay: 0.28s;
+  }
+
+  .motion-delay-4 {
+    animation-delay: 0.42s;
+  }
+
+  .motion-reveal-scroll {
+    opacity: 0;
+    transform: translate3d(0, 1.25rem, 0);
+    filter: blur(8px);
+    transition:
+      opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+      filter 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform, filter;
+  }
+
+  .motion-reveal-scroll.motion-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+    filter: blur(0);
+  }
+
+  .motion-reveal-scroll.motion-delay-1 {
+    transition-delay: 0.05s;
+  }
+
+  .motion-reveal-scroll.motion-delay-2 {
+    transition-delay: 0.12s;
+  }
+
+  .motion-reveal-scroll.motion-delay-3 {
+    transition-delay: 0.2s;
+  }
+
+  .motion-reveal-scroll.motion-delay-4 {
+    transition-delay: 0.28s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-reveal,
+  .motion-reveal-scale,
+  .motion-reveal-scroll {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    animation: none;
+    transition: none;
+  }
+}
