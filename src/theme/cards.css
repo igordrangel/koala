@@ -1,0 +1,85 @@
+@theme {
+  --animate-skill-glow: skill-glow 4s ease-in-out infinite;
+  --animate-skill-logo-float: skill-logo-float 5s ease-in-out infinite;
+  --animate-skill-ring-spin: skill-ring-spin 14s linear infinite;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes skill-glow {
+    0%,
+    100% {
+      opacity: 0.35;
+      transform: scale(1);
+    }
+
+    50% {
+      opacity: 0.65;
+      transform: scale(1.08);
+    }
+  }
+
+  @keyframes skill-logo-float {
+    0%,
+    100% {
+      transform: translateY(0) scale(1);
+    }
+
+    50% {
+      transform: translateY(-6px) scale(1.03);
+    }
+  }
+
+  @keyframes skill-ring-spin {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes skill-shine-sweep {
+    0% {
+      transform: translateX(-120%) skewX(-12deg);
+    }
+
+    100% {
+      transform: translateX(220%) skewX(-12deg);
+    }
+  }
+}
+
+.koala-effect-card {
+  transition:
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .koala-effect-card:hover {
+    transform: translateY(-4px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .koala-effect-card:hover {
+    transform: none;
+  }
+}
+
+.library-card-shine::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 40%, oklch(100% 0 0 / 0.06) 50%, transparent 60%);
+  animation: skill-shine-sweep 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .library-card-shine::after {
+    animation: none;
+    opacity: 0;
+  }
+}

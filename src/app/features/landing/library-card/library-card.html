@@ -1,0 +1,101 @@
+<article [class]="cardClass() + ' ' + revealClass()" appReveal>
+  <div
+    class="pointer-events-none absolute -top-24 -right-16 size-56 rounded-full blur-3xl animate-skill-glow motion-reduce:animate-none"
+    [class]="theme().glowA"
+    aria-hidden="true"
+  ></div>
+  <div
+    class="pointer-events-none absolute -bottom-20 -left-12 size-48 rounded-full blur-3xl animate-skill-glow motion-reduce:animate-none [animation-delay:1.5s]"
+    [class]="theme().glowB"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    class="library-card-shine pointer-events-none absolute inset-0 z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100 motion-reduce:opacity-0"
+    aria-hidden="true"
+  ></div>
+
+  <div class="relative z-20 flex flex-1 flex-col">
+    <div class="mb-4 flex items-start gap-3">
+      <div class="relative flex size-14 shrink-0 items-center justify-center">
+        <div
+          class="pointer-events-none absolute inset-1 rounded-full border animate-skill-ring-spin motion-reduce:animate-none"
+          [class]="theme().ring"
+          aria-hidden="true"
+        ></div>
+
+        @if (library().logo) {
+          <img
+            [src]="library().logo"
+            [alt]="library().name"
+            class="relative size-11 object-contain drop-shadow-[0_8px_24px_rgba(0,0,0,0.45)] animate-skill-logo-float motion-reduce:animate-none"
+            loading="lazy"
+          />
+        } @else if (library().icon) {
+          <i
+            [class]="
+              library().icon +
+              ' relative text-3xl opacity-90 drop-shadow-lg animate-skill-logo-float motion-reduce:animate-none'
+            "
+            aria-hidden="true"
+          ></i>
+        }
+      </div>
+
+      <div class="min-w-0 text-left">
+        <h3 class="font-bold text-lg leading-tight tracking-tight">{{ library().name }}</h3>
+        <code class="text-xs opacity-60">{{ library().packageName }}</code>
+      </div>
+    </div>
+
+    <p class="mb-2 text-left text-sm font-medium opacity-90" [class]="library().accentClass">
+      {{ library().tagline }}
+    </p>
+
+    <p class="mb-6 flex-1 text-left text-sm font-light leading-relaxed opacity-75">
+      {{ library().description }}
+    </p>
+
+    <div
+      class="mb-5 rounded-xl border border-base-300/80 bg-base-100/40 px-3 py-2 text-left font-mono text-xs opacity-80"
+    >
+      {{ library().installCommand }}
+    </div>
+
+    <nav class="mt-auto flex flex-wrap gap-2">
+      <a
+        [href]="library().docsUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+        appButton
+        btnVariant="neutral"
+        btnSize="sm"
+        class="bg-neutral-300 hover:bg-neutral-400 text-neutral-900"
+      >
+        {{ labels().docs }}
+      </a>
+      <a
+        [href]="library().npmUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+        appButton
+        btnVariant="ghost"
+        btnSize="sm"
+        btnOutline
+      >
+        {{ labels().npm }}
+      </a>
+      <a
+        [href]="library().githubUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+        appButton
+        btnVariant="ghost"
+        btnSize="sm"
+        btnOutline
+      >
+        {{ labels().github }}
+      </a>
+    </nav>
+  </div>
+</article>
