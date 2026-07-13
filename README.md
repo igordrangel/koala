@@ -6,7 +6,7 @@ Landing page estática do ecossistema **Koala** — índice das bibliotecas:
 | --- | --- | --- |
 | **Koala UI** | `@koalarx/ui` | [ui.koalarx.com](https://ui.koalarx.com) |
 | **Koala Nest** | `@koalarx/nest` | [nest.koalarx.com](https://nest.koalarx.com) |
-| **Koala Utils** | `@koalarx/utils` | [GitHub](https://github.com/igordrangel/koala-utils) |
+| **Koala Utils** | `@koalarx/utils` | [utils.koalarx.com](https://utils.koalarx.com/) |
 
 Site publicado em **[koalarx.com](https://koalarx.com)**.
 
@@ -40,7 +40,7 @@ O workflow `.github/workflows/deploy-docs.yml` faz build e publica no GitHub Pag
 
 - Angular 21 com SSG (`outputMode: static`)
 - Koala UI (tema `koala`, Tailwind CSS v4, DaisyUI)
-- Design alinhado a [koala-ui](https://ui.koalarx.com) e [koala-nest](https://nest.koalarx.com)
+- Design alinhado a [koala-ui](https://ui.koalarx.com), [koala-nest](https://nest.koalarx.com) e [koala-utils](https://utils.koalarx.com/)
 
 ## Licença
 

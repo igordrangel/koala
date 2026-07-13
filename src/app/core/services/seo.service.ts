@@ -17,7 +17,7 @@ export class SeoService {
 
   update(locale: Locale) {
     const seo = UI_COPY[locale].seo;
-    const pageUrl = `${SITE_URL}/${locale}`;
+    const pageUrl = `${SITE_URL}/${locale}/`;
     const htmlLang = locale === 'pt' ? 'pt-BR' : 'en';
 
     this.document.documentElement.lang = htmlLang;
@@ -48,9 +48,9 @@ export class SeoService {
     const alternates: { hreflang: string; href: string }[] = [
       ...SUPPORTED_LOCALES.map((locale) => ({
         hreflang: locale === 'pt' ? 'pt-BR' : 'en',
-        href: `${SITE_URL}/${locale}`,
+        href: `${SITE_URL}/${locale}/`,
       })),
-      { hreflang: 'x-default', href: `${SITE_URL}/${DEFAULT_LOCALE}` },
+      { hreflang: 'x-default', href: `${SITE_URL}/${DEFAULT_LOCALE}/` },
     ];
 
     for (const alternate of alternates) {
@@ -122,7 +122,7 @@ export class SeoService {
         {
           '@type': 'WebPage',
           '@id': `${SITE_URL}/${locale}/#webpage`,
-          url: `${SITE_URL}/${locale}`,
+          url: `${SITE_URL}/${locale}/`,
           name: title,
           description,
           isPartOf: { '@id': `${SITE_URL}/#website` },

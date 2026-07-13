@@ -101,7 +101,7 @@ export const UI_COPY: Record<Locale, SiteCopy> = {
         name: 'Koala Utils',
         tagline: 'Validadores, datas e conversores TypeScript',
         description:
-          'Biblioteca utilitária compartilhada pelo ecossistema: KlString, KlDate, KlNumber, KlArray, KlCron e validações brasileiras (CPF/CNPJ).',
+          'Biblioteca utilitária compartilhada: máscaras, datas, arrays e validações brasileiras — via core, operators (frontend) ou prototypes (backend).',
         installCommand: 'npm install @koalarx/utils',
       },
     ],
@@ -124,7 +124,7 @@ export const UI_COPY: Record<Locale, SiteCopy> = {
       {
         title: 'Utils compartilhados',
         description:
-          '@koalarx/utils centraliza validações brasileiras, formatação de datas, strings e arrays — a mesma base nos projetos UI e Nest.',
+          '@koalarx/utils centraliza validações brasileiras, datas, strings e arrays — a mesma base nos projetos UI e Nest, com doc em utils.koalarx.com.',
       },
     ],
     footer: {
@@ -186,7 +186,7 @@ export const UI_COPY: Record<Locale, SiteCopy> = {
         name: 'Koala Utils',
         tagline: 'Validators, dates, and TypeScript converters',
         description:
-          'Shared utility library across the ecosystem: KlString, KlDate, KlNumber, KlArray, KlCron, and Brazilian validations (CPF/CNPJ).',
+          'Shared utility library: masks, dates, arrays, and Brazilian validations — via core, operators (frontend), or prototypes (backend).',
         installCommand: 'npm install @koalarx/utils',
       },
     ],
@@ -209,7 +209,7 @@ export const UI_COPY: Record<Locale, SiteCopy> = {
       {
         title: 'Shared utils',
         description:
-          '@koalarx/utils centralizes Brazilian validations, date formatting, strings, and arrays — the same foundation for UI and Nest projects.',
+          '@koalarx/utils centralizes Brazilian validations, dates, strings, and arrays — the same foundation for UI and Nest, documented at utils.koalarx.com.',
       },
     ],
     footer: {

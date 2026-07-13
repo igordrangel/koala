@@ -33,7 +33,7 @@ export const LIBRARY_META: Record<LibraryId, LibraryMeta> = {
   utils: {
     id: 'utils',
     packageName: '@koalarx/utils',
-    docsUrl: 'https://github.com/igordrangel/koala-utils#readme',
+    docsUrl: 'https://utils.koalarx.com/',
     npmUrl: 'https://www.npmjs.com/package/@koalarx/utils',
     githubUrl: 'https://github.com/igordrangel/koala-utils',
     accentClass: 'utils-brand-text',

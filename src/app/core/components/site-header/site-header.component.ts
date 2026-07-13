@@ -22,7 +22,7 @@ export class SiteHeaderComponent {
     return [
       { label: header.koalaUi, href: 'https://ui.koalarx.com' },
       { label: header.koalaNest, href: 'https://nest.koalarx.com' },
-      { label: header.koalaUtils, href: 'https://github.com/igordrangel/koala-utils' },
+      { label: header.koalaUtils, href: 'https://utils.koalarx.com/' },
     ];
   });
 
